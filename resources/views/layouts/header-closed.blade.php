@@ -3,8 +3,8 @@
 	<div class="page-header-inner container">
 		<!-- BEGIN LOGO -->
 		<div class="page-logo">
-			<a href="index.html" style="height:100%">
-				<img src="{{ env('STORAGE_URL_VIEW') }}{{ ('images/logo.png') }}" alt="logo" class="logo-default"  style="margin: 0; height:100%"/> </a>
+			<a href="{{url('/')}}" style="height:100%">
+				<img src="{{ env('STORAGE_URL_VIEW') }}{{ ('images/logo.svg') }}" alt="logo" class="logo-default"  style="margin: 0; height:100%"/> </a>
 			<div class="menu-toggler sidebar-toggler">
 				<span></span>
 			</div>
@@ -25,7 +25,7 @@
 				<!-- DOC: Remove "dropdown-hoverable" and add data-toggle="dropdown" data-hover="dropdown" data-close-others="true" attributes to the below A element with dropdown-toggle class -->
 				<li class="dropdown dropdown-user">
 					<a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
-						<span class="username" style="font-weight: 600;"> {{Session::get('name')}} </span>
+						<span class="username" style="font-weight: 600;"> {{Session::get('user_name')}} </span>
 						<i class="fa fa-angle-down"></i>
 					</a>
 					<ul class="dropdown-menu dropdown-menu-default">
@@ -45,5 +45,8 @@
 		</div>
 		<!-- END TOP NAVIGATION MENU -->
 	</div>
+	@if(config('app.env') != 'production')
+	<div style="position: fixed; top: 28px; background-color: {{config('app.env') == 'local' ? 'red' : 'gold'}}; right: -48px; width: 200px; height: 50px; transform: rotate(45deg); text-align: center; padding: 10px; color: white; font-size: 20px; font-weight: bold; opacity: .9">{{strtoupper(config('app.env'))}}</div>
+	@endif
 	<!-- END HEADER INNER -->
 </div>

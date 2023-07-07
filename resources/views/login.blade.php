@@ -7,18 +7,18 @@
 
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<meta content="width=device-width, initial-scale=1" name="viewport" />
-        <meta content="{{env('TITLE', 'CRM System')}} Admin Portal" name="description" />
+        <meta content="{{env('TITLE', 'CMS System')}} Admin Portal" name="description" />
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
-		<meta property="og:description" content="Technopartner Indonesia - BEHAVE Loyalty Platform" />
+		<meta property="og:description" content="Casion" />
 		<meta property="og:type" content="website" />
-		<meta property="og:title" content="{{env('TITLE', 'Behave')}}" />
-		<meta property="og:image" content="{{env('STORAGE_URL_VIEW') }}{{ ('images/logo.png')}}" />
+		<meta property="og:title" content="{{env('TITLE', 'Casion')}}" />
+		<meta property="og:image" content="{{env('STORAGE_URL_VIEW') }}{{ ('images/logo.svg')}}" />
 		<meta property="og:image:width" content="200" />
 		<meta property="og:image:height" content="200" />
-		<link href="{{env('STORAGE_URL_VIEW') }}{{ ('images/logo.png')}}" rel="image_src" />
+		<link href="{{env('STORAGE_URL_VIEW') }}{{ ('images/logo.svg')}}" rel="image_src" />
 		<meta name="apple-mobile-web-app-capable" content="yes">
-		<link rel="shortcut icon" sizes="200x200" href="{{env('STORAGE_URL_VIEW') }}{{ ('images/icon.png')}}">
+		<link rel="shortcut icon" sizes="200x200" href="{{env('STORAGE_URL_VIEW') }}{{ ('images/logo.svg')}}">
 
         <!-- BEGIN GLOBAL MANDATORY STYLES -->
         <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700&subset=all" rel="stylesheet" type="text/css" />
@@ -33,7 +33,7 @@
         <!-- END PAGE LEVEL STYLES -->
         <!-- BEGIN THEME LAYOUT STYLES -->
         <!-- END THEME LAYOUT STYLES -->
-		<link rel="shortcut icon" href="{{env('STORAGE_URL_VIEW') }}{{ ('images/icon.png')}}" />
+		<link rel="shortcut icon" href="{{env('STORAGE_URL_VIEW') }}{{ ('images/logo.svg')}}" />
 
         <style type="text/css">
             .captcha_div > div{
@@ -49,7 +49,7 @@
         <!-- BEGIN LOGO -->
         <div class="logo">
             <a href="index.html">
-                <img src="{{env('STORAGE_URL_VIEW') }}{{ ('images/logo.png')}}" alt="" style="height:100px; margin: 20px" /> </a>
+                <img src="{{env('STORAGE_URL_VIEW') }}{{ ('images/logo.svg')}}" alt="" style="height:100px; margin: 20px" /> </a>
         </div>
         <!-- END LOGO -->
         <!-- BEGIN LOGIN -->
@@ -61,46 +61,27 @@
 				@include('layouts.notifications')
                 <div class="alert alert-danger display-hide">
                     <button class="close" data-close="alert"></button>
-                    <span> Enter any username and password. </span>
+                    <span> Enter valid email and password. </span>
                 </div>
                 <div class="form-group">
                     <!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
-                    <label class="control-label visible-ie8 visible-ie9">Username</label>
-                    <input class="form-control form-control-solid placeholder-no-fix" type="text" autocomplete="off" placeholder="Username" name="username" value="{{ old('username') }}" /> </div>
+                    <label class="control-label visible-ie8 visible-ie9">Email</label>
+                    <input class="form-control form-control-solid placeholder-no-fix" type="email" autocomplete="off" placeholder="Email" name="email" value="{{ old('email') }}" /> </div>
                 <div class="form-group">
-                    <label class="control-label visible-ie8 visible-ie9">PIN</label>
-                    <input class="form-control form-control-solid placeholder-no-fix" type="password" autocomplete="off" placeholder="PIN" name="password" required maxlength="6" />
+                    <label class="control-label visible-ie8 visible-ie9">Password</label>
+                    <input class="form-control form-control-solid placeholder-no-fix" type="password" autocomplete="off" placeholder="Password" name="password" required />
 				</div>
 				<div class="form-group" style="margin-bottom: 0">
                     {!!  GoogleReCaptchaV3::renderField('captcha_div','login', 'captcha_div') !!}
                 </div>
                 <div class="form-actions">
-                    <button type="submit" class="btn uppercase btn-block" style="background: {{env('BACKGROUND_LOGIN')}}; color: #fff">Login</button>
-                    <!--
-					<label class="rememberme check mt-checkbox mt-checkbox-outline">
-                        <input type="checkbox" name="remember" value="1" />Remember
-                        <span></span>
-                    </label>
-					-->
-                    <!-- <a href="javascript:;" id="forget-password" class="forget-password">Forgot Password?</a> -->
+                    <button type="submit" class="btn uppercase btn-block" style="background: {{env('BUTTON_LOGIN')}}; color: #fff">Login</button>
                 </div>
-				<!--
-                <div class="create-account">
-                    <p>
-                        <a href="javascript:;" id="register-btn" class="uppercase">Create an account</a>
-                    </p>
-                </div>
-				-->
             </form>
             <!-- END LOGIN FORM -->
 
         </div>
-        <div class="copyright" style="color: #fff"> Copyright © 2019 Technopartner Indonesia</div>
-        <!--[if lt IE 9]>
-<script src="{{ env('STORAGE_URL_VIEW') }}{{('assets/global/plugins/respond.min.js')}}"></script>
-<script src="{{ env('STORAGE_URL_VIEW') }}{{('assets/global/plugins/excanvas.min.js')}}"></script>
-<script src="{{ env('STORAGE_URL_VIEW') }}{{('assets/global/plugins/ie8.fix.min.js')}}"></script>
-<![endif]-->
+        <div class="copyright" style="color: #fff"> Copyright © <?php echo date("Y"); ?> Technopartner Indonesia</div>
         <!-- BEGIN CORE PLUGINS -->
         <script src="{{ env('STORAGE_URL_VIEW') }}{{('assets/global/plugins/jquery.min.js')}}" type="text/javascript"></script>
         <script src="{{ env('STORAGE_URL_VIEW') }}{{('assets/global/plugins/bootstrap/js/bootstrap.min.js')}}" type="text/javascript"></script>
