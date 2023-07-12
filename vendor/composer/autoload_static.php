@@ -403,8 +403,8 @@ class ComposerStaticInit8ad32f8fd584da763bb0db69bfe7096f
         ),
         'Psr\\Http\\Message\\' => 
         array (
-            0 => __DIR__ . '/..' . '/psr/http-message/src',
-            1 => __DIR__ . '/..' . '/psr/http-factory/src',
+            0 => __DIR__ . '/..' . '/psr/http-factory/src',
+            1 => __DIR__ . '/..' . '/psr/http-message/src',
         ),
         'Psr\\Http\\Client\\' => 
         array (
@@ -729,7 +729,6 @@ class ComposerStaticInit8ad32f8fd584da763bb0db69bfe7096f
         'App\\Http\\Requests\\Browses\\Vehicle\\UpdateVehicleBrandVisibilityRequest' => __DIR__ . '/../..' . '/app/Http/Requests/Browses/Vehicle/UpdateVehicleBrandVisibilityRequest.php',
         'App\\Http\\Requests\\Browses\\Vehicle\\UpdateVehicleTypeRequest' => __DIR__ . '/../..' . '/app/Http/Requests/Browses/Vehicle/UpdateVehicleTypeRequest.php',
         'App\\Http\\Requests\\Browses\\Vehicle\\UpdateVehicleTypeVisibilityRequest' => __DIR__ . '/../..' . '/app/Http/Requests/Browses/Vehicle/UpdateVehicleTypeVisibilityRequest.php',
-        'App\\Http\\Requests\\LoginRequest' => __DIR__ . '/../..' . '/app/Http/Requests/LoginRequest.php',
         'App\\Http\\Requests\\Settings\\AutoResponse\\UpdateAutoResponseRequest' => __DIR__ . '/../..' . '/app/Http/Requests/Settings/AutoResponse/UpdateAutoResponseRequest.php',
         'App\\Http\\Requests\\Settings\\FrequentlyAskedQuestion\\CreateFAQRequest' => __DIR__ . '/../..' . '/app/Http/Requests/Settings/FrequentlyAskedQuestion/CreateFAQRequest.php',
         'App\\Http\\Requests\\Settings\\FrequentlyAskedQuestion\\UpdateDetailFAQRequest' => __DIR__ . '/../..' . '/app/Http/Requests/Settings/FrequentlyAskedQuestion/UpdateDetailFAQRequest.php',
