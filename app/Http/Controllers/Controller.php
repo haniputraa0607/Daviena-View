@@ -20,7 +20,42 @@ class Controller extends BaseController
             return redirect()->back()->withErrors(['Recaptcha failed']);
         }
 
-        $login = MyHelper::login($request);
+        $login = MyHelper::postLogin($request);
+        if(isset($login['error'])){
+
+			$loginClient =  MyHelper::postLoginClient();
+
+            if (isset($loginClient['access_token'])) {
+				session([
+					'access_token'  => 'Bearer '.$loginClient['access_token']
+				]);
+			}
+			return redirect('login')->withErrors(['invalid_credentials' => 'Invalid username / password'])->withInput();
+        }else{
+            if (isset($login['status']) && $login['status'] == "fail") {
+				$loginClient =  MyHelper::postLoginClient();
+
+				if (isset($loginClient['access_token'])) {
+					session([
+						'access_token'  => 'Bearer '.$loginClient['access_token']
+					]);
+				}
+
+				return redirect('login')->withErrors($login['messages'])->withInput();
+        	}
+        	else {
+
+                session([
+					'access_token'  => 'Bearer '.$login['access_token'],
+					'user_name'      => $request->input('username'),
+				]);
+
+                return $userData = MyHelper::get('be/user',);
+
+                
+                return 123123;
+            }
+        }
         if ($login['status'] == 'success') {
             $user_login = $login['data'];
 
@@ -58,23 +93,7 @@ class Controller extends BaseController
             MyHelper::post('core-user', 'v1/cms-activity-log', $payload_logger);
 
             return redirect('home');
-        } else {
-            if (isset($login['status']) && $login['status'] == "error") {
-                if ($login['message'] == 'wrong password' || $login['message'] == 'user not found') {
-                    return redirect('login')->withErrors(['invalid_credentials' => 'Invalid username / password'])->withInput();
-                } elseif ($login['message'] == 'cannot login to suspended account') {
-                    return redirect('login')->withErrors(['Cannot login. Account suspended.'])->withInput();
-                } elseif ($login['message'] == 'no role assigned to this account. Please contact Super Admin') {
-                    return redirect('login')->withErrors(['No Role assigned to this account. Please contact Super Admin.'])->withInput();
-                } elseif ($login['message'] == 'cannot login to inactive / deleted role account. Please contact Super Admin') {
-                    return redirect('login')->withErrors(['Cannot login to inactive / deleted role account. Please contact Super Admin.'])->withInput();
-                } else {
-                    return redirect('login')->withErrors($login['message'])->withInput();
-                }
-            } else {
-                return redirect('login')->withErrors(['invalid_credentials' => 'Invalid username / password'])->withInput();
-            }
-        }
+        } 
     }
 
     public function getHome()

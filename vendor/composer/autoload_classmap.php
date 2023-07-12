@@ -84,7 +84,6 @@ return array(
     'App\\Http\\Requests\\Browses\\Vehicle\\UpdateVehicleBrandVisibilityRequest' => $baseDir . '/app/Http/Requests/Browses/Vehicle/UpdateVehicleBrandVisibilityRequest.php',
     'App\\Http\\Requests\\Browses\\Vehicle\\UpdateVehicleTypeRequest' => $baseDir . '/app/Http/Requests/Browses/Vehicle/UpdateVehicleTypeRequest.php',
     'App\\Http\\Requests\\Browses\\Vehicle\\UpdateVehicleTypeVisibilityRequest' => $baseDir . '/app/Http/Requests/Browses/Vehicle/UpdateVehicleTypeVisibilityRequest.php',
-    'App\\Http\\Requests\\LoginRequest' => $baseDir . '/app/Http/Requests/LoginRequest.php',
     'App\\Http\\Requests\\Settings\\AutoResponse\\UpdateAutoResponseRequest' => $baseDir . '/app/Http/Requests/Settings/AutoResponse/UpdateAutoResponseRequest.php',
     'App\\Http\\Requests\\Settings\\FrequentlyAskedQuestion\\CreateFAQRequest' => $baseDir . '/app/Http/Requests/Settings/FrequentlyAskedQuestion/CreateFAQRequest.php',
     'App\\Http\\Requests\\Settings\\FrequentlyAskedQuestion\\UpdateDetailFAQRequest' => $baseDir . '/app/Http/Requests/Settings/FrequentlyAskedQuestion/UpdateDetailFAQRequest.php',

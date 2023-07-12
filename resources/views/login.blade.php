@@ -65,11 +65,11 @@
                 </div>
                 <div class="form-group">
                     <!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
-                    <label class="control-label visible-ie8 visible-ie9">Email</label>
-                    <input class="form-control form-control-solid placeholder-no-fix" type="email" autocomplete="off" placeholder="Email" name="email" value="{{ old('email') }}" /> </div>
+                    <label class="control-label visible-ie8 visible-ie9">Phone</label>
+                    <input class="form-control form-control-solid placeholder-no-fix" type="phone" autocomplete="off" placeholder="Phone" name="username" value="{{ old('username') }}" /> </div>
                 <div class="form-group">
                     <label class="control-label visible-ie8 visible-ie9">Password</label>
-                    <input class="form-control form-control-solid placeholder-no-fix" type="password" autocomplete="off" placeholder="Password" name="password" required />
+                    <input class="form-control form-control-solid placeholder-no-fix" maxlength="6" type="password" autocomplete="off" placeholder="Password" name="password" required />
 				</div>
 				<div class="form-group" style="margin-bottom: 0">
                     {!!  GoogleReCaptchaV3::renderField('captcha_div','login', 'captcha_div') !!}

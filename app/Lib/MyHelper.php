@@ -15,56 +15,71 @@ use Illuminate\Support\Carbon;
 
 class MyHelper
 {
-    public static function login($request)
-    {
-        $host = env('APP_API_URL_USER');
-
-        $client = new Client();
+    public static function postLogin($request){
+        $api = env('APP_API_URL');
+    
+        $client = new Client;
         try {
-            $response = $client->request('POST', $host . 'cms/v1/user/login', [
-                'json' => [
-                    'email'     => $request->input('email'),
-                    'password'  => $request->input('password'),
-                ]
-                ]);
+            $response = $client->request('POST',$api.'oauth/token', [
+                'form_params' => [
+                    'grant_type'    => 'password',
+                    'client_id'     => env('PASSWORD_CREDENTIAL_ID'),
+                    'client_secret' => env('PASSWORD_CREDENTIAL_SECRET'),
+                    'username'      => $request->input('username'),
+                    'password'      => $request->input('password'),
+                    'scope'         => 'be'
+                ],
+            ]);
             return json_decode($response->getBody(), true);
-        } catch (\GuzzleHttp\Exception\RequestException $e) {
-            try {
-                if ($e->getResponse()) {
+        }catch (\GuzzleHttp\Exception\RequestException $e) {
+            try{
+                if($e->getResponse()){
                     $response = $e->getResponse()->getBody()->getContents();
                     return json_decode($response, true);
-                } else {
+                }
+                else{
                     return ['status' => 'fail', 'messages' => [0 => 'Check your internet connection.']];
                 }
-            } catch (Exception $e) {
+    
+            }catch(Exception $e){
                 return ['status' => 'fail', 'messages' => [0 => 'Check your internet connection.']];
             }
         }
     }
 
-    public static function post($source, $url, $post)
-    {
-        switch ($source) {
-            case 'core-user':
-                $host = env('APP_API_URL_USER');
-                break;
-
-            case 'core-api':
-                $host = env('APP_API_URL_CORE');
-                break;
-
-            case 'core-transaction':
-                $host = env('APP_API_URL_TRANSACTION');
-                break;
-
-            case 'device-central':
-                $host = env('APP_API_URL_DEVICE_CENTRAL');
-                break;
-
-            default:
-                return ['status' => 'fail', 'messages' => [0 => 'Invalid Host']];
-                break;
+    public static function postLoginClient(){
+        $api = env('APP_API_URL');
+        $client = new Client;
+     
+        try {
+            $response = $client->request('POST',$api.'oauth/token', [
+                'form_params' => [
+                    'grant_type'    => 'client_credentials',
+                    'client_id'     => env('CLIENT_CREDENTIAL_ID'),
+                    'client_secret' => env('CLIENT_CREDENTIAL_SECRET'),
+                    'scope'      		=> 'be'
+                ],
+            ]);
+            return json_decode($response->getBody(), true);
+        }catch (\GuzzleHttp\Exception\RequestException $e) {
+            try{
+                if($e->getResponse()){
+                    $response = $e->getResponse()->getBody()->getContents();
+                    return json_decode($response, true);
+                }
+                else{
+                    return ['status' => 'fail', 'messages' => [0 => 'Check your internet connection.']];
+                }
+        
+            }catch(Exception $e){
+                return ['status' => 'fail', 'messages' => [0 => 'Check your internet connection.']];
+            }
         }
+      }
+
+    public static function post($url, $post)
+    {
+        $host = env('APP_API_URL');
 
         $client = new Client();
         $bearer = session('access_token');
@@ -79,7 +94,7 @@ class MyHelper
         );
 
         try {
-            $response = $client->post($host . 'cms/' . $url, $content);
+            $response = $client->post($host . 'api/' . $url, $content);
             return json_decode($response->getBody(), true);
         } catch (\GuzzleHttp\Exception\RequestException $e) {
             try {
@@ -97,29 +112,10 @@ class MyHelper
         }
     }
 
-    public static function get($source, $url)
+    public static function get($url)
     {
-        switch ($source) {
-            case 'core-user':
-                $host = env('APP_API_URL_USER');
-                break;
 
-            case 'core-api':
-                $host = env('APP_API_URL_CORE');
-                break;
-
-            case 'core-transaction':
-                $host = env('APP_API_URL_TRANSACTION');
-                break;
-
-            case 'device-central':
-                $host = env('APP_API_URL_DEVICE_CENTRAL');
-                break;
-
-            default:
-                return ['status' => 'fail', 'messages' => [0 => 'Invalid Host']];
-                break;
-        }
+        $host = env('APP_API_URL');
 
         $client = new Client();
         $bearer = session('access_token');
@@ -131,7 +127,7 @@ class MyHelper
                         ],
         );
         try {
-            $response =  $client->request('GET', $host . 'cms/' . $url, $content);
+            $response =  $client->request('GET', $host . 'api/' . $url, $content);
             return json_decode($response->getBody(), true);
         } catch (\GuzzleHttp\Exception\RequestException $e) {
             try {
