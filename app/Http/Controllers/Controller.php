@@ -50,10 +50,23 @@ class Controller extends BaseController
 					'user_name'      => $request->input('username'),
 				]);
 
-                return $userData = MyHelper::get('be/user',);
+                $userData = MyHelper::get('be/user');
 
+                if(isset($userData['status']) && $userData['status'] == 'success' && !empty($userData['result'])) {
+                    $dataUser = $userData['result'];
+                }
+
+                session([
+                    'access_token'      => 'Bearer ' . $login['access_token'],
+                    'user_id'           => $dataUser['user']['id'],
+                    'user_name'         => $dataUser['user']['name'],
+                    'user_email'        => $dataUser['user']['email'],
+                    'user_role'         => $dataUser['user']['admin_id'],
+                    'granted_features'  => $dataUser['features'],
+                ]);
                 
-                return 123123;
+                return redirect('home');
+
             }
         }
         if ($login['status'] == 'success') {

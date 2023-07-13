@@ -33,4 +33,5 @@ Route::get('login', function () {
 });
 
 Route::post('login', [Controller::class, 'login']);
-Route::get('home', [Controller::class, 'getHome'])->middleware('validate_session');
+// Route::get('home', [Controller::class, 'getHome'])->middleware('validate_session');
+Route::get('home', [Controller::class, 'getHome']);;
