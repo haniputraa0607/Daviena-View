@@ -37,21 +37,27 @@ class UserController extends Controller
 
     public function store()
     {
-        dd("indeex");
+        // todo
     }
 
     public function show()
     {
-        dd("indeex");
+        // todo
     }
 
     public function update()
     {
-        dd("indeex");
+        // todo
     }
 
-    public function delete()
+    public function delete($id)
     {
-        dd("indeex");
+        $delete= MyHelper::deleteApi('user/' . $id);
+
+        if (isset($delete['status']) && $delete['status'] == "success") {
+            return response()->json(['status' => 'success', 'messages' => ['User deleted successfully']]);
+        } else {
+            return response()->json(['status' => 'fail', 'messages' => [$delete['message']]]);
+        }
     }
 }

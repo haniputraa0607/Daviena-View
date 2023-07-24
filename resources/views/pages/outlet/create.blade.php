@@ -180,7 +180,7 @@
                                 </div>
                                 <div class="col-md-9">
                                     <div class="col-md-10">
-                                        <select name="activities" class="selectpicker form-control" multiple data-live-search="true" required>
+                                        <select name="activities[]" class="selectpicker form-control" multiple data-live-search="true" required>
                                             <option value="product">Product</option>
                                             <option value="treatment">Treatment</option>
                                             <option value="consultation">Consultation</option>

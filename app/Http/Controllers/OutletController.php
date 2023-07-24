@@ -47,7 +47,7 @@ class OutletController extends Controller
             "outlet_email"  => $request->email,
             "id_partner"    => $request->partner,
             "outlet_code"   => $request->outlet_code,
-            "activities"    => array('product', 'consultation')
+            "activities"    => $request->activities
         ];
 
         $save = MyHelper::post('outlet', $payload);
@@ -78,24 +78,26 @@ class OutletController extends Controller
         return view('pages.outlet.detail', $data);
     }
 
-    public function update(Request $request)
+    public function update(Request $request, $id)
     {
         $payload = [
-            'id'                    => $request->id,
-            'name'                  => $request->name,
-            'email'                 => $request->email,
-            'is_active'             => $is_active,
-            'role_id'               => $request->admin_role,
-            'super_admin_password'  => $request->super_admin_password
+            "name"          => $request->name,
+            "address"       => $request->address,
+            "district_code" => $request->district,
+            "outlet_phone"  => $request->phone,
+            "outlet_email"  => $request->email,
+            "id_partner"    => $request->partner,
+            "outlet_code"   => $request->outlet_code,
+            "activities"    => $request->activities
         ];
 
-        $save = MyHelper::post(self::SOURCE,'v1/user/update/detail', $payload);
+        $save = MyHelper::patch('outlet/' . $id, $payload);
 
         if (isset($save['status']) && $save['status'] == "success") {
-            return back()->withFragment('#tab_detail')->withSuccess(['CMS User detail has been updated.']);
+            return redirect('outlet')->withSuccess(['CMS Outlet detail has been updated.']);
         } else {
             if (isset($save['status']) && $save['status'] == "error") {
-                return back()->withFragment('#tab_detail')->withErrors($save['message'])->withInput();
+                return back()->withErrors($save['message'])->withInput();
             }
             return back()->withFragment('#tab_detail')->withErrors(['Something went wrong. Please try again.'])->withInput();
         }

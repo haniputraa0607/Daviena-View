@@ -195,9 +195,9 @@
                                     <div class="col-md-10">
                                         <select name="partner" id="partner-input" class="form-control" required>
                                             <option value="">--Select--</option>
-                                            <option value="admin">Admin</option>
-                                            <option value="salesman">Salesman</option>
-                                            <option value="cashier">Cashier</option>
+                                            <option value="1">Admin</option>
+                                            <option value="2">Salesman</option>
+                                            <option value="3">Cashier</option>
                                         </select>
                                     </div>
                                 </div>
@@ -213,7 +213,7 @@
                                 </div>
                                 <div class="col-md-9">
                                     <div class="col-md-10">
-                                        <select name="activities" class="selectpicker form-control" multiple data-live-search="true" required>
+                                        <select name="activities[]" class="selectpicker form-control" multiple data-live-search="true" required>
                                             <option value="product" {{ (in_array("product", json_decode($detail['activities']))) ? 'selected' : '' }}>Product</option>
                                             <option value="treatment" {{ (in_array("treatment", json_decode($detail['activities']))) ? 'selected' : '' }}>Treatment</option>
                                             <option value="consultation" {{ (in_array("consultation", json_decode($detail['activities']))) ? 'selected' : '' }}>Consultation</option>

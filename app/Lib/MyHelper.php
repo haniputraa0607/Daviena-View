@@ -113,6 +113,41 @@ class MyHelper
         }
     }
 
+    public static function patch($url, $post)
+    {
+        $host = env('APP_API_URL');
+
+        $client = new Client();
+        $bearer = session('access_token');
+        $content = array(
+            'headers'   => [
+                            'Authorization' => $bearer,
+                            'Accept'        => 'application/json',
+                            'Content-Type'  => 'application/json',
+                        ],
+            'json'      => (array) $post
+
+        );
+
+        try {
+            $response = $client->patch($host . 'api/' . $url, $content);
+            return json_decode($response->getBody(), true);
+        } catch (\GuzzleHttp\Exception\RequestException $e) {
+            try {
+                if ($e->getResponse()) {
+                    $response = $e->getResponse()->getBody()->getContents();
+                    if (!is_array($response)) {
+                    }
+                    return json_decode($response, true);
+                } else {
+                    return ['status' => 'fail', 'messages' => [0 => 'Check your internet connection.']];
+                }
+            } catch (Exception $e) {
+                return ['status' => 'fail', 'messages' => [0 => 'Check your internet connection.']];
+            }
+        }
+    }
+
     public static function get($url)
     {
 

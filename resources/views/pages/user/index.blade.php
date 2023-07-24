@@ -89,8 +89,7 @@
                     <tr style="text-align: center">
                         <th style="text-align: center"> Name </th>
                         <th style="text-align: center"> Email </th>
-                        <th style="text-align: center"> Super Admin </th>
-                        {{-- <th style="text-align: center"> Status </th> --}}
+                        <th style="text-align: center"> Type </th>
                         <th style="text-align: center"> Action </th>
                     </tr>
                 </thead>
@@ -100,16 +99,9 @@
                             <tr style="text-align: center; {{ $user['type'] == 'super_admin' ? 'color:red;' : '' }}">
                                 <td>{{ $user['name'] }}</td>
                                 <td>{{ $user['email'] }}</td>
-                                <td>{{ $user['type'] == 'super_admin' ? 'Yes' : 'No' }}</td>
-                                {{-- <td>
-                                    @if ($user['is_active'])
-                                        <span class="badge badge-success badge-sm">Active</span>
-                                    @else
-                                        <span class="badge badge-danger badge-sm">Non-Active</span>
-                                    @endif
-                                </td> --}}
+                                <td>{{ $user['type'] }}</td>
                                 <td style="width: 90px;">
-                                    <a href="{{ url('user/detail') }}/{{ $user['id'] }}" class="btn btn-sm blue"><i class="fa fa-search"></i></a>
+                                    <a href="" class="btn btn-sm blue"><i class="fa fa-search"></i></a>
                                 </td>
                             </tr>
                         @endforeach

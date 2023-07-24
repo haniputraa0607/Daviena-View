@@ -53,5 +53,5 @@ Route::prefix('outlet')->group(function () {
     Route::get('detail/{id}', [OutletController::class, 'show'])->name('outlet.detail');
     Route::post('store', [OutletController::class, 'store'])->name('outlet.store');
     Route::get('delete/{id}', [OutletController::class, 'delete'])->name('outlet.delete');
-    Route::post('update', [OutletController::class, 'update'])->name('outlet.update');
+    Route::post('update/{id}', [OutletController::class, 'update'])->name('outlet.update');
 });
