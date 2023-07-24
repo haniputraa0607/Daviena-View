@@ -52,8 +52,8 @@ final class DirectDispatcher implements SubscribableDispatcher
             throw new UnknownSubscriberTypeException(
                 sprintf(
                     'Subscriber "%s" does not implement any known interface - did you forget to register it?',
-                    $subscriber::class
-                )
+                    $subscriber::class,
+                ),
             );
         }
 
@@ -67,6 +67,22 @@ final class DirectDispatcher implements SubscribableDispatcher
     }
 
     /**
+     * @psalm-param class-string $className
+     */
+    public function hasSubscriberFor(string $className): bool
+    {
+        if ($this->tracers !== []) {
+            return true;
+        }
+
+        if (isset($this->subscribers[$className])) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
      * @throws UnknownEventTypeException
      */
     public function dispatch(Event $event): void
@@ -77,8 +93,8 @@ final class DirectDispatcher implements SubscribableDispatcher
             throw new UnknownEventTypeException(
                 sprintf(
                     'Unknown event type "%s"',
-                    $eventClassName
-                )
+                    $eventClassName,
+                ),
             );
         }
 

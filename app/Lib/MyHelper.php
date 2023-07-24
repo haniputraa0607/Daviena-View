@@ -12,6 +12,7 @@ use JWTAuth;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use Intervention\Image\Facades\Image;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Log;
 
 class MyHelper
 {
@@ -144,6 +145,52 @@ class MyHelper
                     return ['status' => 'fail', 'messages' => [0 => 'Check your internet connection.']];
                 }
             } catch (Exception $e) {
+                return ['status' => 'fail', 'messages' => [0 => 'Check your internet connection.']];
+            }
+        }
+    }
+
+    public static function deleteApi($url, $post = null)
+    { 
+        $api = env('APP_API_URL');
+        $client = new Client;
+        $ses = session('access_token');
+        $content = array(
+            'headers' => [
+                'Authorization'   => $ses,
+            ],
+            'connect_timeout' => 15,
+        );
+        try {
+            $response =  $client->request('DELETE', $api . 'api/' . $url, $content);
+            return json_decode($response->getBody(), true);
+        } catch (\GuzzleHttp\Exception\RequestException $e) {
+            try {
+                if ($e->getResponse()) {
+                    $response = $e->getResponse()->getBody()->getContents();
+                    $error = json_decode($response, true);
+                    if (!$error) {
+                        Log::debug([
+                            'url' => $api . '/' . $url,
+                            'param'  => $content,
+                            'response'  => $e
+                        ]);
+                        return;
+                    } else {
+                        Log::debug([
+                            'url' => $api . '/' . $url,
+                            'param'  => $content,
+                            'response'  => $error
+                        ]);
+                        return $error;
+                    }
+                } else return ['status' => 'fail', 'messages' => [0 => 'Check your internet connection.']];
+            } catch (\Exception $e) {
+                Log::debug([
+                    'url' => $api . '/' . $url,
+                    'param'  => $content,
+                    'response'  => $e
+                ]);
                 return ['status' => 'fail', 'messages' => [0 => 'Check your internet connection.']];
             }
         }
