@@ -162,9 +162,9 @@
                                     <div class="col-md-10">
                                         <select name="partner" id="partner-input" class="form-control" required>
                                             <option value="">--Select--</option>
-                                            <option value="1">Admin</option>
-                                            <option value="2">Salesman</option>
-                                            <option value="3">Cashier</option>
+                                            <option value="1">Partner 1</option>
+                                            <option value="2">Partner 2</option>
+                                            <option value="3">Partner 3</option>
                                         </select>
                                     </div>
                                 </div>
