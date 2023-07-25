@@ -25,7 +25,7 @@ class OnboardingController extends Controller
             'sub_title'      => 'On-Boarding Setting',
         ];
 
-        $on_boarding = MyHelper::get(self::SOURCE,'v1/on-boarding');
+        $on_boarding = MyHelper::get(self::SOURCE, 'v1/on-boarding');
 
         $existing_file = [];
         foreach ($on_boarding['data']['image'] as $value) {
@@ -63,7 +63,7 @@ class OnboardingController extends Controller
             "images" => $images
         ];
 
-        $save = MyHelper::post(self::SOURCE,'v1/on-boarding', $payload);
+        $save = MyHelper::post(self::SOURCE, 'v1/on-boarding', $payload);
 
         if (isset($save['status']) && $save['status'] == "success") {
             return redirect('setting/on-boarding')->withSuccess(['On-Boarding setting has been updated.']);
@@ -97,7 +97,7 @@ class OnboardingController extends Controller
             return back()->withErrors($error->getMessage())->withInput();
         }
 
-        $save = MyHelper::post(self::SOURCE,'v1/on-boarding/add', $payload);
+        $save = MyHelper::post(self::SOURCE, 'v1/on-boarding/add', $payload);
 
         if (isset($save['status']) && $save['status'] == "success") {
             return redirect('setting/on-boarding')->withSuccess(['Onboarding image successfully added.']);

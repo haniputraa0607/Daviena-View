@@ -22,7 +22,8 @@ class FAQController extends Controller
     const REGULAR = "regular";
     const EXAMPLE = "with_example";
 
-    public function getFAQSetting() {
+    public function getFAQSetting()
+    {
         $data = [
             'title'   => 'Frequently Asked Questions',
             'sub_title'   => 'Sorting FAQ',
@@ -30,7 +31,7 @@ class FAQController extends Controller
             'submenu_active' => 'faq'
         ];
 
-        $faq = MyHelper::get(self::SOURCE,'v1/faq');
+        $faq = MyHelper::get(self::SOURCE, 'v1/faq');
 
         $existing_image = [];
         foreach ($faq['data'] as $value) {
@@ -53,14 +54,15 @@ class FAQController extends Controller
         return view('settings.faq.faq_list', $data);
     }
 
-    public function updateFAQSetting(UpdateOrderFAQRequest $request) {
+    public function updateFAQSetting(UpdateOrderFAQRequest $request)
+    {
         $questions = [];
         foreach ($request->id as $key => $id) {
             array_push($questions, ['id' => $id, 'order_no' => $key]);
         }
 
         $payload['data'] = $questions;
-        $save = MyHelper::post(self::SOURCE,'v1/faq', $payload);
+        $save = MyHelper::post(self::SOURCE, 'v1/faq', $payload);
 
         if (isset($save['status']) && $save['status'] == "success") {
             return redirect('setting/faq')->withSuccess(['Question order has been updated.']);
@@ -69,7 +71,8 @@ class FAQController extends Controller
         }
     }
 
-    public function getDetialFAQSetting($id) {
+    public function getDetialFAQSetting($id)
+    {
         $data = [
             'title'   => 'Frequently Asked Questions',
             'sub_title'   => 'Detail',
@@ -77,7 +80,7 @@ class FAQController extends Controller
             'submenu_active' => 'faq'
         ];
 
-        $faq = MyHelper::get(self::SOURCE,'v1/faq/' . $id);
+        $faq = MyHelper::get(self::SOURCE, 'v1/faq/' . $id);
 
         if (isset($faq['status']) && $faq['status'] == "success") {
             $data['detail'] = $faq['data'];
@@ -88,7 +91,8 @@ class FAQController extends Controller
         return view('settings.faq.faq_detail', $data);
     }
 
-    public function updateDetialFAQSetting(UpdateDetailFAQRequest $request){
+    public function updateDetialFAQSetting(UpdateDetailFAQRequest $request)
+    {
         $path = 'image/answer';
         $step_by_step_answer = [];
         $new_step_by_step_answer = [];
@@ -103,7 +107,7 @@ class FAQController extends Controller
 
                         if ($uploadedFile['path'] == null) {
                             return back()->withErrors(['Something went wrong when uploading image. Please try again.'])->withInput();
-                    }
+                        }
                     }
                 } catch (Exception $error) {
                     return back()->withErrors($error->getMessage())->withInput();
@@ -142,7 +146,7 @@ class FAQController extends Controller
             'new_step_by_step_answer' => $new_step_by_step_answer
         ];
 
-        $save = MyHelper::post(self::SOURCE,'v1/faq/update', $payload);
+        $save = MyHelper::post(self::SOURCE, 'v1/faq/update', $payload);
         if (isset($save['status']) && $save['status'] == "success") {
             return redirect('setting/faq/' . $request->id)->withSuccess(['Question and answer has been updated.']);
         } else {
@@ -150,7 +154,8 @@ class FAQController extends Controller
         }
     }
 
-    public function newFAQSetting() {
+    public function newFAQSetting()
+    {
         $data = [
             'title'   => 'Frequently Asked Questions',
             'sub_title'   => 'New FAQ',
@@ -161,7 +166,8 @@ class FAQController extends Controller
         return view('settings.faq.faq_create', $data);
     }
 
-    public function createFAQSetting(CreateFAQRequest $request) {
+    public function createFAQSetting(CreateFAQRequest $request)
+    {
         $path = 'image/answer';
         $step_by_step_answer = [];
         if (!empty($request->file)) {
@@ -203,7 +209,7 @@ class FAQController extends Controller
             'step_by_step_answer'   => $step_by_step_answer
         ];
 
-        $save = MyHelper::post(self::SOURCE,'v1/faq/add', $payload);
+        $save = MyHelper::post(self::SOURCE, 'v1/faq/add', $payload);
 
         if (isset($save['status']) && $save['status'] == "success") {
             return redirect('setting/faq')->withSuccess(['New question and answer successfully added.']);
@@ -212,8 +218,9 @@ class FAQController extends Controller
         }
     }
 
-    public function deleteFAQSetting($id) {
-        $delete= MyHelper::get(self::SOURCE,'v1/faq/' . $id . '/delete/');
+    public function deleteFAQSetting($id)
+    {
+        $delete = MyHelper::get(self::SOURCE, 'v1/faq/' . $id . '/delete/');
 
         if (isset($delete['status']) && $delete['status'] == "success") {
             return response()->json(['status' => 'success', 'messages' => ['Question and Answer deleted successfully']]);

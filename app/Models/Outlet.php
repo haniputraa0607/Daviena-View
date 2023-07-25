@@ -42,5 +42,4 @@ class Outlet extends Model
     {
         return $this->hasMany(OutletSchedule::class);
     }
-
 }

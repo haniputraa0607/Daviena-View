@@ -41,6 +41,5 @@ class UpdateSplashScreenRequest extends FormRequest
             'default_home_splash_duration' => 'Durasi',
             'default_home_splash_screen' => 'Media'
         ];
-
     }
 }

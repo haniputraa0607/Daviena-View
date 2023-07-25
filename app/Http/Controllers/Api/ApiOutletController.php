@@ -9,22 +9,27 @@ use Illuminate\Http\Request;
 
 class ApiOutletController extends Controller
 {
-    public function index(Request $request) : JsonResponse {
-    $data = Outlet::paginate($request->length ?? 15);
-        return $this->ok("succes", $data);
+    public function index(Request $request): JsonResponse
+    {
+        $outlets = $request->length ? Outlet::with('district')->paginate($request->length ?? 10) : Outlet::with('district')->get();
+        return $this->ok("succes", $outlets);
     }
-    public function show(Outlet $outlet) : JsonResponse {
+    public function show(Outlet $outlet): JsonResponse
+    {
         return $this->ok("succes", $outlet);
     }
-    public function store(Request $request) : JsonResponse {
+    public function store(Request $request): JsonResponse
+    {
         $outlet = Outlet::create($request->all());
         return $this->ok("succes", $outlet);
     }
-    public function update(Request $request, Outlet $outlet) : JsonResponse {
+    public function update(Request $request, Outlet $outlet): JsonResponse
+    {
         $outlet->update($request->all());
         return $this->ok("succes", $outlet);
     }
-    public function destroy(Outlet $outlet) : JsonResponse {
+    public function destroy(Outlet $outlet): JsonResponse
+    {
         $outlet->delete();
         return $this->ok("succes", $outlet);
     }

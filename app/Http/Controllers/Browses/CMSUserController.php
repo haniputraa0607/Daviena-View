@@ -14,7 +14,8 @@ class CMSUserController extends Controller
 {
     const SOURCE = 'core-user';
 
-    public function getUserList() {
+    public function getUserList()
+    {
         $data = [
             'title'             => 'CMS Users',
             'sub_title'         => 'List',
@@ -22,7 +23,7 @@ class CMSUserController extends Controller
             'submenu_active'    => 'browse-cms-user'
         ];
 
-        $cms_user = MyHelper::get(self::SOURCE,'v1/user');
+        $cms_user = MyHelper::get(self::SOURCE, 'v1/user');
         if (isset($cms_user['status']) && $cms_user['status'] == "success") {
             $data['cms_users'] = $cms_user['data'];
         } else {
@@ -32,7 +33,8 @@ class CMSUserController extends Controller
         return view('browses.cms-user.cms_user_list', $data);
     }
 
-    public function getUserDetail($id) {
+    public function getUserDetail($id)
+    {
         $data = [
             'title'             => 'CMS Users',
             'sub_title'         => 'Detail',
@@ -40,14 +42,14 @@ class CMSUserController extends Controller
             'submenu_active'    => 'browse-cms-user'
         ];
 
-        $role = MyHelper::get(self::SOURCE,'v1/role?status=true');
+        $role = MyHelper::get(self::SOURCE, 'v1/role?status=true');
         if (isset($role['status']) && $role['status'] == "success") {
             $data['roles'] = $role['data'];
         } else {
             return back()->withErrors(['Something went wrong. Please try again.'])->withInput();
         }
 
-        $cms_user = MyHelper::get(self::SOURCE,'v1/user/detail/' . $id);
+        $cms_user = MyHelper::get(self::SOURCE, 'v1/user/detail/' . $id);
         if (isset($cms_user['status']) && $cms_user['status'] == "success") {
             $data['detail'] = $cms_user['data'];
         } else {
@@ -57,7 +59,8 @@ class CMSUserController extends Controller
         return view('browses.cms-user.cms_user_detail', $data);
     }
 
-    public function addUser() {
+    public function addUser()
+    {
         $data = [
             'title'             => 'CMS Users',
             'sub_title'         => 'New',
@@ -65,7 +68,7 @@ class CMSUserController extends Controller
             'submenu_active'    => 'browse-cms-user'
         ];
 
-        $role = MyHelper::get(self::SOURCE,'v1/role?status=true');
+        $role = MyHelper::get(self::SOURCE, 'v1/role?status=true');
         if (isset($role['status']) && $role['status'] == "success") {
             $data['roles'] = $role['data'];
         } else {
@@ -75,7 +78,8 @@ class CMSUserController extends Controller
         return view('browses.cms-user.cms_user_add', $data);
     }
 
-    public function createUser(CreateUserRequest $request) {
+    public function createUser(CreateUserRequest $request)
+    {
         if (isset($request->role)) {
             $role = $request->role;
             $admin_role = '';
@@ -92,7 +96,7 @@ class CMSUserController extends Controller
             "role_id"   => $admin_role,
         ];
 
-        $save = MyHelper::post(self::SOURCE,'v1/user/create', $payload);
+        $save = MyHelper::post(self::SOURCE, 'v1/user/create', $payload);
 
         if (isset($save['status']) && $save['status'] == "success") {
             return redirect('browse/cms-user')->withSuccess(['New User successfully added.']);
@@ -102,14 +106,15 @@ class CMSUserController extends Controller
     }
 
 
-    public function updateRoleUser(UpdateRoleUserRequest $request) {
+    public function updateRoleUser(UpdateRoleUserRequest $request)
+    {
         $payload = [
             'id'                    => $request->id,
             'role'                  => $request->role,
             'super_admin_password'  => $request->super_admin_password
         ];
 
-        $update = MyHelper::post(self::SOURCE,'v1/user/update/role', $payload);
+        $update = MyHelper::post(self::SOURCE, 'v1/user/update/role', $payload);
 
         if (isset($update['status']) && $update['status'] == "success") {
             return response()->json(['status' => 'success', 'messages' => ['CMS user role updated successfully']]);
@@ -118,7 +123,8 @@ class CMSUserController extends Controller
         }
     }
 
-    public function updateUserDetail(UpdateDetailUserRequest $request) {
+    public function updateUserDetail(UpdateDetailUserRequest $request)
+    {
         if ($request->is_active == '1') {
             $is_active = true;
         } else {
@@ -134,7 +140,7 @@ class CMSUserController extends Controller
             'super_admin_password'  => $request->super_admin_password
         ];
 
-        $save = MyHelper::post(self::SOURCE,'v1/user/update/detail', $payload);
+        $save = MyHelper::post(self::SOURCE, 'v1/user/update/detail', $payload);
 
         if (isset($save['status']) && $save['status'] == "success") {
             return back()->withFragment('#tab_detail')->withSuccess(['CMS User detail has been updated.']);
@@ -146,14 +152,15 @@ class CMSUserController extends Controller
         }
     }
 
-    public function updatePasswordDetail(UpdatePasswordUserRequest $request) {
+    public function updatePasswordDetail(UpdatePasswordUserRequest $request)
+    {
         $payload = [
             'id'                    => $request->id,
             'super_admin_password'  => $request->super_admin_password,
             'new_password'          => $request->new_password
         ];
 
-        $save = MyHelper::post(self::SOURCE,'v1/user/update/password', $payload);
+        $save = MyHelper::post(self::SOURCE, 'v1/user/update/password', $payload);
 
         if (isset($save['status']) && $save['status'] == "success") {
             return back()->withFragment('#tab_password')->withSuccess(['CMS User password has been updated.']);

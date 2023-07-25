@@ -14,7 +14,8 @@ class ECSController extends Controller
     const SOURCE = 'core-api';
     const ROOTPATH = 'device';
 
-    public function getECSList() {
+    public function getECSList()
+    {
         $data = [
             'title'   => 'ECS',
             'sub_title'   => 'Electronic Charging Station',
@@ -27,7 +28,7 @@ class ECSController extends Controller
         }
 
         $location_ids = [];
-        $device = MyHelper::get(self::SOURCE,'v1/ecs');
+        $device = MyHelper::get(self::SOURCE, 'v1/ecs');
         if (isset($device['status']) && $device['status'] == "success") {
             foreach ($device['data'] as $location) {
                 $location_ids[] = $location['location_id'];
@@ -38,9 +39,9 @@ class ECSController extends Controller
             }
             $data['devices'] = [];
         }
-        $string_location_ids = implode(",",$location_ids);
+        $string_location_ids = implode(",", $location_ids);
 
-        $location_list = MyHelper::get(self::SOURCE,'v1/location/list?location_ids=' . $string_location_ids);
+        $location_list = MyHelper::get(self::SOURCE, 'v1/location/list?location_ids=' . $string_location_ids);
         $location_data = [];
         if (isset($location_list['status']) && $location_list['status'] == "success") {
             if (count($location_list['data']) > 0) {
@@ -48,7 +49,6 @@ class ECSController extends Controller
                     $location_data[$location['id']] = $location;
                 }
             }
-
         }
 
         foreach ($device['data'] as $device) {
@@ -68,7 +68,8 @@ class ECSController extends Controller
         return view('browses.ecs.ecs_list', $data);
     }
 
-    public function getEcsDetail($id) {
+    public function getEcsDetail($id)
+    {
         $data = [
             'title'   => 'ECS',
             'sub_title'   => 'Detail Electronic Charging Station',
@@ -77,11 +78,11 @@ class ECSController extends Controller
         ];
 
         $error_bag = [];
-        $device = MyHelper::get(self::SOURCE,'v1/ecs/' . $id);
+        $device = MyHelper::get(self::SOURCE, 'v1/ecs/' . $id);
         if (isset($device['status']) && $device['status'] == "success") {
             $data['device_detail'] = $device['data'];
             if ($device['data']['status'] == 'NEW') {
-                $location_option = MyHelper::get(self::SOURCE,'v1/location/search');
+                $location_option = MyHelper::get(self::SOURCE, 'v1/location/search');
                 if (isset($location_option['status']) && $location_option['status'] == "success") {
                     $data['location_option'] = $location_option['data'];
                 } else {
@@ -98,7 +99,7 @@ class ECSController extends Controller
             $data['device_detail'] = [];
         }
 
-        $location = MyHelper::get(self::SOURCE,'v1/location/list?location_ids=' . $device['data']['location_id']);
+        $location = MyHelper::get(self::SOURCE, 'v1/location/list?location_ids=' . $device['data']['location_id']);
         if (isset($location['status']) && $location['status'] == "success") {
             foreach ($location['data'] as $location) {
                 $data['location_detail'] = $location;
@@ -110,7 +111,7 @@ class ECSController extends Controller
             $data['location_detail'] = [];
         }
 
-        $connectors = MyHelper::get(self::SOURCE,'v1/ecs/connector/' . $id);
+        $connectors = MyHelper::get(self::SOURCE, 'v1/ecs/connector/' . $id);
         if (isset($connectors['status']) && $connectors['status'] == "success") {
             $data['connector_list'] = $connectors['data'];
         } else {
@@ -120,7 +121,7 @@ class ECSController extends Controller
             $data['connector_list'] = [];
         }
 
-        $custom_price = MyHelper::get('core-transaction','v1/price-setting/custom-price/option');
+        $custom_price = MyHelper::get('core-transaction', 'v1/price-setting/custom-price/option');
         if (isset($custom_price['status']) && $custom_price['status'] == "success") {
             $data['custom_prices'] = $custom_price['data'];
         } else {
@@ -137,34 +138,35 @@ class ECSController extends Controller
         return view('browses.ecs.ecs_detail', $data);
     }
 
-    public function generateQRCode($ecs_id, $connector_id = null) {
+    public function generateQRCode($ecs_id, $connector_id = null)
+    {
         $error_bag = [];
 
-        $device = MyHelper::get(self::SOURCE,'v1/ecs/' . $ecs_id);
+        $device = MyHelper::get(self::SOURCE, 'v1/ecs/' . $ecs_id);
         if (isset($device['status']) && $device['status'] == "success") {
             $device_detail = $device['data'];
         } else {
             if (isset($device['status']) && $device['status'] == "error") {
-                return redirect('browse/ecs/'.$ecs_id)->withErrors($device['message'])->withInput();
+                return redirect('browse/ecs/' . $ecs_id)->withErrors($device['message'])->withInput();
             }
-            return redirect('browse/ecs/'.$ecs_id)->withErrors("Something went wrong!")->withInput();
+            return redirect('browse/ecs/' . $ecs_id)->withErrors("Something went wrong!")->withInput();
         }
         if ($device['data']['status'] == "NEW") {
-            return redirect('browse/ecs/'.$ecs_id)->withErrors(['Cannot Print QR Code for New ECS'])->withInput();
+            return redirect('browse/ecs/' . $ecs_id)->withErrors(['Cannot Print QR Code for New ECS'])->withInput();
         }
 
         if ($device['data']['location_id'] == 0 || $device['data']['num_of_connector'] == 0) {
-            return redirect('browse/ecs/'.$ecs_id)->withErrors(['No Location / Connector found'])->withInput();
+            return redirect('browse/ecs/' . $ecs_id)->withErrors(['No Location / Connector found'])->withInput();
         }
 
         $connector_list = [];
-        $connectors = MyHelper::get(self::SOURCE,'v1/ecs/connector/' . $ecs_id);
+        $connectors = MyHelper::get(self::SOURCE, 'v1/ecs/connector/' . $ecs_id);
         if (isset($connectors['status']) && $connectors['status'] == "success") {
             if ($connector_id != null) {
                 foreach ($connectors['data'] as $connector) {
                     if ($connector['connector_id'] == $connector_id) {
                         if ($connector['qr_code'] == null) {
-                            $error_bag[] = "No QrCode Value for connector number : ".$connector['connector_id'];
+                            $error_bag[] = "No QrCode Value for connector number : " . $connector['connector_id'];
                         }
                         $connector_list[] = $connector;
                     }
@@ -172,7 +174,7 @@ class ECSController extends Controller
             } else {
                 foreach ($connectors['data'] as $connector) {
                     if ($connector['qr_code'] == null) {
-                        $error_bag[] = "No QrCode Value for connector number : ".$connector['connector_id'];
+                        $error_bag[] = "No QrCode Value for connector number : " . $connector['connector_id'];
                     }
                     $connector_list[] = $connector;
                 }
@@ -184,16 +186,16 @@ class ECSController extends Controller
         }
 
         if (count($error_bag) > 0) {
-            return redirect('browse/ecs/'.$ecs_id)->withErrors($error_bag)->withInput();
+            return redirect('browse/ecs/' . $ecs_id)->withErrors($error_bag)->withInput();
         }
 
         $path = 'device/qr-code/' . $device_detail['ecs_id'];
         $qr_files = Storage::files($path);
         foreach ($connector_list as $key => $conn) {
-            $filename = $device_detail['ecs_id']."_".$conn['connector_id'];
-            $qr_path = $path."/".$filename.".png";
+            $filename = $device_detail['ecs_id'] . "_" . $conn['connector_id'];
+            $qr_path = $path . "/" . $filename . ".png";
             if (!in_array($qr_path, $qr_files)) {
-                $generated_qr_path = MyHelper::GenerateQR(empty($conn['qr_code']) ? "no-data" : $conn['qr_code'], $filename, $path, $device['data']['num_of_connector'] > 1 ? $device_detail['ecs_id']. "-" . $conn['connector_id'] : $device_detail['ecs_id']);
+                $generated_qr_path = MyHelper::GenerateQR(empty($conn['qr_code']) ? "no-data" : $conn['qr_code'], $filename, $path, $device['data']['num_of_connector'] > 1 ? $device_detail['ecs_id'] . "-" . $conn['connector_id'] : $device_detail['ecs_id']);
                 $connector_list[$key]['qr_path'] = $generated_qr_path;
             } else {
                 $connector_list[$key]['qr_path'] = $qr_path;
@@ -202,13 +204,14 @@ class ECSController extends Controller
 
         $data = ["device" => $device_detail, "connectors" => $connector_list];
 
-        $filename = $connector_id == null ? $device_detail['ecs_id'] : ($device['data']['num_of_connector'] > 1 ? $device_detail['ecs_id']. "-" . $connector_id : $device_detail['ecs_id']);
+        $filename = $connector_id == null ? $device_detail['ecs_id'] : ($device['data']['num_of_connector'] > 1 ? $device_detail['ecs_id'] . "-" . $connector_id : $device_detail['ecs_id']);
 
         $pdf = Pdf::loadView('pdf.qrcode', $data);
-        return $pdf->download($filename.'.pdf');
+        return $pdf->download($filename . '.pdf');
     }
 
-    public function assignECSLocation(AssignECSLocationRequest $request) {
+    public function assignECSLocation(AssignECSLocationRequest $request)
+    {
 
         $payload = [
             "id" => intval($request->id_ecs),
@@ -216,7 +219,7 @@ class ECSController extends Controller
             "num_of_connector" => intval($request->num_of_connector),
         ];
 
-        $save = MyHelper::post(self::SOURCE,'v1/ecs/update', $payload);
+        $save = MyHelper::post(self::SOURCE, 'v1/ecs/update', $payload);
 
         if (isset($save['status']) && $save['status'] == "success") {
             return back()->withSuccess(['Success Assign ECS to location']);
@@ -228,15 +231,16 @@ class ECSController extends Controller
         }
     }
 
-    public function searchECS(){
+    public function searchECS()
+    {
         $search = request()->query("search");
 
         $url = 'v1/ecs/search';
         if (!empty($search)) {
-            $url = 'v1/ecs/search?search='. $search;
+            $url = 'v1/ecs/search?search=' . $search;
         }
 
-        $ecs = MyHelper::get(self::SOURCE,$url);
+        $ecs = MyHelper::get(self::SOURCE, $url);
 
         if (isset($ecs['status']) && $ecs['status'] == "success") {
             return response()->json(['status' => 'success', 'messages' => ['search ecs success'], 'data' => $ecs['data']]);
@@ -246,7 +250,8 @@ class ECSController extends Controller
     }
 
     //TODO Development only, will remove soon!
-    public function registerECS($ecs_id){
+    public function registerECS($ecs_id)
+    {
         if (env('APP_ENV') == 'production') {
             return response()->json(['status' => 'fail', 'messages' => ['This Endpoint Is Closed']]);
         }
@@ -263,13 +268,14 @@ class ECSController extends Controller
         }
     }
 
-    public function updateECSPricing(Request $request, $id) {
+    public function updateECSPricing(Request $request, $id)
+    {
         $payload = [
             "id" => intval($request->id),
             "pricing_group" => intval($request->custom_price),
         ];
 
-        $save = MyHelper::post(self::SOURCE,'v1/ecs/pricing/update', $payload);
+        $save = MyHelper::post(self::SOURCE, 'v1/ecs/pricing/update', $payload);
 
         if ($request->type == 'ajax') {
             if (isset($save['status']) && $save['status'] == "success") {
@@ -292,7 +298,8 @@ class ECSController extends Controller
         }
     }
 
-    public function listPricingECS() {
+    public function listPricingECS()
+    {
         $data = [
             'title'   => 'ECS',
             'sub_title'   => 'Pricing',
@@ -305,7 +312,7 @@ class ECSController extends Controller
         $search = request()->query('search', '');
 
         $location_ids = [];
-        $ecs = MyHelper::get(self::SOURCE,'v1/ecs/pagination?per_page=' . $per_page . '&page=' . $page . '&search=' . $search);
+        $ecs = MyHelper::get(self::SOURCE, 'v1/ecs/pagination?per_page=' . $per_page . '&page=' . $page . '&search=' . $search);
         if (isset($ecs['status']) && $ecs['status'] == "success") {
             foreach ($ecs['data']['data'] as $location) {
                 $location_ids[] = $location['location_id'];
@@ -320,9 +327,9 @@ class ECSController extends Controller
             return back()->withErrors(['Something went wrong. Please try again.'])->withInput();
         }
 
-        $string_location_ids = implode(",",$location_ids);
+        $string_location_ids = implode(",", $location_ids);
 
-        $location_list = MyHelper::get(self::SOURCE,'v1/location/list?location_ids=' . $string_location_ids);
+        $location_list = MyHelper::get(self::SOURCE, 'v1/location/list?location_ids=' . $string_location_ids);
         $location_data = [];
         if (isset($location_list['status']) && $location_list['status'] == "success") {
             if (count($location_list['data']) > 0) {
@@ -330,7 +337,6 @@ class ECSController extends Controller
                     $location_data[$location['id']] = $location;
                 }
             }
-
         }
 
         foreach ($ecs['data']['data'] as $device) {
@@ -345,7 +351,7 @@ class ECSController extends Controller
             ];
         }
 
-        $custom_price = MyHelper::get('core-transaction','v1/price-setting/custom-price/option');
+        $custom_price = MyHelper::get('core-transaction', 'v1/price-setting/custom-price/option');
         if (isset($custom_price['status']) && $custom_price['status'] == "success") {
             $data['custom_price'] = $custom_price['data'];
         } else {
@@ -355,7 +361,8 @@ class ECSController extends Controller
         return view('browses.ecs.ecs_pricing', $data);
     }
 
-    public function startCharging($ecs_id, $connector_id) {
+    public function startCharging($ecs_id, $connector_id)
+    {
         $reference = MyHelper::generateReference();
         $payload = [
             "connector_id" => intval($connector_id),
@@ -375,7 +382,8 @@ class ECSController extends Controller
         }
     }
 
-    public function stopCharging($ecs_id, $connector_id, $reference) {
+    public function stopCharging($ecs_id, $connector_id, $reference)
+    {
         $payload = [
             "connector_id" => intval($connector_id),
             "reference_id" => $reference,
@@ -394,8 +402,9 @@ class ECSController extends Controller
         }
     }
 
-    public function ajaxGetConnectors($id) {
-        $connectors = MyHelper::get(self::SOURCE,'v1/ecs/connector/' . $id);
+    public function ajaxGetConnectors($id)
+    {
+        $connectors = MyHelper::get(self::SOURCE, 'v1/ecs/connector/' . $id);
 
         if (isset($connectors['status']) && $connectors['status'] == "success") {
             return response()->json(['status' => 'success', 'messages' => ['search ecs success'], 'data' => $connectors['data']]);
@@ -405,6 +414,5 @@ class ECSController extends Controller
             }
             return response()->json(['status' => 'fail', 'messages' => ["something went wrong!"]]);
         }
-
     }
 }

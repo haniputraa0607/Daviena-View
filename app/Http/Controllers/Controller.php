@@ -2,17 +2,19 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\LoginRequest;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Routing\Controller as BaseController;
-use App\Http\Requests\LoginRequest;
 use App\Lib\MyHelper;
 use App\Traits\ApiResponse;
 use GoogleReCaptchaV3;
 
 class Controller extends BaseController
 {
-    use AuthorizesRequests, ValidatesRequests, ApiResponse;
+    use AuthorizesRequests;
+    use ValidatesRequests;
+    use ApiResponse;
 
     public function login(LoginRequest $request)
     {
@@ -22,38 +24,36 @@ class Controller extends BaseController
         // }
         $login = MyHelper::postLogin($request);
         // dd($login);
-        if(isset($login['error'])){
-
-			$loginClient =  MyHelper::postLoginClient();
+        if (isset($login['error'])) {
+            $loginClient =  MyHelper::postLoginClient();
 
             if (isset($loginClient['access_token'])) {
-				session([
-					'access_token'  => 'Bearer '.$loginClient['access_token']
-				]);
-			}
-			return redirect('login')->withErrors(['invalid_credentials' => 'Invalid username / password'])->withInput();
-        }else{
-            if (isset($login['status']) && $login['status'] == "fail") {
-				$loginClient =  MyHelper::postLoginClient();
-
-				if (isset($loginClient['access_token'])) {
-					session([
-						'access_token'  => 'Bearer '.$loginClient['access_token']
-					]);
-				}
-
-				return redirect('login')->withErrors($login['messages'])->withInput();
-        	}
-        	else {
-
                 session([
-					'access_token'  => 'Bearer '.$login['access_token'],
-					'user_name'      => $request->input('username'),
-				]);
+                    'access_token'  => 'Bearer ' . $loginClient['access_token']
+                ]);
+            }
+            return redirect('login')->withErrors(['invalid_credentials' => 'Invalid username / password'])->withInput();
+        } else {
+            if (isset($login['status']) && $login['status'] == "fail") {
+                $loginClient =  MyHelper::postLoginClient();
 
-                $userData = MyHelper::get('be/user');
+                if (isset($loginClient['access_token'])) {
+                    session([
+                        'access_token'  => 'Bearer ' . $loginClient['access_token']
+                    ]);
+                }
 
-                if(isset($userData['status']) && $userData['status'] == 'success' && !empty($userData['result'])) {
+                return redirect('login')->withErrors($login['messages'])->withInput();
+            } else {
+                session([
+                    'access_token'  => 'Bearer ' . $login['access_token'],
+                    'user_name'      => $request->input('username'),
+                ]);
+
+                // $userData = MyHelper::get('be/user/');
+                $userData = MyHelper::get('be/user/detail');
+
+                if (isset($userData['status']) && $userData['status'] == 'success' && !empty($userData['result'])) {
                     $dataUser = $userData['result'];
                 }
 
@@ -65,9 +65,8 @@ class Controller extends BaseController
                     'user_role'         => $dataUser['user']['admin_id'],
                     'granted_features'  => $dataUser['features'],
                 ]);
-                
-                return redirect('home');
 
+                return redirect('home');
             }
         }
         if ($login['status'] == 'success') {
@@ -81,7 +80,7 @@ class Controller extends BaseController
                 'user_role'         => $user_login['role'],
             ]);
 
-            $role = MyHelper::get('core-user','v1/role/detail/'.$login['data']['role_id']);
+            $role = MyHelper::get('core-user', 'v1/role/detail/' . $login['data']['role_id']);
 
             $owned_features = [];
             if (isset($role['status']) && $role['status'] == "success") {
@@ -107,7 +106,7 @@ class Controller extends BaseController
             MyHelper::post('core-user', 'v1/cms-activity-log', $payload_logger);
 
             return redirect('home');
-        } 
+        }
     }
 
     public function getHome()

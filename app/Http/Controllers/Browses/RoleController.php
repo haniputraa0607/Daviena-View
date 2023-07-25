@@ -12,7 +12,8 @@ class RoleController extends Controller
 {
     const SOURCE = 'core-user';
 
-    public function getRoleList() {
+    public function getRoleList()
+    {
         $data = [
             'title'             => 'Role',
             'sub_title'         => 'List',
@@ -20,7 +21,7 @@ class RoleController extends Controller
             'submenu_active'    => 'browse-role'
         ];
 
-        $role = MyHelper::get(self::SOURCE,'v1/role');
+        $role = MyHelper::get(self::SOURCE, 'v1/role');
 
         if (isset($role['status']) && $role['status'] == "success") {
             $data['roles'] = $role['data'];
@@ -31,7 +32,8 @@ class RoleController extends Controller
         return view('browses.role.role_list', $data);
     }
 
-    public function createRole(CreateRoleRequest $request) {
+    public function createRole(CreateRoleRequest $request)
+    {
         if ($request->status == "1") {
             $status = true;
         } else {
@@ -43,7 +45,7 @@ class RoleController extends Controller
             'status' => $status
         ];
 
-        $save = MyHelper::post(self::SOURCE,'v1/role/create' , $payload);
+        $save = MyHelper::post(self::SOURCE, 'v1/role/create', $payload);
 
         if (isset($save['status']) && $save['status'] == "success") {
             return redirect('browse/role')->withSuccess(['New role successfully added.']);
@@ -52,7 +54,8 @@ class RoleController extends Controller
         }
     }
 
-    public function getRoleDetail($id) {
+    public function getRoleDetail($id)
+    {
         $data = [
             'title'             => 'Role',
             'sub_title'         => 'Detail',
@@ -60,7 +63,7 @@ class RoleController extends Controller
             'submenu_active'    => 'browse-role'
         ];
 
-        $feature_list = MyHelper::get(self::SOURCE,'v1/feature');
+        $feature_list = MyHelper::get(self::SOURCE, 'v1/feature');
         if (isset($feature_list['status']) && $feature_list['status'] == "success") {
             foreach ($feature_list['data'] as $value) {
                 $features[$value['feature_module']][] = [
@@ -73,7 +76,7 @@ class RoleController extends Controller
             return back()->withErrors(['Something went wrong. Please try again.'])->withInput();
         }
 
-        $role = MyHelper::get(self::SOURCE,'v1/role/detail/'.$id);
+        $role = MyHelper::get(self::SOURCE, 'v1/role/detail/' . $id);
 
         $owned_features = [];
         if (isset($role['status']) && $role['status'] == "success") {
@@ -89,7 +92,8 @@ class RoleController extends Controller
         return view('browses.role.role_detail', $data);
     }
 
-    public function updateRole(UpdateRoleRequest $request){
+    public function updateRole(UpdateRoleRequest $request)
+    {
         if ($request->status == "1") {
             $status = true;
         } else {
@@ -97,7 +101,7 @@ class RoleController extends Controller
         }
 
         $feature_ids = [];
-        foreach ($request->fature_ids ?? []  as $id) {
+        foreach ($request->fature_ids ?? [] as $id) {
             $feature_ids[] = (int)$id;
         }
 
@@ -109,7 +113,7 @@ class RoleController extends Controller
             "feature_ids" => $feature_ids
         ];
 
-        $save = MyHelper::post(self::SOURCE,'v1/role/update' , $payload);
+        $save = MyHelper::post(self::SOURCE, 'v1/role/update', $payload);
 
         if (isset($save['status']) && $save['status'] == "success") {
             return back()->withSuccess(['Role successfully updated.']);
@@ -118,8 +122,9 @@ class RoleController extends Controller
         }
     }
 
-    public function deleteRole($id){
-        $delete= MyHelper::get(self::SOURCE,'v1/role/' . $id . '/delete/');
+    public function deleteRole($id)
+    {
+        $delete = MyHelper::get(self::SOURCE, 'v1/role/' . $id . '/delete/');
 
         if (isset($delete['status']) && $delete['status'] == "success") {
             return redirect('browse/role')->withSuccess(['Location deleted successfully.']);

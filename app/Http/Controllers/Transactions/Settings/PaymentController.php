@@ -14,7 +14,8 @@ class PaymentController extends Controller
     const SOURCE = 'core-transaction';
     const ROOTPATH = 'payment-method';
 
-    public function getAvailablePaymentSetting() {
+    public function getAvailablePaymentSetting()
+    {
         $data = [
             'title'   => 'Transaction',
             'sub_title'   => 'Payment Method',
@@ -23,7 +24,7 @@ class PaymentController extends Controller
         ];
 
         // $availablePayment = config('payment_method');
-        $payment_method = MyHelper::get(self::SOURCE,'v1/payment-method');
+        $payment_method = MyHelper::get(self::SOURCE, 'v1/payment-method');
         if (isset($payment_method['status']) && $payment_method['status'] == "success") {
             $data['payments'] = $payment_method['data'];
         } else {
@@ -41,7 +42,8 @@ class PaymentController extends Controller
         return view('transactions.settings.payment_method', $data);
     }
 
-    public function updateAvailablePaymentSetting(UpdateAvailablePaymentSettingRequest $request) {
+    public function updateAvailablePaymentSetting(UpdateAvailablePaymentSettingRequest $request)
+    {
         $payload = [];
         foreach ($request->ids as $order => $payment) {
             if (isset($request->status[$payment])) {
@@ -57,7 +59,7 @@ class PaymentController extends Controller
             ];
         }
 
-        $save = MyHelper::post(self::SOURCE,'v1/payment-method', $payload);
+        $save = MyHelper::post(self::SOURCE, 'v1/payment-method', $payload);
 
         if (isset($save['status']) && $save['status'] == "success") {
             return back()->withSuccess(['Payment method setting has been updated.']);
@@ -66,7 +68,8 @@ class PaymentController extends Controller
         }
     }
 
-    public function updateLogoPaymentMethod(UpdatePaymentMethodLogoRequest $request){
+    public function updateLogoPaymentMethod(UpdatePaymentMethodLogoRequest $request)
+    {
         try {
             $path = 'logo';
             $fileName = MyHelper::createFilename($request->file);
@@ -80,7 +83,7 @@ class PaymentController extends Controller
             return back()->withErrors($error->getMessage())->withInput();
         }
 
-        $save = MyHelper::post(self::SOURCE,'v1/payment-method/update/logo', $payload);
+        $save = MyHelper::post(self::SOURCE, 'v1/payment-method/update/logo', $payload);
 
         if (isset($save['status']) && $save['status'] == "success") {
             return back()->withSuccess(['Payment method logo updated successfully']);

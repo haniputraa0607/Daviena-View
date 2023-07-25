@@ -53,6 +53,5 @@ class UpdateDetailFAQRequest extends FormRequest
             'answer_description.*' => 'Answer: Step Description',
             'file.*' => 'Answer: Step Image',
         ];
-
     }
 }

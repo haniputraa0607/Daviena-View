@@ -21,7 +21,7 @@ class SplashScreenController extends Controller
             'submenu_active' => 'splash-screen'
         ];
 
-        $splash_screen = MyHelper::get(self::SOURCE,'v1/splash-screen');
+        $splash_screen = MyHelper::get(self::SOURCE, 'v1/splash-screen');
 
         if (isset($splash_screen['status']) && $splash_screen['status'] == "success") {
             $result = $splash_screen['data'];
@@ -54,7 +54,7 @@ class SplashScreenController extends Controller
             $payload['default_home_splash_screen'] = "";
         }
 
-        $save = MyHelper::post(self::SOURCE,'v1/splash-screen', $payload);
+        $save = MyHelper::post(self::SOURCE, 'v1/splash-screen', $payload);
 
         if (isset($save['status']) && $save['status'] == "success") {
             return redirect('setting/splash-screen')->withSuccess(['Splash screen has been updated.']);
