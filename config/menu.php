@@ -32,6 +32,34 @@ return [
         ],
         [
             'type' => 'group',
+            'label' => 'User',
+            'required_features' => [],
+            'children' => [
+                [
+                    'type' => 'single',
+                    'label' => 'User',
+                    'icon' => 'icon-user',
+                    'url' => 'user',
+                    'active' => '\View::shared("menu_active") == "user"',
+                ],
+            ]
+        ],
+        [
+            'type' => 'group',
+            'label' => 'Outlet',
+            'required_features' => [],
+            'children' => [
+                [
+                    'type' => 'single',
+                    'label' => 'Outlet',
+                    'icon' => 'fa fa-info-circle',
+                    'url' => 'outlet',
+                    'active' => '\View::shared("menu_active") == "outlet"',
+                ],
+            ]
+        ],
+        [
+            'type' => 'group',
             'label' => 'Transaction',
             'children' => [
                 [

@@ -20,7 +20,7 @@ class EventFake implements Dispatcher, Fake
      *
      * @var \Illuminate\Contracts\Events\Dispatcher
      */
-    protected $dispatcher;
+    public $dispatcher;
 
     /**
      * The event types that should be intercepted instead of dispatched.
@@ -95,7 +95,10 @@ class EventFake implements Dispatcher, Fake
                     if (Str::contains($expectedListener, '@')) {
                         $normalizedListener = Str::parseCallback($expectedListener);
                     } else {
-                        $normalizedListener = [$expectedListener, 'handle'];
+                        $normalizedListener = [
+                            $expectedListener,
+                            method_exists($expectedListener, 'handle') ? 'handle' : '__invoke',
+                        ];
                     }
                 }
             }
@@ -374,7 +377,7 @@ class EventFake implements Dispatcher, Fake
      *
      * @param  string|object  $event
      * @param  mixed  $payload
-     * @return array|null
+     * @return mixed
      */
     public function until($event, $payload = [])
     {
