@@ -7,20 +7,21 @@ use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Routing\Controller as BaseController;
 use App\Http\Requests\LoginRequest;
 use App\Lib\MyHelper;
+use App\Traits\ApiResponse;
 use GoogleReCaptchaV3;
 
 class Controller extends BaseController
 {
-    use AuthorizesRequests, ValidatesRequests;
+    use AuthorizesRequests, ValidatesRequests, ApiResponse;
 
     public function login(LoginRequest $request)
     {
-        $captcha = GoogleReCaptchaV3::verifyResponse($request->input('g-recaptcha-response'))->isSuccess();
-        if (!$captcha) {
-            return redirect()->back()->withErrors(['Recaptcha failed']);
-        }
-
+        // $captcha = GoogleReCaptchaV3::verifyResponse($request->input('g-recaptcha-response'))->isSuccess();
+        // if (!$captcha) {
+        //     return redirect()->back()->withErrors(['Recaptcha failed']);
+        // }
         $login = MyHelper::postLogin($request);
+        // dd($login);
         if(isset($login['error'])){
 
 			$loginClient =  MyHelper::postLoginClient();
