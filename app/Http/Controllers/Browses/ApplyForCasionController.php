@@ -14,7 +14,8 @@ class ApplyForCasionController extends Controller
 {
     const SOURCE = 'core-api';
 
-    public function getApplyCasionList() {
+    public function getApplyCasionList()
+    {
         $data = [
             'title'   => 'Apply For Casion',
             'sub_title'   => 'Apply For Casion List',
@@ -22,7 +23,7 @@ class ApplyForCasionController extends Controller
             'submenu_active' => 'browse-apply-casion'
         ];
 
-        $applyCasion = MyHelper::get(self::SOURCE,'v1/apply-for-casion');
+        $applyCasion = MyHelper::get(self::SOURCE, 'v1/apply-for-casion');
 
         if (isset($applyCasion['status']) && $applyCasion['status'] == "success") {
             $data['apply_casion'] = $applyCasion['data'];
@@ -33,7 +34,8 @@ class ApplyForCasionController extends Controller
         return view('browses.apply-for-casion.apply_casion_list', $data);
     }
 
-    public function getApplyCasionDetail($id) {
+    public function getApplyCasionDetail($id)
+    {
         $data = [
             'title'   => 'Apply For Casion',
             'sub_title'   => 'Apply For Casion Detail',
@@ -41,7 +43,7 @@ class ApplyForCasionController extends Controller
             'submenu_active' => 'browse-apply-casion'
         ];
 
-        $detail = MyHelper::get(self::SOURCE,'v1/apply-for-casion/' . $id);
+        $detail = MyHelper::get(self::SOURCE, 'v1/apply-for-casion/' . $id);
 
         if (isset($detail['status']) && $detail['status'] == "success") {
             $data['detail'] = $detail['data'];
@@ -52,10 +54,11 @@ class ApplyForCasionController extends Controller
         return view('browses.apply-for-casion.apply_casion_detail', $data);
     }
 
-    public function updateDetailApplyCasion(UpdateApplyCasionRequest $request){
+    public function updateDetailApplyCasion(UpdateApplyCasionRequest $request)
+    {
         $payload = $request->except('_token');
 
-        $save = MyHelper::post(self::SOURCE,'v1/apply-for-casion/update', $payload);
+        $save = MyHelper::post(self::SOURCE, 'v1/apply-for-casion/update', $payload);
 
         if (isset($save['status']) && $save['status'] == "success") {
             return back()->withSuccess(['Apply for Casion detail updated successfully.']);
@@ -64,13 +67,14 @@ class ApplyForCasionController extends Controller
         }
     }
 
-    public function updateStatusApplyCasion(UpdateStatusApplyCasionRequest $request) {
+    public function updateStatusApplyCasion(UpdateStatusApplyCasionRequest $request)
+    {
         $payload = [
             'id'        => $request->id,
             'status'    => $request->status
         ];
 
-        $update = MyHelper::post(self::SOURCE,'v1/apply-for-casion/update/status', $payload);
+        $update = MyHelper::post(self::SOURCE, 'v1/apply-for-casion/update/status', $payload);
 
         if (isset($update['status']) && $update['status'] == "success") {
             return response()->json(['status' => 'success', 'messages' => ['Apply for Casion status updated successfully']]);
@@ -79,8 +83,9 @@ class ApplyForCasionController extends Controller
         }
     }
 
-    public function exportApplyCasion() {
-        $applyCasion = MyHelper::get(self::SOURCE,'v1/apply-for-casion');
+    public function exportApplyCasion()
+    {
+        $applyCasion = MyHelper::get(self::SOURCE, 'v1/apply-for-casion');
         $data = [];
         foreach ($applyCasion['data'] as $apply) {
             $data[] = [
@@ -95,6 +100,6 @@ class ApplyForCasionController extends Controller
             ];
         }
 
-        return Excel::download(new ApplyForCasionExport($data), 'apply_for_casion_' . md5(time()). '.csv');
+        return Excel::download(new ApplyForCasionExport($data), 'apply_for_casion_' . md5(time()) . '.csv');
     }
 }

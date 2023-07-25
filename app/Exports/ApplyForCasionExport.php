@@ -22,7 +22,7 @@ class ApplyForCasionExport implements FromCollection, WithHeadings
         return collect($this->data);
     }
 
-    public function headings() :array
+    public function headings(): array
     {
         return [
             'Name',

@@ -8,6 +8,6 @@ Route::prefix('outlet')->group(function () {
     Route::get('create', [OutletController::class, 'create'])->name('outlet.create');
     Route::get('detail/{id}', [OutletController::class, 'show'])->name('outlet.detail');
     Route::post('store', [OutletController::class, 'store'])->name('outlet.store');
-    // Route::get('delete/{id}', [OutletController::class, 'delete'])->name('outlet.delete');
+    Route::get('delete/{id}', [OutletController::class, 'deleteOutlet'])->name('outlet.delete');
     Route::post('update/{id}', [OutletController::class, 'update'])->name('outlet.update');
 });

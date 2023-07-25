@@ -39,6 +39,5 @@ class AddOnboardingImageRequest extends FormRequest
         return[
             'file' => 'Gambar',
         ];
-
     }
 }

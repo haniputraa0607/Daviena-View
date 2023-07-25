@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use App\Lib\MyHelper;
 use Illuminate\Http\Request;
 
@@ -14,7 +15,8 @@ class OutletController extends Controller
             'menu_active'       => 'outlet',
         ];
 
-        $outlet = MyHelper::get('outlet');
+        // $outlet = MyHelper::get('outlet');
+        $outlet = MyHelper::get('be/outlet');
         if (isset($outlet['status']) && $outlet['status'] == "success") {
             $data['outlets'] = $outlet['result'];
         } else {
@@ -103,14 +105,14 @@ class OutletController extends Controller
         }
     }
 
-    // public function delete($id)
-    // {
-    //     $delete= MyHelper::deleteApi('outlet/' . $id);
+    public function deleteOutlet($id)
+    {
+        $delete = MyHelper::deleteApi('outlet/' . $id);
 
-    //     if (isset($delete['status']) && $delete['status'] == "success") {
-    //         return response()->json(['status' => 'success', 'messages' => ['Outlet deleted successfully']]);
-    //     } else {
-    //         return response()->json(['status' => 'fail', 'messages' => [$delete['message']]]);
-    //     }
-    // }
+        if (isset($delete['status']) && $delete['status'] == "success") {
+            return response()->json(['status' => 'success', 'messages' => ['Outlet deleted successfully']]);
+        } else {
+            return response()->json(['status' => 'fail', 'messages' => [$delete['message']]]);
+        }
+    }
 }

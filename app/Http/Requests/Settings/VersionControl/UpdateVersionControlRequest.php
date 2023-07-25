@@ -70,7 +70,6 @@ class UpdateVersionControlRequest extends FormRequest
             'Display.version_text_button_mobile' => 'Text Button',
             'Display.version_image_mobile' => 'Image',
         ];
-
     }
 
     protected function getRedirectUrl()
@@ -82,6 +81,6 @@ class UpdateVersionControlRequest extends FormRequest
         } else {
             $fragment = '';
         }
-        return parent::getRedirectUrl() .$fragment;
+        return parent::getRedirectUrl() . $fragment;
     }
 }

@@ -54,6 +54,6 @@ class UpdateProfileRequest extends FormRequest
         } else {
             $fragment = '';
         }
-        return parent::getRedirectUrl() .$fragment;
+        return parent::getRedirectUrl() . $fragment;
     }
 }

@@ -20,7 +20,7 @@ class VersionControlController extends Controller
                   'submenu_active'    => 'setting-version'
                 ];
 
-        $version = MyHelper::get(self::SOURCE,'v1/version');
+        $version = MyHelper::get(self::SOURCE, 'v1/version');
 
         if (isset($version['status']) && $version['status'] == "success") {
             $result = $version['data'];
@@ -29,7 +29,7 @@ class VersionControlController extends Controller
                 "version_max_ios" => $result['version_ios_max'],
                 "version_playstore" => $result['version_playstore_url'],
                 "version_max_android" => $result['version_android_max'],
-                "version_text_alert_mobile"=> $result['version_text_alert'],
+                "version_text_alert_mobile" => $result['version_text_alert'],
                 "version_text_button_mobile" => $result['version_text_button'],
                 "version_image_mobile" => $result['version_image'],
                 "Android" => MyHelper::sortVersions($result['android_version_list']),
@@ -67,7 +67,7 @@ class VersionControlController extends Controller
                 return back()->withErrors('Total allowed versions are greater than max supported version')->withInput();
             }
             $redirect_tab = '';
-        } else if ($request->IOS) {
+        } elseif ($request->IOS) {
             $allowed_versions = 0;
             $payload['version_appstore_url'] = $request->IOS['version_appstore'];
             $payload['version_ios_max'] = $request->IOS['version_max_ios'];
@@ -88,7 +88,7 @@ class VersionControlController extends Controller
                 return back()->withFragment('#tab_IOS')->withErrors('Total allowed versions are greater than max supported version')->withInput();
             }
             $redirect_tab = '#tab_IOS';
-        } else if ($request->Display) {
+        } elseif ($request->Display) {
             $payload['version_text_alert'] = $request->Display['version_text_alert_mobile'];
             $payload['version_text_button'] = $request->Display['version_text_button_mobile'];
 
@@ -105,7 +105,7 @@ class VersionControlController extends Controller
             return back()->withFragment('#tab_display_androidios')->withErrors(['Something went wrong. Please try again.'])->withInput();
         }
 
-        $save = MyHelper::post(self::SOURCE,'v1/version', $payload);
+        $save = MyHelper::post(self::SOURCE, 'v1/version', $payload);
 
         if (isset($save['status']) && $save['status'] == "success") {
             return redirect('setting/version')->withFragment($redirect_tab)->withSuccess(['Version Setting has been updated.']);

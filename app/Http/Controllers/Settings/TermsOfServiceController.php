@@ -19,7 +19,7 @@ class TermsOfServiceController extends Controller
                     'submenu_active'    => 'terms-of-service',
                 ];
 
-        $setting = MyHelper::get(self::SOURCE,'v1/setting/terms_of_service');
+        $setting = MyHelper::get(self::SOURCE, 'v1/setting/terms_of_service');
 
         if (isset($setting['status']) && $setting['status'] == 'success') {
             $result = $setting['data'];
@@ -37,7 +37,7 @@ class TermsOfServiceController extends Controller
             'value_text' => $request->value
         ];
 
-        $save = MyHelper::post(self::SOURCE,'v1/setting/terms_of_service/update', $payload);
+        $save = MyHelper::post(self::SOURCE, 'v1/setting/terms_of_service/update', $payload);
 
         if (isset($save['status']) && $save['status'] == "success") {
             return redirect('setting/terms-of-service')->withSuccess(['Terms Of Service Setting has been updated.']);

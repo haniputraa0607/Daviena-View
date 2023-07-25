@@ -12,7 +12,8 @@ class AutoResponseController extends Controller
     const SOURCE = 'core-api';
     const ROOTPATH = 'auto-response';
 
-    public function getAutoResponseSetting() {
+    public function getAutoResponseSetting()
+    {
         $data = [
             'title'   => 'Auto-Response',
             'sub_title'   => 'List',
@@ -31,7 +32,8 @@ class AutoResponseController extends Controller
         return view('settings.auto-response.autoresponse_list', $data);
     }
 
-    public function getAutoResponseDetail($code) {
+    public function getAutoResponseDetail($code)
+    {
         $data = [
             'title'   => 'Auto-Response',
             'sub_title'   => 'Detail',
@@ -39,7 +41,7 @@ class AutoResponseController extends Controller
             'submenu_active' => 'setting-autoresponse'
         ];
 
-        $auto_response = MyHelper::get(self::SOURCE, 'v1/auto-response/'.$code);
+        $auto_response = MyHelper::get(self::SOURCE, 'v1/auto-response/' . $code);
 
         if (isset($auto_response['status']) && $auto_response['status'] == "success") {
             $data['detail'] = $auto_response['data'];
@@ -50,10 +52,11 @@ class AutoResponseController extends Controller
         return view('settings.auto-response.autoresponse_detail', $data);
     }
 
-    public function updateAutoResponse(UpdateAutoResponseRequest $request) {
+    public function updateAutoResponse(UpdateAutoResponseRequest $request)
+    {
         $logo_path = "";
         if (!empty($request->push_image)) {
-            $path = 'push-image/'.$request->code;
+            $path = 'push-image/' . $request->code;
             $fileName = MyHelper::createFilename($request->push_image);
 
             $uploadedFile = MyHelper::uploadFile($request->push_image, self::ROOTPATH, $path, $fileName);
@@ -63,7 +66,7 @@ class AutoResponseController extends Controller
             }
 
             //Delete image file that deleted images from database
-            MyHelper::deleteImageNotExist('auto-response/push-image/'.$request->code, [$uploadedFile['path']]);
+            MyHelper::deleteImageNotExist('auto-response/push-image/' . $request->code, [$uploadedFile['path']]);
             $logo_path = $uploadedFile['path'];
         }
 
@@ -83,7 +86,7 @@ class AutoResponseController extends Controller
             "forward_email_content" => $request->forward_email_content ?? ""
         ];
 
-        $save = MyHelper::post(self::SOURCE,'v1/auto-response/update', $payload);
+        $save = MyHelper::post(self::SOURCE, 'v1/auto-response/update', $payload);
 
         if (isset($save['status']) && $save['status'] == "success") {
             return back()->withSuccess(['Auto-Response updated successfully.']);

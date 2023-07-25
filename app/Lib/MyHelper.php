@@ -16,12 +16,13 @@ use Illuminate\Support\Facades\Log;
 
 class MyHelper
 {
-    public static function postLogin($request){
+    public static function postLogin($request)
+    {
         $api = env('APP_API_URL');
-    
-        $client = new Client;
+
+        $client = new Client();
         try {
-            $response = $client->request('POST',$api.'oauth/token', [
+            $response = $client->request('POST', $api . 'oauth/token', [
                 'form_params' => [
                     'grant_type'    => 'password',
                     'client_id'     => env('PASSWORD_CREDENTIAL_ID'),
@@ -32,51 +33,48 @@ class MyHelper
                 ],
             ]);
             return json_decode($response->getBody(), true);
-        }catch (\GuzzleHttp\Exception\RequestException $e) {
-            try{
-                if($e->getResponse()){
+        } catch (\GuzzleHttp\Exception\RequestException $e) {
+            try {
+                if ($e->getResponse()) {
                     $response = $e->getResponse()->getBody()->getContents();
                     return json_decode($response, true);
-                }
-                else{
+                } else {
                     return ['status' => 'fail', 'messages' => [0 => 'Check your internet connection.']];
                 }
-    
-            }catch(Exception $e){
+            } catch (Exception $e) {
                 return ['status' => 'fail', 'messages' => [0 => 'Check your internet connection.']];
             }
         }
     }
 
-    public static function postLoginClient(){
+    public static function postLoginClient()
+    {
         $api = env('APP_API_URL');
-        $client = new Client;
-     
+        $client = new Client();
+
         try {
-            $response = $client->request('POST',$api.'oauth/token', [
+            $response = $client->request('POST', $api . 'oauth/token', [
                 'form_params' => [
                     'grant_type'    => 'client_credentials',
                     'client_id'     => env('CLIENT_CREDENTIAL_ID'),
                     'client_secret' => env('CLIENT_CREDENTIAL_SECRET'),
-                    'scope'      		=> 'be'
+                    'scope'             => 'be'
                 ],
             ]);
             return json_decode($response->getBody(), true);
-        }catch (\GuzzleHttp\Exception\RequestException $e) {
-            try{
-                if($e->getResponse()){
+        } catch (\GuzzleHttp\Exception\RequestException $e) {
+            try {
+                if ($e->getResponse()) {
                     $response = $e->getResponse()->getBody()->getContents();
                     return json_decode($response, true);
-                }
-                else{
+                } else {
                     return ['status' => 'fail', 'messages' => [0 => 'Check your internet connection.']];
                 }
-        
-            }catch(Exception $e){
+            } catch (Exception $e) {
                 return ['status' => 'fail', 'messages' => [0 => 'Check your internet connection.']];
             }
         }
-      }
+    }
 
     public static function post($url, $post)
     {
@@ -151,7 +149,8 @@ class MyHelper
     public static function get($url)
     {
 
-        $host = env('APP_API_URL');
+        $host = env('APP_API_URL_CMS');
+        // $host = env('APP_API_URL');
 
         $client = new Client();
         $bearer = session('access_token');
@@ -186,9 +185,9 @@ class MyHelper
     }
 
     public static function deleteApi($url, $post = null)
-    { 
+    {
         $api = env('APP_API_URL');
-        $client = new Client;
+        $client = new Client();
         $ses = session('access_token');
         $content = array(
             'headers' => [
@@ -219,7 +218,9 @@ class MyHelper
                         ]);
                         return $error;
                     }
-                } else return ['status' => 'fail', 'messages' => [0 => 'Check your internet connection.']];
+                } else {
+                    return ['status' => 'fail', 'messages' => [0 => 'Check your internet connection.']];
+                }
             } catch (\Exception $e) {
                 Log::debug([
                     'url' => $api . '/' . $url,
@@ -250,12 +251,12 @@ class MyHelper
             }
 
              $url = $menu['url'] ?? '';
-             if (substr($url, 0, 4) == 'http') {
-               $url = $menu['url'];
-             } else {
-               $url ??= '';
-               $url = $url ? url($url) : 'javascript:void(0)';
-             }
+            if (substr($url, 0, 4) == 'http') {
+                $url = $menu['url'];
+            } else {
+                $url ??= '';
+                $url = $url ? url($url) : 'javascript:void(0)';
+            }
             // $url = substr($menu['url'] ?? '', 0, 4) == 'http' ? $menu['url'] : ($menu['url'] ?? '') ? url($menu['url']) : 'javascript:void(0)'; //php v7
             $icon = ($menu['icon'] ?? '') ? '<i class="' . $menu['icon'] . '"></i>' : '';
 
@@ -327,7 +328,8 @@ class MyHelper
         return false;
     }
 
-    public static function uploadFile($file, $root_path, $path, $filename = "") {
+    public static function uploadFile($file, $root_path, $path, $filename = "")
+    {
         try {
             try {
                 $ext = $file->getClientOriginalExtension();
@@ -352,7 +354,6 @@ class MyHelper
             } catch (Exception $error) {
                 throw new Exception($error->getMessage());
             }
-
         } catch (Exception $error) {
             throw new Exception($error->getMessage());
         }
@@ -361,7 +362,7 @@ class MyHelper
     public static function createFilename(UploadedFile $file)
     {
         $extension = $file->getClientOriginalExtension();
-        $filename = str_replace(".".$extension, "", $file->getClientOriginalName()); // Filename without extension
+        $filename = str_replace("." . $extension, "", $file->getClientOriginalName()); // Filename without extension
 
         // Add timestamp hash to name of the file
         $filename .= "_" . md5(time());
@@ -369,7 +370,8 @@ class MyHelper
         return $filename;
     }
 
-    public static function deleteImageNotExist($path, $image_list = []) {
+    public static function deleteImageNotExist($path, $image_list = [])
+    {
         if (!empty($image_list)) {
             // Get all files in the folder
             $files = Storage::files($path);
@@ -383,7 +385,8 @@ class MyHelper
         }
     }
 
-    public static function extractToken($bearer_token) {
+    public static function extractToken($bearer_token)
+    {
         $access_token = str_replace('Bearer ', '', $bearer_token);
         $token = new \Tymon\JWTAuth\Token($access_token);
         $decoded_token = JWTAuth::decode($token);
@@ -391,7 +394,8 @@ class MyHelper
         return $decoded_token;
     }
 
-    public static function GenerateQR($value, $filename, $output_path, $additional_text = null) {
+    public static function GenerateQR($value, $filename, $output_path, $additional_text = null)
+    {
         $logo = public_path('images/logo/casion-face.png');
 
         $image = QrCode::format('png')
@@ -407,7 +411,7 @@ class MyHelper
             $temp_qr = $output_path . '/temp_' . $filename . '-' . time() . '.png';
             Storage::disk(config('filesystems.default'))->put($temp_qr, $image);
 
-            $img = Image::make(storage_path("app/public/". $temp_qr));
+            $img = Image::make(storage_path("app/public/" . $temp_qr));
             $img->text(
                 $additional_text,
                 $img->getWidth() / 2,
@@ -419,9 +423,9 @@ class MyHelper
                     $font->valign('middle');
                     $font->align('center');
                 }
-            )->save(storage_path("app/public/". $output_file));
+            )->save(storage_path("app/public/" . $output_file));
 
-            if (file_exists(storage_path("app/public/". $temp_qr))) {
+            if (file_exists(storage_path("app/public/" . $temp_qr))) {
                 Storage::delete($temp_qr);
             }
         }
@@ -430,7 +434,8 @@ class MyHelper
     }
 
     //TODO Development only, will remove soon!
-    public static function RegisterECS($ecs_id) {
+    public static function RegisterECS($ecs_id)
+    {
         $payload = [
             "ecs_id" => $ecs_id
         ];
@@ -466,9 +471,10 @@ class MyHelper
         }
     }
 
-    public static function generateReference() {
+    public static function generateReference()
+    {
         $encryptedUserID = session('user_id');
-        $decrypt = self::get('core-api','v1/helper/decrypt?id='.$encryptedUserID);
+        $decrypt = self::get('core-api', 'v1/helper/decrypt?id=' . $encryptedUserID);
 
         $userId = $decrypt['data'] ?? 0;
         // $paddedUserId = str_pad($userId, 4, '0', STR_PAD_LEFT);
@@ -480,7 +486,8 @@ class MyHelper
         return $reference;
     }
 
-    public static function startCharging($post) {
+    public static function startCharging($post)
+    {
         $host = env('APP_API_URL_DEVICE_CENTRAL');
         $client = new Client();
         $bearer = session('access_token');
@@ -513,7 +520,8 @@ class MyHelper
         }
     }
 
-    public static function stopCharging($post) {
+    public static function stopCharging($post)
+    {
         $host = env('APP_API_URL_DEVICE_CENTRAL');
         $client = new Client();
         $bearer = session('access_token');

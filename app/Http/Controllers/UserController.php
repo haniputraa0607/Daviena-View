@@ -1,8 +1,10 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use App\Lib\MyHelper;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 
 class UserController extends Controller
 {
@@ -14,7 +16,8 @@ class UserController extends Controller
             'menu_active'       => 'user',
         ];
 
-        $cms_user = MyHelper::get('user');
+        // $cms_user = MyHelper::get('user');
+        $cms_user = MyHelper::get('be/user');
         if (isset($cms_user['status']) && $cms_user['status'] == "success") {
             $data['cms_users'] = $cms_user['result'];
         } else {
@@ -50,9 +53,9 @@ class UserController extends Controller
         // todo
     }
 
-    public function delete($id)
+    public function deleteUser($id)
     {
-        $delete= MyHelper::deleteApi('user/' . $id);
+        $delete = MyHelper::deleteApi('user/' . $id);
 
         if (isset($delete['status']) && $delete['status'] == "success") {
             return response()->json(['status' => 'success', 'messages' => ['User deleted successfully']]);

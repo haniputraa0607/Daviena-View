@@ -11,7 +11,8 @@ class ProfileController extends Controller
 {
     const SOURCE = 'core-user';
 
-    public function getProfileSetting() {
+    public function getProfileSetting()
+    {
         $data = [
             'title'             => 'My Profile',
             'menu_active'       => 'setting-profile',
@@ -20,7 +21,7 @@ class ProfileController extends Controller
 
         $user_id = session('user_id');
 
-        $detail = MyHelper::get(self::SOURCE,'v1/user/detail/' . $user_id);
+        $detail = MyHelper::get(self::SOURCE, 'v1/user/detail/' . $user_id);
         if (isset($detail['status']) && $detail['status'] == "success") {
             $data['detail'] = $detail['data'];
         } else {
@@ -29,7 +30,7 @@ class ProfileController extends Controller
 
         $per_page = request()->query('per_page', 10);
         $page = request()->query('page', 1);
-        $log = MyHelper::get(self::SOURCE,'v1/cms-activity-log/pagination?user_id=' . $user_id . '&per_page=' . $per_page . '&page=' . $page);
+        $log = MyHelper::get(self::SOURCE, 'v1/cms-activity-log/pagination?user_id=' . $user_id . '&per_page=' . $per_page . '&page=' . $page);
         if (isset($log['status']) && $log['status'] == "success") {
             $data['user_log'] = $log['data']['data'];
             $data['pagination'] = [
@@ -45,7 +46,8 @@ class ProfileController extends Controller
         return view('settings.profile.my-profile', $data);
     }
 
-    public function updateProfileSetting(UpdateProfileRequest $request) {
+    public function updateProfileSetting(UpdateProfileRequest $request)
+    {
         if ($request->name) {
             $redirect_tab = "#tab_detail";
             $payload = [
@@ -64,7 +66,7 @@ class ProfileController extends Controller
             $redirect_tab = "";
         }
 
-        $save = MyHelper::post(self::SOURCE,'v1/user/update', $payload);
+        $save = MyHelper::post(self::SOURCE, 'v1/user/update', $payload);
 
         if (isset($save['status']) && $save['status'] == "success") {
             if ($request->name) {

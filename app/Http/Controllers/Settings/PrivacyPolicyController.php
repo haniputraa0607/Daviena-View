@@ -20,7 +20,7 @@ class PrivacyPolicyController extends Controller
                 ];
 
 
-        $setting = MyHelper::get(self::SOURCE,'v1/setting/privacy_policy');
+        $setting = MyHelper::get(self::SOURCE, 'v1/setting/privacy_policy');
 
         if (isset($setting['status']) && $setting['status'] == 'success') {
             $result = $setting['data'];
@@ -38,7 +38,7 @@ class PrivacyPolicyController extends Controller
             'value_text' => $request->value
         ];
 
-        $save = MyHelper::post(self::SOURCE,'v1/setting/privacy_policy/update', $payload);
+        $save = MyHelper::post(self::SOURCE, 'v1/setting/privacy_policy/update', $payload);
 
         if (isset($save['status']) && $save['status'] == "success") {
             return redirect('setting/privacy-policy')->withSuccess(['Privacy Policy Setting has been updated.']);

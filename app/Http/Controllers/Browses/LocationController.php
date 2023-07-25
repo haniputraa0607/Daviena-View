@@ -16,7 +16,8 @@ class LocationController extends Controller
     const SOURCE = 'core-api';
     const ROOTPATH = 'location';
 
-    public function getLocationList() {
+    public function getLocationList()
+    {
         $data = [
             'title'   => 'Location',
             'sub_title'   => 'Location List',
@@ -26,7 +27,7 @@ class LocationController extends Controller
 
         $per_page = request()->query('per_page', 10);
         $page = request()->query('page', 1);
-        $location_pagination = MyHelper::get(self::SOURCE,'v1/location/pagination?per_page=' . $per_page . '&page=' . $page);
+        $location_pagination = MyHelper::get(self::SOURCE, 'v1/location/pagination?per_page=' . $per_page . '&page=' . $page);
 
         if (isset($location_pagination['status']) && $location_pagination['status'] == "success") {
             $data['locations'] = $location_pagination['data']['data'];
@@ -42,7 +43,7 @@ class LocationController extends Controller
 
         $dev_per_page = request()->query('dev_per_page', 10);
         $dev_page = request()->query('dev_page', 1);
-        $developer = MyHelper::get(self::SOURCE,'v1/location/developer/pagination?per_page=' . $dev_per_page . '&page=' . $dev_page);
+        $developer = MyHelper::get(self::SOURCE, 'v1/location/developer/pagination?per_page=' . $dev_per_page . '&page=' . $dev_page);
         if (isset($developer['status']) && $developer['status'] == "success") {
             $data['developers'] = $developer['data']['data'];
             $data['developer_pagination'] = [
@@ -51,12 +52,11 @@ class LocationController extends Controller
                 'current_page' => $developer['data']['current_page'],
                 'last_page' => $developer['data']['last_page'],
             ];
-
         } else {
             $data['developers'] = [];
         }
 
-        $location = MyHelper::get(self::SOURCE,'v1/location');
+        $location = MyHelper::get(self::SOURCE, 'v1/location');
         if (!isset($location_pagination['status']) || $location_pagination['status'] != "success") {
             return back()->withErrors(['Something went wrong. Please try again.'])->withInput();
         }
@@ -75,7 +75,8 @@ class LocationController extends Controller
         return view('browses.location.location_list', $data);
     }
 
-    public function addLocation() {
+    public function addLocation()
+    {
         $data = [
             'title'   => 'Location',
             'sub_title'   => 'New Location',
@@ -83,7 +84,7 @@ class LocationController extends Controller
             'submenu_active' => 'browse-location'
         ];
 
-        $developer = MyHelper::get(self::SOURCE,'v1/location/developer');
+        $developer = MyHelper::get(self::SOURCE, 'v1/location/developer');
         if (isset($developer['status']) && $developer['status'] == "success") {
             $data['developers'] = $developer['data'];
         } else {
@@ -93,7 +94,8 @@ class LocationController extends Controller
         return view('browses.location.location_new', $data);
     }
 
-    public function createLocation(CreateLocationRequest $request) {
+    public function createLocation(CreateLocationRequest $request)
+    {
         $path = 'image';
         $images = [];
         if (!empty($request->file)) {
@@ -140,7 +142,7 @@ class LocationController extends Controller
             "location_image" => $images
         ];
 
-        $save = MyHelper::post(self::SOURCE,'v1/location/add', $payload);
+        $save = MyHelper::post(self::SOURCE, 'v1/location/add', $payload);
 
         if (isset($save['status']) && $save['status'] == "success") {
             return redirect('browse/location')->withSuccess(['New location successfully added.']);
@@ -149,7 +151,8 @@ class LocationController extends Controller
         }
     }
 
-    public function getLocationDetail($id) {
+    public function getLocationDetail($id)
+    {
         $data = [
             'title'   => 'Location',
             'sub_title'   => 'Location Detail',
@@ -158,23 +161,23 @@ class LocationController extends Controller
         ];
         $error_bag = [];
 
-        $developer = MyHelper::get(self::SOURCE,'v1/location/developer');
+        $developer = MyHelper::get(self::SOURCE, 'v1/location/developer');
         if (isset($developer['status']) && $developer['status'] == "success") {
             $data['developers'] = $developer['data'];
         } else {
             return back()->withErrors(['Something went wrong. Please try again.'])->withInput();
         }
 
-        $detail = MyHelper::get(self::SOURCE,'v1/location/' . $id);
+        $detail = MyHelper::get(self::SOURCE, 'v1/location/' . $id);
 
         if (isset($detail['status']) && $detail['status'] == "success") {
             $data['detail'] = $detail['data'];
-            $data['detail']['decrypted_location_id'] = MyHelper::get(self::SOURCE,'v1/helper/decrypt?id=' . $id)['data'] ?? "";
+            $data['detail']['decrypted_location_id'] = MyHelper::get(self::SOURCE, 'v1/helper/decrypt?id=' . $id)['data'] ?? "";
         } else {
             return back()->withErrors(['Something went wrong. Please try again.'])->withInput();
         }
 
-        $ecs = MyHelper::get(self::SOURCE,'v1/ecs/location/' . $id);
+        $ecs = MyHelper::get(self::SOURCE, 'v1/ecs/location/' . $id);
         if (isset($ecs['status']) && $ecs['status'] == "success") {
             $data['ecs'] = $ecs['data'];
         } else {
@@ -184,7 +187,7 @@ class LocationController extends Controller
             $data['ecs'] = [];
         }
 
-        $ecs_option = MyHelper::get(self::SOURCE,'v1/ecs/search');
+        $ecs_option = MyHelper::get(self::SOURCE, 'v1/ecs/search');
         if (isset($ecs_option['status']) && $ecs_option['status'] == "success") {
             $data['ecs_option'] = $ecs_option['data'];
         } else {
@@ -201,7 +204,8 @@ class LocationController extends Controller
         return view('browses.location.location_detail', $data);
     }
 
-    public function updateStatusLocation(UpdateLocationStatusRequest $request) {
+    public function updateStatusLocation(UpdateLocationStatusRequest $request)
+    {
         if ($request->status == "1") {
             $status = true;
         } else {
@@ -213,7 +217,7 @@ class LocationController extends Controller
             'status'    => $status
         ];
 
-        $update= MyHelper::post(self::SOURCE,'v1/location/update/status', $payload);
+        $update = MyHelper::post(self::SOURCE, 'v1/location/update/status', $payload);
 
         if (isset($update['status']) && $update['status'] == "success") {
             return response()->json(['status' => 'success', 'messages' => ['Location status updated successfully']]);
@@ -222,7 +226,8 @@ class LocationController extends Controller
         }
     }
 
-    public function updateLocation(UpdateLocationRequest $request) {
+    public function updateLocation(UpdateLocationRequest $request)
+    {
         $path = 'image';
         $location_image = [];
         $new_location_image = [];
@@ -280,7 +285,7 @@ class LocationController extends Controller
             "location_image"        => $location_image,
             "new_location_image"    => $new_location_image
         ];
-        $save = MyHelper::post(self::SOURCE,'v1/location/update', $payload);
+        $save = MyHelper::post(self::SOURCE, 'v1/location/update', $payload);
 
         if (isset($save['status']) && $save['status'] == "success") {
             return redirect('browse/location/' . $request->id)->withSuccess(['Location has been updated.']);
@@ -289,8 +294,9 @@ class LocationController extends Controller
         }
     }
 
-    public function deleteLocation($id) {
-        $delete= MyHelper::get(self::SOURCE,'v1/location/' . $id . '/delete/');
+    public function deleteLocation($id)
+    {
+        $delete = MyHelper::get(self::SOURCE, 'v1/location/' . $id . '/delete/');
 
         if (isset($delete['status']) && $delete['status'] == "success") {
             return redirect('browse/location')->withSuccess(['Location deleted successfully.']);
@@ -299,15 +305,16 @@ class LocationController extends Controller
         }
     }
 
-    public function searchLocation(){
+    public function searchLocation()
+    {
         $search = request()->query("search");
 
         $url = 'v1/location/search';
         if (!empty($search)) {
-            $url = 'v1/location/search?search='. $search;
+            $url = 'v1/location/search?search=' . $search;
         }
 
-        $location = MyHelper::get(self::SOURCE,$url);
+        $location = MyHelper::get(self::SOURCE, $url);
 
         if (isset($location['status']) && $location['status'] == "success") {
             return response()->json(['status' => 'success', 'messages' => ['search location success'], 'data' => $location['data']]);
@@ -316,17 +323,19 @@ class LocationController extends Controller
         }
     }
 
-    public function deleteDevice($location_id, $device_id){
+    public function deleteDevice($location_id, $device_id)
+    {
         return $location_id . " - " . $device_id;
     }
 
-    public function createLocationDeveloper(CreateLocationDeveloperRequest $request) {
+    public function createLocationDeveloper(CreateLocationDeveloperRequest $request)
+    {
         $payload = [
             "name" => $request->name,
             "developer_code" => $request->code
         ];
 
-        $save = MyHelper::post(self::SOURCE,'v1/location/developer/add', $payload);
+        $save = MyHelper::post(self::SOURCE, 'v1/location/developer/add', $payload);
 
         if (isset($save['status']) && $save['status'] == "success") {
             return redirect('browse/location')->withSuccess(['New location successfully added.']);
@@ -338,8 +347,9 @@ class LocationController extends Controller
         }
     }
 
-    public function deleteLocationDeveloper($id) {
-        $delete= MyHelper::get(self::SOURCE,'v1/location/developer/' . $id . '/delete/');
+    public function deleteLocationDeveloper($id)
+    {
+        $delete = MyHelper::get(self::SOURCE, 'v1/location/developer/' . $id . '/delete/');
 
         if (isset($delete['status']) && $delete['status'] == "success") {
             return response()->json(['status' => 'success', 'messages' => ['Developer deleted successfully']]);
