@@ -103,14 +103,14 @@ class OutletController extends Controller
         }
     }
 
-    public function delete($id)
-    {
-        $delete= MyHelper::deleteApi('outlet/' . $id);
+    // public function delete($id)
+    // {
+    //     $delete= MyHelper::deleteApi('outlet/' . $id);
 
-        if (isset($delete['status']) && $delete['status'] == "success") {
-            return response()->json(['status' => 'success', 'messages' => ['Outlet deleted successfully']]);
-        } else {
-            return response()->json(['status' => 'fail', 'messages' => [$delete['message']]]);
-        }
-    }
+    //     if (isset($delete['status']) && $delete['status'] == "success") {
+    //         return response()->json(['status' => 'success', 'messages' => ['Outlet deleted successfully']]);
+    //     } else {
+    //         return response()->json(['status' => 'fail', 'messages' => [$delete['message']]]);
+    //     }
+    // }
 }
