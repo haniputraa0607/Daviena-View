@@ -149,8 +149,8 @@ class MyHelper
     public static function get($url)
     {
 
-        $host = env('APP_API_URL_CMS');
-        // $host = env('APP_API_URL');
+        // $host = env('APP_API_URL_CMS');
+        $host = env('APP_API_URL');
 
         $client = new Client();
         $bearer = session('access_token');
