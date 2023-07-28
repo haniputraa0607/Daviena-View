@@ -80,7 +80,7 @@ class MyHelper
 
     public static function post($url, $post)
     {
-        $host = env('APP_API_URL');
+        $host = env('APP_API_URL_CMS');
 
         $client = new Client();
         $bearer = session('access_token');
