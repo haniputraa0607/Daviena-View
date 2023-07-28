@@ -18,7 +18,8 @@ class MyHelper
 {
     public static function postLogin($request)
     {
-        $api = env('APP_API_URL');
+        // $api = env('APP_API_URL');
+        $api = env('APP_API_URL_CMS');
 
         $client = new Client();
         try {
@@ -49,7 +50,8 @@ class MyHelper
 
     public static function postLoginClient()
     {
-        $api = env('APP_API_URL');
+        // $api = env('APP_API_URL');
+        $api = env('APP_API_URL_CMS');
         $client = new Client();
 
         try {

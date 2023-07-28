@@ -114,18 +114,14 @@ class User extends Authenticatable
     {
         return $query->where('is_active', true);
     }
-    // protected static function newFactory()
-    // {
-    //     return UserFactory::new();
-    // }
 
     public function get_features(): mixed
     {
         return $this->level == 'Super Admin' ? Feature::all()->pluck('id') : $this->admin->admin_features->map(fn ($item) => $item->feature_id);
     }
 
-//     public function findForPassport(string $username): User
-//     {
-//         return $this->where('phone', $username)->first();
-//     }
+    public function findForPassport(string $username): User
+    {
+        return $this->where('phone', $username)->first();
+    }
 }
