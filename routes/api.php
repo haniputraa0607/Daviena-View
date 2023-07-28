@@ -15,7 +15,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 Route::middleware('auth:api')->prefix('be')->group(function () {
-    
     Route::controller(ApiUserController::class)->prefix('/user')->group(function () {
         $user = '{user}';
         Route::get('', 'index')->name('user.list');
