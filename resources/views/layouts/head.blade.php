@@ -4,6 +4,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta content="width=device-width, initial-scale=1" name="viewport" />
         <meta content="DAVIENA" name="description" />
+        <meta name="csrf-token" content="{{ csrf_token() }}">
         <meta content="" name="author" />
 		<!-- BEGIN PAGE FIRST SCRIPTS -->
         <script src="{{ env('STORAGE_URL_VIEW') }}{{ ('assets/global/plugins/pace/pace.min.js') }}" type="text/javascript"></script>

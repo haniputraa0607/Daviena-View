@@ -188,7 +188,7 @@ class MyHelper
 
     public static function deleteApi($url, $post = null)
     {
-        $api = env('APP_API_URL');
+        $api = env('APP_API_URL_CMS');
         $client = new Client();
         $ses = session('access_token');
         $content = array(

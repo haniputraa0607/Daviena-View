@@ -163,7 +163,7 @@
                             </div>
                         </div>
 
-                         <div class="form-group" id="outlet-selection">
+                        <div class="form-group" id="outlet-selection">
                             <div class="col-md-12">
                                 <div class="col-md-3">
                                     <label class="control-label">Outlet<span class="required"
@@ -297,6 +297,7 @@
                                 </div>
                             </div>
                         </div>
+
                         <div class="form-group">
                             <div class="col-md-12">
                                 <div class="col-md-3">
@@ -308,7 +309,10 @@
                                 </div>
                                 <div class="col-md-9">
                                     <div class="col-md-10">
-                                        <input class="form-check-input" type="checkbox" name="is_active" value="true">
+                                        <input width="100px;" type="checkbox" class="make-switch" data-size="small"
+                                            data-on-color="info" data-on-text="Active" data-off-color="default"
+                                            data-off-text="Nonactive" name="is_active" value="1"
+                                            @if (old('is_active') ?? '') checked @endif>
                                     </div>
                                 </div>
                             </div>

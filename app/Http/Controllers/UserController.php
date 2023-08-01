@@ -65,10 +65,11 @@ class UserController extends Controller
             'address' => 'required|min:6',
             'password_confirmation' => 'required_with:password|same:password|min:6',
         ]);
+        
 
         $payload = [
             // "equal_id"          => $request->equal_id,
-            "equal_id" => '1211',
+            "equal_id" => '45',
             "name"       => $request->name,
             "username" => $request->username,
             "phone" => $request->phone,
@@ -81,8 +82,7 @@ class UserController extends Controller
             "level"    => $request->level,
             "password" => $request->password,
             "address" => $request->address,
-            "is_active" => $request->is_active ?? '',
-
+            "is_active" => $request->is_active ?? 0,
         ];
 
         $save = MyHelper::post('be/user/', $payload);
@@ -94,9 +94,27 @@ class UserController extends Controller
         }
     }
 
-    public function show()
+    public function show($id)
     {
-        // todo
+        $districts = MyHelper::get('indonesia/districts');
+
+        $outlet = MyHelper::get('be/outlet');
+
+        $detail = MyHelper::get('be/user/' . $id);
+
+        if (isset($outlet['status']) && $outlet['status'] == "success" && isset($detail['status'])  && $detail['status'] == 'success') {
+            $data = [
+                'title'             => 'Create Users',
+                'sub_title'         => 'List',
+                'menu_active'       => 'user',
+                'districts'         => $districts['data'],
+                'outlets'           => $outlet['result'],
+                'detail'            => $detail['result']
+            ];
+        } else {
+            return back()->withErrors(['Something went wrong. Please try again.'])->withInput();
+        }
+        return view('pages.user.detail', $data);
     }
 
     public function update()
@@ -106,8 +124,8 @@ class UserController extends Controller
 
     public function deleteUser($id)
     {
-        $delete = MyHelper::deleteApi('user/' . $id);
-
+        $delete = MyHelper::deleteApi('be/user/' . $id);
+        
         if (isset($delete['status']) && $delete['status'] == "success") {
             return response()->json(['status' => 'success', 'messages' => ['User deleted successfully']]);
         } else {

@@ -202,7 +202,7 @@
                                                         <span class="badge badge-danger badge-lg">Non-Active</span>
                                                     @endif
                                                 </div>
-                                            </div>
+                                            </div> 
                                             <div class="form-group">
                                                 <div class="input-icon right">
                                                     <label class="col-md-4 control-label">
@@ -211,8 +211,8 @@
                                                 </div>
                                                 <div class="col-md-8">
                                                     <div class="caption font-blue sbold">
-                                                        @if (isset($detail['role']))
-                                                            @if ($detail['role'] == 'super_admin')
+                                                        @if (isset($detail['level']))
+                                                            @if ($detail['level'] == 'Super Admin')
                                                                 <label class="sale-num font-red sbold control-label">Super Admin</label>
                                                             @else
                                                                 <label class="sale-num font-blue sbold control-label">Admin</label>
@@ -247,7 +247,7 @@
                                     </div>
                                 </div>
                                 <div class="form-actions">
-                                    @if ($detail['role'] == 'super_admin')
+                                    {{-- @if ($detail['role'] == 'super_admin')
                                         <div class="col-md-offset-4 col-md-4 text-center">
                                             <input type="password" class="form-control super_admin_password" width="30%" name="super_admin_password" placeholder="Enter Your current Password">
                                             <a class="btn btn-info button-action btn-block" data-id="{{ $detail['id'] }}" data-email="{{ $detail['email'] }}" data-action="admin"><i class="fa fa-user"></i> Make Admin</a>
@@ -257,7 +257,7 @@
                                             <input type="password" class="form-control super_admin_password" width="30%" name="super_admin_password" placeholder="Enter Your current Password">
                                             <a class="btn btn-danger button-action btn-block" data-id="{{ $detail['id'] }}" data-email="{{ $detail['email'] }}"  data-action="super_admin"><i class="fa fa-user-secret"></i> Make Super Admin</a>
                                         </div>
-                                    @endif
+                                    @endif --}}
                                 </div>
                             </form>
 
@@ -300,7 +300,7 @@
                                                     <input type="email" class="form-control" name="email" value="@if(isset($detail['email'])){{ $detail['email'] }}@endif" placeholder="Email" required>
                                                 </div>
                                             </div>
-                                            @if ($detail['role'] != 'super_admin')
+                                            {{-- @if ($detail['role'] != 'super_admin')
                                                 <div class="form-group">
                                                     <div class="input-icon right">
                                                         <label class="col-md-4 control-label">
@@ -317,7 +317,7 @@
                                                         </select>
                                                     </div>
                                                 </div>
-                                            @endif
+                                            @endif --}}
                                         </div>
                                     </div>
                                 </div>
