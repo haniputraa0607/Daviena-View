@@ -50,26 +50,26 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            // 'equal_id' => 'required|numeric',
+            'equal_id' => 'required|numeric',
             'name' => 'required',
             'username' => 'required',
             'email' => 'required',
             'idc' => 'required',
             'birthdate' => 'required',
             'phone' => 'required|',
+            'gender' => 'required',
             'district' => 'required',
             'admin_role' => 'required',
             'level' => 'required',
             'outlet' => 'required',
-            'password' => 'min:6',
             'address' => 'required|min:6',
+            'password' => 'min:6',
             'password_confirmation' => 'required_with:password|same:password|min:6',
         ]);
         
 
         $payload = [
-            // "equal_id"          => $request->equal_id,
-            "equal_id" => '45',
+            "equal_id"          => $request->equal_id, 
             "name"       => $request->name,
             "username" => $request->username,
             "phone" => $request->phone,
@@ -80,6 +80,7 @@ class UserController extends Controller
             "outlet_id"   => $request->outlet,
             "district_code"    => $request->district,
             "level"    => $request->level,
+            "gender" => $request->gender,
             "password" => $request->password,
             "address" => $request->address,
             "is_active" => $request->is_active ?? 0,
@@ -98,30 +99,84 @@ class UserController extends Controller
     {
         $districts = MyHelper::get('indonesia/districts');
 
-        $outlet = MyHelper::get('be/outlet');
+        $outlets = MyHelper::get('be/outlet');
 
         $detail = MyHelper::get('be/user/' . $id);
 
-        if (isset($outlet['status']) && $outlet['status'] == "success" && isset($detail['status'])  && $detail['status'] == 'success') {
+        if (isset($outlets['status']) && $outlets['status'] == "success" && isset($detail['status'])  && $detail['status'] == 'success') {
             $data = [
                 'title'             => 'Create Users',
                 'sub_title'         => 'List',
                 'menu_active'       => 'user',
                 'districts'         => $districts['data'],
-                'outlets'           => $outlet['result'],
+                'outlets'           => $outlets['result'],
                 'detail'            => $detail['result']
             ];
         } else {
             return back()->withErrors(['Something went wrong. Please try again.'])->withInput();
         }
+ 
         return view('pages.user.detail', $data);
     }
 
-    public function update()
+    public function update(Request $request, $id)
     {
-        // todo
-    }
 
+        if (!isset($request->new_password)) {
+            $this->validate($request, [
+                'equal_id' => 'required|numeric',
+                'name' => 'required',
+                'username' => 'required',
+                'email' => 'required',
+                'idc' => 'required',
+                'birthdate' => 'required',
+                'phone' => 'required|',
+                'district' => 'required',
+                'admin_role' => 'required',
+                'level' => 'required',
+                'outlet' => 'required',
+                'gender' => 'required',
+                'address' => 'required|min:6',
+            ]);
+
+            $payload = [
+                "equal_id"          => $request->equal_id,
+                "name"       => $request->name,
+                "username" => $request->username,
+                "phone" => $request->phone,
+                "email"  => $request->email,
+                "idc"  => $request->idc,
+                "birthdate"    => $request->birthdate,
+                "type"   => $request->admin_role,
+                "outlet_id"   => $request->outlet,
+                "district_code"    => $request->district,
+                "level"    => $request->level,
+                "address" => $request->address,
+                "gender" => $request->gender,
+                "is_active" => $request->is_active ?? 0,
+            ];
+
+            $save = MyHelper::patch('be/user/' . $id, $payload);
+        } else {
+            $this->validate($request, [
+                'password' => 'min:6',
+                'password_confirmation' => 'required_with:password|same:password|min:6',
+            ]);
+
+            $payload = [
+                "password"       => $request->password,
+            ];
+
+            $save = MyHelper::patch('be/user/' . $id, $payload);
+        }
+
+        if (isset($save['status']) && $save['status'] == "success") {
+            return redirect('user')->withSuccess(['CMS User detail has been updated.']);
+        } else {
+            return back()->withErrors(['Something went wrong. Please try again.'])->withInput();
+        }
+    }
+    
     public function deleteUser($id)
     {
         $delete = MyHelper::deleteApi('be/user/' . $id);

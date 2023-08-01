@@ -59,18 +59,37 @@
                             <div class="col-md-12">
                                 <div class="col-md-3">
                                     <label class="control-label">Name<span class="required" aria-required="true">*</span>
-                                        <i class="fa fa-question-circle tooltips" data-original-title="Nama"
+                                        <i class="fa fa-question-circle tooltips" data-original-title="Name"
                                             data-container="body"></i>
                                     </label>
                                 </div>
                                 <div class="col-md-9">
                                     <div class="col-md-10">
-                                        <input type="text" class="form-control" name="name" placeholder="Nama"
+                                        <input type="text" class="form-control" name="name" placeholder="Name"
                                             value="{{ old('name') }}" required>
                                     </div>
                                 </div>
                             </div>
                         </div>
+
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <div class="col-md-3">
+                                    <label class="control-label">Equal ID<span class="required"
+                                            aria-required="true">*</span>
+                                        <i class="fa fa-question-circle tooltips" data-original-title="Equal ID"
+                                            data-container="body"></i>
+                                    </label>
+                                </div>
+                                <div class="col-md-9">
+                                    <div class="col-md-10">
+                                        <input type="number" class="form-control" name="equal_id" placeholder="Equal ID"
+                                            value="{{ old('equal_id') }}" required>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
 
                         <div class="form-group">
                             <div class="col-md-12">
@@ -117,8 +136,8 @@
                                 </div>
                                 <div class="col-md-9">
                                     <div class="col-md-10">
-                                        <input type="text" class="form-control" name="phone" placeholder="Phone Number"
-                                            value="{{ old('phone') }}" required>
+                                        <input type="text" class="form-control" name="phone"
+                                            placeholder="Phone Number" value="{{ old('phone') }}" required>
                                     </div>
                                 </div>
                             </div>
@@ -188,7 +207,7 @@
                         <div class="form-group">
                             <div class="col-md-12">
                                 <div class="col-md-3">
-                                    <label class="control-label">BirthDate<span class="required"
+                                    <label class="control-label">Birth Date<span class="required"
                                             aria-required="true">*</span>
                                         <i class="fa fa-question-circle tooltips" data-original-title="Birthdate"
                                             data-container="body"></i>
@@ -198,6 +217,36 @@
                                     <div class="col-md-10">
                                         <input type="date" class="form-control" name="birthdate"
                                             placeholder="Birthdate" value="{{ old('birthdate') }}" required>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <div class="col-md-3">
+                                    <label class="control-label">Gender<span class="required"
+                                            aria-required="true">*</span>
+                                        <i class="fa fa-question-circle tooltips" data-original-title="Gender"
+                                            data-container="body"></i>
+                                    </label>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="col-md-10">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="gender" id="gender"
+                                                value="Male">
+                                            <label class="form-check-label" for="gender">
+                                                Male
+                                            </label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="gender" id="gender"
+                                                value="Female">
+                                            <label class="form-check-label" for="gender">
+                                                Female
+                                            </label>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -301,7 +350,7 @@
                         <div class="form-group">
                             <div class="col-md-12">
                                 <div class="col-md-3">
-                                    <label class="control-label">Active<span class="required"
+                                    <label class="control-label">Status<span class="required"
                                             aria-required="true">*</span>
                                         <i class="fa fa-question-circle tooltips" data-original-title="Active"
                                             data-container="body"></i>
