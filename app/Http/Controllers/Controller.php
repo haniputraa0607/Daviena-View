@@ -50,9 +50,8 @@ class Controller extends BaseController
                     'user_name'      => $request->input('username'),
                 ]);
 
-                // $userData = MyHelper::get('be/user/');
-                $userData = MyHelper::get('be/user/detail');
-
+                $userData = MyHelper::get('be/user/');
+                // $userData = MyHelper::get('be/user/detail');
                 if (isset($userData['status']) && $userData['status'] == 'success' && !empty($userData['result'])) {
                     $dataUser = $userData['result'];
                 }
