@@ -186,6 +186,46 @@ class MyHelper
         }
     }
 
+    public static function postCurl($url, $data = '')
+    {
+        $host = env('APP_API_URL_CMS');
+        // $host = env('APP_API_URL');
+
+        $client = new Client();
+        $bearer = session('access_token');
+        $content = array(
+            'headers'   => [
+                            'Authorization' => $bearer,
+                            'Accept'        => 'application/json',
+                            'Content-Type'  => 'application/json',
+                        ],
+        );
+        try {
+            $response =  $client->request('POST', $host . 'api/' . $url, [
+                'headers' => $content,
+                'json' => ($data),
+            ]);
+            return json_decode($response->getBody(), true);
+        } catch (\GuzzleHttp\Exception\RequestException $e) {
+            try {
+                if ($e->getResponse()) {
+                    $response = $e->getResponse()->getBody()->getContents();
+                    $error = json_decode($response, true);
+
+                    if (!$error) {
+                        return $e->getResponse()->getBody();
+                    } else {
+                        return $error;
+                    }
+                } else {
+                    return ['status' => 'fail', 'messages' => [0 => 'Check your internet connection.']];
+                }
+            } catch (Exception $e) {
+                return ['status' => 'fail', 'messages' => [0 => 'Check your internet connection.']];
+            }
+        }
+    }
+
     public static function deleteApi($url, $post = null)
     {
         $api = env('APP_API_URL_CMS');
