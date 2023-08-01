@@ -184,7 +184,7 @@ class MyHelper
         }
     }
 
-    public static function postCurl($url, $data='')
+    public static function postCurl($url, $data = '')
     {
         $host = env('APP_API_URL_CMS');
         // $host = env('APP_API_URL');

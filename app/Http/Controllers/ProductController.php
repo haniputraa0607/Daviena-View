@@ -17,7 +17,8 @@ class ProductController extends Controller
         return view('pages.product.index', $data);
     }
 
-    public function list(Request $request){
+    public function list(Request $request)
+    {
         $products = MyHelper::post('be/product/table_list', $request->all());
         return response()->json($products);
     }
@@ -31,7 +32,7 @@ class ProductController extends Controller
             'menu_active'       => 'product',
             'districts'         => $districts['data'],
         ];
-        
+
         $category = MyHelper::get('be/product-category/list');
         if (isset($category['status']) && $category['status'] == 'success') {
             $data['categorys'] = $category['result'];
