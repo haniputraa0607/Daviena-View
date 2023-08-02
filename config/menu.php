@@ -60,6 +60,20 @@ return [
         ],
         [
             'type' => 'group',
+            'label' => 'Product',
+            'required_features' => [],
+            'children' => [
+                [
+                    'type' => 'single',
+                    'label' => 'Product',
+                    'icon' => 'fa fa-info-circle',
+                    'url' => 'product',
+                    'active' => '\View::shared("menu_active") == "product"',
+                ],
+            ]
+        ],
+        [
+            'type' => 'group',
             'label' => 'Transaction',
             'children' => [
                 [

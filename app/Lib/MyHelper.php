@@ -18,8 +18,7 @@ class MyHelper
 {
     public static function postLogin($request)
     {
-        // $api = env('APP_API_URL');
-        $api = env('APP_API_URL_CMS');
+        $api = env('APP_API_URL');
 
         $client = new Client();
         try {
@@ -50,8 +49,7 @@ class MyHelper
 
     public static function postLoginClient()
     {
-        // $api = env('APP_API_URL');
-        $api = env('APP_API_URL_CMS');
+        $api = env('APP_API_URL');
         $client = new Client();
 
         try {
@@ -128,7 +126,6 @@ class MyHelper
             'json'      => (array) $post
 
         );
-
         try {
             $response = $client->patch($host . 'api/' . $url, $content);
             return json_decode($response->getBody(), true);
