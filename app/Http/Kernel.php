@@ -42,6 +42,7 @@ class Kernel extends HttpKernel
             // \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
             \Illuminate\Routing\Middleware\ThrottleRequests::class . ':api',
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
+            \Illuminate\Http\Middleware\HandleCors::class,
         ],
     ];
 
@@ -67,5 +68,7 @@ class Kernel extends HttpKernel
         'log'  => \App\Http\Middleware\Log::class,
         'super.admin'  => \App\Http\Middleware\SuperAdmin::class,
         'feature_control'   => \App\Http\Middleware\FeatureControl::class,
+        'scopes' => \App\Http\Middleware\CheckScopes::class,
+
     ];
 }

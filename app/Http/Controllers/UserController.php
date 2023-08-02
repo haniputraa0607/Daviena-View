@@ -16,8 +16,8 @@ class UserController extends Controller
             'menu_active'       => 'user',
         ];
 
-        // $cms_user = MyHelper::get('user');
         $cms_user = MyHelper::get('be/user');
+
         if (isset($cms_user['status']) && $cms_user['status'] == "success") {
             $data['cms_users'] = $cms_user['result'];
         } else {
@@ -43,7 +43,7 @@ class UserController extends Controller
             ];
         } else {
             return back()->withErrors(['Something went wrong. Please try again.'])->withInput();
-        } 
+        }
         return view('pages.user.create', $data);
     }
 
@@ -66,10 +66,10 @@ class UserController extends Controller
             'password' => 'min:6',
             'password_confirmation' => 'required_with:password|same:password|min:6',
         ]);
-        
+
 
         $payload = [
-            "equal_id"          => $request->equal_id, 
+            "equal_id"          => $request->equal_id,
             "name"       => $request->name,
             "username" => $request->username,
             "phone" => $request->phone,
@@ -115,7 +115,7 @@ class UserController extends Controller
         } else {
             return back()->withErrors(['Something went wrong. Please try again.'])->withInput();
         }
- 
+
         return view('pages.user.detail', $data);
     }
 
@@ -176,11 +176,11 @@ class UserController extends Controller
             return back()->withErrors(['Something went wrong. Please try again.'])->withInput();
         }
     }
-    
+
     public function deleteUser($id)
     {
         $delete = MyHelper::deleteApi('be/user/' . $id);
-        
+
         if (isset($delete['status']) && $delete['status'] == "success") {
             return response()->json(['status' => 'success', 'messages' => ['User deleted successfully']]);
         } else {
