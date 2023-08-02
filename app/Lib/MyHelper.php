@@ -80,7 +80,7 @@ class MyHelper
 
     public static function post($url, $post)
     {
-        $host = env('APP_API_URL');
+        $host = env('APP_API_URL_CMS');
 
         $client = new Client();
         $bearer = session('access_token');
@@ -115,7 +115,7 @@ class MyHelper
 
     public static function patch($url, $post)
     {
-        $host = env('APP_API_URL');
+        $host = env('APP_API_URL_CMS');
 
         $client = new Client();
         $bearer = session('access_token');
@@ -228,7 +228,7 @@ class MyHelper
 
     public static function deleteApi($url, $post = null)
     {
-        $api = env('APP_API_URL');
+        $api = env('APP_API_URL_CMS');
         $client = new Client();
         $ses = session('access_token');
         $content = array(

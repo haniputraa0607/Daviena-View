@@ -3,7 +3,8 @@
         <title>{{env('TITLE', 'CRM System')}} | {{$title}}</title>
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta content="width=device-width, initial-scale=1" name="viewport" />
-        <meta content="Casion" name="description" />
+        <meta content="DAVIENA" name="description" />
+        <meta name="csrf-token" content="{{ csrf_token() }}">
         <meta content="" name="author" />
 		<!-- BEGIN PAGE FIRST SCRIPTS -->
         <script src="{{ env('STORAGE_URL_VIEW') }}{{ ('assets/global/plugins/pace/pace.min.js') }}" type="text/javascript"></script>
@@ -34,5 +35,5 @@
         <link href="{{ env('STORAGE_URL_VIEW') }}{{ ('assets/layouts/layout/css/custom.min.css') }}" rel="stylesheet" type="text/css" />
         <!-- END THEME LAYOUT STYLES -->
 
-        <link rel="shortcut icon" href="{{env('STORAGE_URL_VIEW') }}{{ ('images/logo.svg')}}" />
+        <link rel="shortcut icon" href="{{env('STORAGE_URL_VIEW') }}{{ ('images/logo.png')}}" />
 </head>

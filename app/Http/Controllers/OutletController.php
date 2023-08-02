@@ -41,10 +41,15 @@ class OutletController extends Controller
 
     public function store(Request $request)
     {
+        
         $payload = [
             "name"          => $request->name,
             "address"       => $request->address,
             "district_code" => $request->district,
+            "coordinates" => [
+                "latitude" => $request->latitude,
+                "longitude" => $request->longitude
+            ],
             "outlet_phone"  => $request->phone,
             "outlet_email"  => $request->email,
             "id_partner"    => $request->partner,
@@ -52,8 +57,8 @@ class OutletController extends Controller
             "activities"    => $request->activities
         ];
 
-        $save = MyHelper::post('outlet', $payload);
 
+        $save = MyHelper::post('be/outlet', $payload); 
         if (isset($save['status']) && $save['status'] == "success") {
             return redirect('outlet')->withSuccess(['New Outlet successfully added.']);
         } else {
