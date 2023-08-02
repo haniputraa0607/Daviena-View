@@ -18,7 +18,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js"></script>
     <script>
         $('.selectpicker').selectpicker();
-    </script>
+    </script>    
+    
 @endsection
 
 
@@ -48,11 +49,11 @@
     <div class="portlet light bordered">
         <div class="portlet-title">
             <div class="caption">
-                <span class="caption-subject font-blue sbold uppercase ">New Product</span>
+                <span class="caption-subject font-blue sbold uppercase ">New Partner</span>
             </div>
         </div>
         <div class="portlet-body m-form__group row">
-            <form class="form-horizontal" role="form" action="{{ route('product.store') }}"  method="post" enctype="multipart/form-data" id="myForm">
+            <form class="form-horizontal" role="form" action="{{ route('partner.store') }}"  method="post" enctype="multipart/form-data" id="myForm">
                 <div class="col-md-12">
                     <div class="form-body">
 
@@ -65,7 +66,7 @@
                                 </div>
                                 <div class="col-md-9">
                                     <div class="col-md-10">
-                                        <input type="text" class="form-control" name="product_name" placeholder="Name" required>
+                                        <input type="text" class="form-control" name="partner_name" placeholder="Name" required>
                                     </div>
                                 </div>
                             </div>
@@ -74,48 +75,28 @@
                         <div class="form-group">
                             <div class="col-md-12">
                                 <div class="col-md-3">
-                                    <label class="control-label">Price<span class="required" aria-required="true">*</span>
-                                        <i class="fa fa-question-circle tooltips" data-original-title="Price" data-container="body"></i>
+                                    <label class="control-label">Email<span class="required" aria-required="true">*</span>
+                                        <i class="fa fa-question-circle tooltips" data-original-title="Email" data-container="body"></i>
                                     </label>
                                 </div>
                                 <div class="col-md-9">
                                     <div class="col-md-10">
-                                        <input type="number" class="form-control" name="price" placeholder="Price" required>
+                                        <input type="email" class="form-control" name="partner_email" placeholder="Partner Email" required>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        
-                        <div class="form-group" id="product-category-selection">
+
+                        <div class="form-group" id="type">
                             <div class="col-md-12">
                                 <div class="col-md-3">
-                                    <label class="control-label">Category<span class="required" aria-required="true">*</span>
-                                        <i class="fa fa-question-circle tooltips" data-original-title="Category" data-container="body"></i>
+                                    <label class="control-label">Phone<span class="required" aria-required="true">*</span>
+                                        <i class="fa fa-question-circle tooltips" data-original-title="Phone" data-container="body"></i>
                                     </label>
                                 </div>
                                 <div class="col-md-9">
                                     <div class="col-md-10">
-                                        <select name="product_category_id" id="product_category_selection" class="form-control" required>
-                                            <option value="">--Select--</option>
-                                            @foreach ($categorys as $category)
-                                            <option value="{{ $category['id'] }}">{{ $category['product_category_name'] }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="form-group">
-                            <div class="col-md-12">
-                                <div class="col-md-3">
-                                    <label class="control-label">Description<span class="required" aria-required="true">*</span>
-                                        <i class="fa fa-question-circle tooltips" data-original-title="Description" data-container="body"></i>
-                                    </label>
-                                </div>
-                                <div class="col-md-9">
-                                    <div class="col-md-10">
-                                        <textarea type="text" class="form-control" name="description" placeholder="Description" required></textarea>
+                                        <input type="text" name="partner_phone" class="form-control" placeholder="Phone" >
                                     </div>
                                 </div>
                             </div>
@@ -124,17 +105,33 @@
                         <div class="form-group">
                             <div class="col-md-12">
                                 <div class="col-md-3">
-                                    <label class="control-label">Product Code<span class="required" aria-required="true">*</span>
-                                        <i class="fa fa-question-circle tooltips" data-original-title="Product Code" data-container="body"></i>
+                                    <label class="control-label">Address<span class="required" aria-required="true">*</span>
+                                        <i class="fa fa-question-circle tooltips" data-original-title="Address" data-container="body"></i>
                                     </label>
                                 </div>
                                 <div class="col-md-9">
                                     <div class="col-md-10">
-                                        <input type="text" class="form-control" name="product_code" placeholder="Product  Code" required>
+                                        <textarea type="text" class="form-control" name="partner_address" placeholder="Address"></textarea>
                                     </div>
                                 </div>
                             </div>
                         </div>
+
+                        <div class="form-group" id="type">
+                            <div class="col-md-12">
+                                <div class="col-md-3">
+                                    <label class="control-label">Partner Code<span class="required" aria-required="true">*</span>
+                                        <i class="fa fa-question-circle tooltips" data-original-title="Partner Code" data-container="body"></i>
+                                    </label>
+                                </div>
+                                <div class="col-md-9">
+                                    <div class="col-md-10">
+                                        <input type="text" name="partner_code" class="form-control" placeholder="Partner Code" >
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
                     <div class="form-actions">
                         {{ csrf_field() }}

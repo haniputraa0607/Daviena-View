@@ -70,6 +70,41 @@ return [
                     'url' => 'product',
                     'active' => '\View::shared("menu_active") == "product"',
                 ],
+                [
+                    'type' => 'single',
+                    'label' => 'Treatment',
+                    'icon' => 'fa fa-info-circle',
+                    'url' => 'treatment',
+                    'active' => '\View::shared("menu_active") == "treatment"',
+                ],
+            ]
+        ],
+        [
+            'type' => 'group',
+            'label' => 'Article',
+            'required_features' => [],
+            'children' => [
+                [
+                    'type' => 'single',
+                    'label' => 'Article',
+                    'icon' => 'fa fa-info-circle',
+                    'url' => 'article',
+                    'active' => '\View::shared("menu_active") == "article"',
+                ],
+            ]
+        ],
+        [
+            'type' => 'group',
+            'label' => 'Partner',
+            'required_features' => [],
+            'children' => [
+                [
+                    'type' => 'single',
+                    'label' => 'Partner',
+                    'icon' => 'fa fa-info-circle',
+                    'url' => 'partner',
+                    'active' => '\View::shared("menu_active") == "partner"',
+                ],
             ]
         ],
         [

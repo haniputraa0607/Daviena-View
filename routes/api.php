@@ -1,6 +1,8 @@
 <?php
 
+use App\Http\Controllers\Api\ApiArticleController;
 use App\Http\Controllers\Api\ApiOutletController;
+use App\Http\Controllers\Api\ApiPartnerController;
 use App\Http\Controllers\Api\ApiUserController;
 use App\Http\Controllers\Api\ApiProductController;
 use App\Http\Controllers\Api\ApiProductCategoryController;
@@ -17,6 +19,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 Route::middleware('auth:api')->prefix('be')->group(function () {
+// Route::prefix('be')->group(function () {
     
     Route::controller(ApiUserController::class)->prefix('/user')->group(function () {
         $user = '{user}';
@@ -50,5 +53,21 @@ Route::middleware('auth:api')->prefix('be')->group(function () {
         Route::get($product_category, 'show')->name('product-category.show');
         Route::patch($product_category, 'update')->name('product-category.update');
         Route::delete($product_category, 'destroy')->name('product-category.delete');
+    });
+    Route::controller(ApiArticleController::class)->prefix('/article')->group(function () {
+        $article = '{article}';
+        Route::get('', 'index')->name('article.list');
+        Route::post('', 'store')->name('article.create');
+        Route::get($article, 'show')->name('article.show');
+        Route::patch($article, 'update')->name('article.update');
+        Route::delete($article, 'destroy')->name('article.delete');
+    });
+    Route::controller(ApiPartnerController::class)->prefix('/partner')->group(function () {
+        $partner = '{partner}';
+        Route::get('', 'index')->name('partner.list');
+        Route::post('', 'store')->name('partner.create');
+        Route::get($partner, 'show')->name('partner.show');
+        Route::patch($partner, 'update')->name('partner.update');
+        Route::delete($partner, 'destroy')->name('partner.delete');
     });
 });

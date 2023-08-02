@@ -12,7 +12,16 @@ class ApiProductController extends Controller
 {
     public function index(Request $request): JsonResponse
     {
-        $product = $request->length ?  Product::paginate($request->length ?? 10) : Product::get();
+        $type = $request->type ? $request->type : '';
+        if($request->length){ 
+            $product = Product::when($type, function ($q) {
+                $q->where('type', $type);
+            })->paginate($request->length ?? 10);
+        } else {
+            $product = Product::when($type, function ($query) use ($type) {
+                return $query->where(['type' => $type]);
+            })->get();
+        } 
         return $this->ok("success get data all users", $product);
     }
 
