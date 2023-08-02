@@ -154,7 +154,7 @@
                                 <td>{{ $outlet['outlet_email'] }}</td>
                                 <td>{{ $outlet['outlet_phone'] }}</td>
                                 <td>
-                                    @if ($outlet['status'])
+                                    @if ($outlet['status'] == 'Active')
                                         <span class="badge badge-success badge-sm">Active</span>
                                     @else
                                         <span class="badge badge-danger badge-sm">Non-Active</span>

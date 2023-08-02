@@ -19,19 +19,20 @@ class MyHelper
     public static function postLogin($request)
     {
         $api = env('APP_API_URL');
+        $form_params =  [
+            'form_params' => [
+                'grant_type'    => 'password',
+                'client_id'     => env('PASSWORD_CREDENTIAL_ID'),
+                'client_secret' => env('PASSWORD_CREDENTIAL_SECRET'),
+                'username'      => $request->input('username'),
+                'password'      => $request->input('password'),
+                'scope'         => 'be'
+            ],
+        ];
 
         $client = new Client();
         try {
-            $response = $client->request('POST', $api . 'oauth/token', [
-                'form_params' => [
-                    'grant_type'    => 'password',
-                    'client_id'     => env('PASSWORD_CREDENTIAL_ID'),
-                    'client_secret' => env('PASSWORD_CREDENTIAL_SECRET'),
-                    'username'      => $request->input('username'),
-                    'password'      => $request->input('password'),
-                    'scope'         => 'be'
-                ],
-            ]);
+            $response = $client->request('POST', $api . 'oauth/token', $form_params);
             return json_decode($response->getBody(), true);
         } catch (\GuzzleHttp\Exception\RequestException $e) {
             try {
@@ -78,7 +79,7 @@ class MyHelper
 
     public static function post($url, $post)
     {
-        $host = env('APP_API_URL');
+        $host = env('APP_API_URL_CMS');
 
         $client = new Client();
         $bearer = session('access_token');
@@ -113,7 +114,7 @@ class MyHelper
 
     public static function patch($url, $post)
     {
-        $host = env('APP_API_URL');
+        $host = env('APP_API_URL_CMS');
 
         $client = new Client();
         $bearer = session('access_token');
@@ -148,8 +149,8 @@ class MyHelper
     public static function get($url)
     {
 
-        $host = env('APP_API_URL_CMS');
-        // $host = env('APP_API_URL');
+        // $host = env('APP_API_URL_CMS');
+        $host = env('APP_API_URL');
 
         $client = new Client();
         $bearer = session('access_token');
@@ -225,7 +226,7 @@ class MyHelper
 
     public static function deleteApi($url, $post = null)
     {
-        $api = env('APP_API_URL');
+        $api = env('APP_API_URL_CMS');
         $client = new Client();
         $ses = session('access_token');
         $content = array(

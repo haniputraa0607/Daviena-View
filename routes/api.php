@@ -18,6 +18,9 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
+header('Access-Control-Allow-Origin:  *');
+header('Access-Control-Allow-Methods:  POST, GET, OPTIONS, PUT, DELETE');
+header('Access-Control-Allow-Headers:  Content-Type, X-Auth-Token, Origin, Authorization');
 Route::middleware('auth:api')->prefix('be')->group(function () {
 // Route::prefix('be')->group(function () {
     
@@ -34,7 +37,7 @@ Route::middleware('auth:api')->prefix('be')->group(function () {
         $outlet = '{outlet}';
         Route::get('', 'index')->name('outlet.list');
         Route::post('', 'store')->name('outlet.create');
-        Route::get($outlet, 'shown')->name('outlet.show');
+        Route::get($outlet, 'show')->name('outlet.show');
         Route::patch($outlet, 'update')->name('outlet.update');
         Route::delete($outlet, 'destroy')->name('outlet.delete');
     });

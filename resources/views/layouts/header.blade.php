@@ -1,9 +1,9 @@
-<div class="page-header navbar navbar-fixed-top">
+<div class="page-header navbar navbar-fixed-top" style="background-color:#bdbdbd;">
 	<!-- BEGIN HEADER INNER -->
 	<div class="page-header-inner container">
 		<!-- BEGIN LOGO -->
 		<div class="page-logo">
-			<a href="{{url('/')}}" style="height:100%">
+			<a href="{{url('/')}}" style="height:100%; padding-top:8px; padding-bottom:8px;">
 				<img src="{{ env('STORAGE_URL_VIEW') }}{{ ('images/logo.svg') }}" alt="logo" class="logo-default"  style="margin: 0; height:100%"/> </a>
 			<div class="menu-toggler sidebar-toggler">
 				<span></span>
