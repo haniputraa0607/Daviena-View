@@ -41,7 +41,7 @@ class OutletController extends Controller
 
     public function store(Request $request)
     {
-        
+
         $payload = [
             "name"          => $request->name,
             "address"       => $request->address,
@@ -58,7 +58,7 @@ class OutletController extends Controller
         ];
 
 
-        $save = MyHelper::post('be/outlet', $payload); 
+        $save = MyHelper::post('be/outlet', $payload);
         if (isset($save['status']) && $save['status'] == "success") {
             return redirect('outlet')->withSuccess(['New Outlet successfully added.']);
         } else {
