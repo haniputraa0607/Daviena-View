@@ -28,7 +28,7 @@ Route::middleware('auth:api')->prefix('be')->group(function () {
         $outlet = '{outlet}';
         Route::get('', 'index')->name('outlet.list');
         Route::post('', 'store')->name('outlet.create');
-        Route::get($outlet, 'shown')->name('outlet.show');
+        Route::get($outlet, 'show')->name('outlet.show');
         Route::patch($outlet, 'update')->name('outlet.update');
         Route::delete($outlet, 'destroy')->name('outlet.delete');
     });

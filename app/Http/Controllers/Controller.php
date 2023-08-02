@@ -51,9 +51,8 @@ class Controller extends BaseController
                 ]);
 
 
-                $userData = MyHelper::get('be/user/');
-                // $userData = MyHelper::get('be/user/detail');
-
+                // $userData = MyHelper::get('be/user/');
+                $userData = MyHelper::get('be/user/detail'); 
               if (isset($userData['status']) && $userData['status'] == 'success' && !empty($userData['result'])) {
                     $dataUser = $userData['result'];
                 }

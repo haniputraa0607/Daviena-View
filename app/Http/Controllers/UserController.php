@@ -22,8 +22,7 @@ class UserController extends Controller
             $data['cms_users'] = $cms_user['result'];
         } else {
             return back()->withErrors(['Something went wrong. Please try again.'])->withInput();
-        }
-
+        } 
         return view('pages.user.index', $data);
     }
 
