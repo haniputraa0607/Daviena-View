@@ -126,7 +126,6 @@ class MyHelper
             'json'      => (array) $post
 
         );
-
         try {
             $response = $client->patch($host . 'api/' . $url, $content);
             return json_decode($response->getBody(), true);

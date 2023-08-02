@@ -15,15 +15,15 @@
     <script type="text/javascript">
         $(document).ready(function() {
             var table=$('#table_data').DataTable({
-                    bProcessing: true,
-                    bServerSide: true,
-                    ajax: {
-                        url: "{{ route('product.list') }}",
-                        type: "POST",
-                        data: {
-                            _token: '{{ csrf_token() }}',
-                        }
-                    },
+                    // bProcessing: true,
+                    // bServerSide: true,
+                    // ajax: {
+                    //     url: "{{ route('product.list') }}",
+                    //     type: "POST",
+                    //     data: {
+                    //         _token: '{{ csrf_token() }}',
+                    //     }
+                    // },
                     language: {
                         aria: {
                             sortAscending: ": activate to sort column ascending",
@@ -86,8 +86,11 @@
                 },
                 function(){
                     $.ajax({
-                        type : "GET",
+                        type : "delete",
                         url : "{{ url('product/delete') }}"+'/'+id,
+                        data: {
+                            _token: '{{ csrf_token() }}',
+                        },
                         success : function(result) {
                             if (result.status == "success") {
                                 swal({
@@ -107,6 +110,11 @@
                         }
                     });
                 });
+            },
+            detail: function(that){
+                let id = $(that).data('id');
+                let name = $(that).data('name');
+                window.location.href = `{{ url('product/detail') }}/${id}`;
             }
         }
     </script>
@@ -148,13 +156,27 @@
             <table class="table table-striped table-bordered table-hover dt-responsive" width="100%" id="table_data">
                 <thead>
                     <tr style="text-align: center">
-                        <th style="text-align: center"> No </th>
                         <th style="text-align: center"> Product Code </th>
                         <th style="text-align: center"> Name </th>
                         <th style="text-align: center"> Type </th>
                         <th style="text-align: center"> Action </th>
                     </tr>
                 </thead>
+                <tbody id="">
+                    @if (!empty($products))
+                        @foreach ($products as $product)
+                            <tr style="text-align: center;">
+                                <td>{{ $product['product_code'] }}</td>
+                                <td>{{ $product['product_name'] }}</td>
+                                <td>{{ $product['type'] }}</td>
+                                <td style="width: 90px;">                    
+                                    <a data-id="{{ $product['id'] }}" data-name="{{ $product['product_name'] }}" class="btn btn-sm blue" onclick="main.detail(this)"><i class="fa fa-search"></i></a>
+                                    <a class="btn btn-sm red sweetalert-delete btn-primary" data-id="{{ $product['id'] }}" data-name="{{ $product['product_name'] }}" onclick="main.delete(this)"><i class="fa fa-trash-o"></i></a>           
+                                </td>
+                            </tr>
+                        @endforeach
+                    @endif
+                </tbody>
             </table>
 
         </div>
