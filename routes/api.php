@@ -16,9 +16,8 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
-// Route::middleware('auth:api')->prefix('be')->group(function () {
-Route::prefix('be')->group(function () {
-
+Route::middleware('auth:api')->prefix('be')->group(function () {
+    
     Route::controller(ApiUserController::class)->prefix('/user')->group(function () {
         $user = '{user}';
         Route::get('', 'index')->name('user.list');
