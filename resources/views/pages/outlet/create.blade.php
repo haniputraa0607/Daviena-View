@@ -8,23 +8,19 @@
     <link href="{{ env('STORAGE_URL_VIEW') }}{{ 'assets/datemultiselect/jquery-ui.css' }}" rel="stylesheet" type="text/css" />
     <link href="{{ env('STORAGE_URL_VIEW') }}{{ 'assets/global/plugins/bootstrap-sweetalert/sweetalert.css' }}"
         rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/css/bootstrap-select.css" />
 @endsection
 
 @section('page-script')
     <script
         src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCOHBNv3Td9_zb_7uW-AJDU6DHFYk-8e9Y&v=3.exp&signed_in=true&libraries=places">
     </script>
-
     <script src="{{ env('STORAGE_URL_VIEW') }}{{ 'assets/global/plugins/bootstrap-switch/js/bootstrap-switch.min.js' }}"
         type="text/javascript"></script>
     <script src="{{ env('STORAGE_URL_VIEW') }}{{ 'assets/global/plugins/bootstrap-toastr/toastr.min.js' }}"
         type="text/javascript"></script>
     <script src="{{ env('STORAGE_URL_VIEW') }}{{ 'assets/global/plugins/bootstrap-sweetalert/sweetalert.min.js' }}"
         type="text/javascript"></script>
-
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/css/bootstrap-select.css" />
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js"></script>
     <script>
         $('.selectpicker').selectpicker();
@@ -289,7 +285,6 @@
                             </div>
                         </div>
 
-
                         <div class="form-group">
                             <div class="col-md-12">
                                 <div class="col-md-3">
@@ -339,6 +334,26 @@
                                     <div class="col-md-10">
                                         <input type="text" class="form-control" name="outlet_code"
                                             placeholder="Outlet Code" required>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <div class="col-md-3">
+                                    <label class="control-label">Status<span class="required"
+                                            aria-required="true">*</span>
+                                        <i class="fa fa-question-circle tooltips" data-original-title="Active"
+                                            data-container="body"></i>
+                                    </label>
+                                </div>
+                                <div class="col-md-9">
+                                    <div class="col-md-10">
+                                        <input width="100px;" type="checkbox" class="make-switch" data-size="small"
+                                            data-on-color="info" data-on-text="Active" data-off-color="default"
+                                            data-off-text="Nonactive" name="status" value="Active"
+                                            @if (old('status') ?? '') checked @endif>
                                     </div>
                                 </div>
                             </div>

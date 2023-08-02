@@ -98,27 +98,7 @@
                                     "error")
                             }
                         }
-                    });
-
-                    // success: function(result) {
-                    //     if (result.status == "success") {
-                    //         swal({
-                    //             title: 'Deleted!',
-                    //             text: 'User has been deleted.',
-                    //             type: 'success',
-                    //             showCancelButton: false,
-                    //             showConfirmButton: false
-                    //         })
-                    //         SweetAlert.init()
-                    //         window.location.reload(true);
-                    //     } else if (result.status == "fail") {
-                    //         swal("Error!", result.messages[0], "error")
-                    //     } else {
-                    //         swal("Error!",
-                    //             "Something went wrong. Failed to delete vehicle brand.",
-                    //             "error")
-                    //     }
-                    // }
+                    }); 
 
                 });
         });
@@ -162,7 +142,9 @@
                 <thead>
                     <tr style="text-align: center">
                         <th style="text-align: center"> Name </th>
+                        <th style="text-align: center"> Idc </th>
                         <th style="text-align: center"> Email </th>
+                        <th style="text-align: center"> Phone </th>
                         <th style="text-align: center"> Type </th>
                         <th style="text-align: center"> Action </th>
                     </tr>
@@ -172,7 +154,9 @@
                         @foreach ($cms_users as $user)
                             <tr style="text-align: center; {{ $user['type'] == 'super_admin' ? 'color:red;' : '' }}">
                                 <td>{{ $user['name'] }}</td>
+                                <td>{{ $user['idc'] }}</td>
                                 <td>{{ $user['email'] }}</td>
+                                <td>{{ $user['phone'] }}</td>
                                 <td>{{ $user['type'] }}</td>
                                 <td style="width: 90px;">
                                     <a href="{{ url('user/detail/' . $user['id']) }}" class="btn btn-sm blue"><i
