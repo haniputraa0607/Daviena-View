@@ -30,8 +30,10 @@ Route::get('login', function () {
     } else {
         return redirect('home');
     }
-})->name('login');
+});
 
 Route::post('login', [Controller::class, 'login']);
 // Route::get('home', [Controller::class, 'getHome'])->middleware('validate_session');
 Route::get('home', [Controller::class, 'getHome']);;
+
+Route::get('test', [Controller::class, 'conncetionTest']);

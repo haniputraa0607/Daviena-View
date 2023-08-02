@@ -60,83 +60,97 @@ return [
         ],
         [
             'type' => 'group',
-            'label' => 'Transaction',
+            'label' => 'Product',
+            'required_features' => [],
             'children' => [
                 [
-                    'type' => 'tree',
-                    'label' => 'Settings',
-                    'icon' => 'fa fa-cogs',
-                    'children' => [
-                        [
-                            'label' => 'Price Setting',
-                            'required_features' => [32, 34, 37],
-                            'active' => '\View::shared("submenu_active") == "setting-price"',
-                            'url' => 'transaction/setting/price'
-                        ],
-                        [
-                            'label' => 'Available Payment Method',
-                            'required_features' => [30, 31],
-                            'active' => '\View::shared("submenu_active") == "setting-payment-method"',
-                            'url' => 'transaction/setting/available-payment'
-                        ],
-                    ]
-                ]
-            ]
-        ],
-        [
-            'type' => 'group',
-            'label' => 'Browse',
-            'children' => [
-                [
-                    'label' => 'Vehicle',
-                    'required_features' => [5,6,7,8],
-                    'active' => '\View::shared("menu_active") == "browse-vehicle"',
-                    'url' => 'browse/vehicle',
-                    'icon' => 'fa fa-car'
-                ],
-                [
-                    'label' => 'Location',
-                    'required_features' => [1,2,3,4],
-                    'active' => '\View::shared("menu_active") == "browse-location"',
-                    'url' => 'browse/location',
-                    'icon' => 'fa fa-map'
-                ],
-                [
-                    'label' => 'ECS',
-                    'required_features' => [],
-                    'type' => 'tree',
-                    'children' => [
-                        [
-                            'label' => 'Device',
-                            'required_features' => [28,29],
-                            'active' => '\View::shared("menu_active") == "browse-ecs"',
-                            'url' => 'browse/ecs',
-                        ],
-                        [
-                            'label' => 'Pricing',
-                            'required_features' => [28,29],
-                            'active' => '\View::shared("menu_active") == "pricing-ecs"',
-                            'url' => 'browse/ecs/pricing',
-                        ],
-                    ],
-                    'icon' => 'fa fa-plug'
-                ],
-                [
-                    'label' => 'Apply For Casion',
-                    'required_features' => [9,10],
-                    'active' => '\View::shared("menu_active") == "browse-apply-casion"',
-                    'url' => 'browse/apply-casion',
-                    'icon' => 'fa fa-star'
-                ],
-                [
-                    'label' => 'Mobile Users',
-                    'required_features' => [11,12],
-                    'active' => '\View::shared("menu_active") == "browse-mobile-user"',
-                    'url' => 'browse/mobile-user',
-                    'icon' => 'fa fa-users'
+                    'type' => 'single',
+                    'label' => 'Product',
+                    'icon' => 'fa fa-info-circle',
+                    'url' => 'product',
+                    'active' => '\View::shared("menu_active") == "product"',
                 ],
             ]
         ],
+        // [
+        //     'type' => 'group',
+        //     'label' => 'Transaction',
+        //     'children' => [
+        //         [
+        //             'type' => 'tree',
+        //             'label' => 'Settings',
+        //             'icon' => 'fa fa-cogs',
+        //             'children' => [
+        //                 [
+        //                     'label' => 'Price Setting',
+        //                     'required_features' => [32, 34, 37],
+        //                     'active' => '\View::shared("submenu_active") == "setting-price"',
+        //                     'url' => 'transaction/setting/price'
+        //                 ],
+        //                 [
+        //                     'label' => 'Available Payment Method',
+        //                     'required_features' => [30, 31],
+        //                     'active' => '\View::shared("submenu_active") == "setting-payment-method"',
+        //                     'url' => 'transaction/setting/available-payment'
+        //                 ],
+        //             ]
+        //         ]
+        //     ]
+        // ],
+        // [
+        //     'type' => 'group',
+        //     'label' => 'Browse',
+        //     'children' => [
+        //         [
+        //             'label' => 'Vehicle',
+        //             'required_features' => [5,6,7,8],
+        //             'active' => '\View::shared("menu_active") == "browse-vehicle"',
+        //             'url' => 'browse/vehicle',
+        //             'icon' => 'fa fa-car'
+        //         ],
+        //         [
+        //             'label' => 'Location',
+        //             'required_features' => [1,2,3,4],
+        //             'active' => '\View::shared("menu_active") == "browse-location"',
+        //             'url' => 'browse/location',
+        //             'icon' => 'fa fa-map'
+        //         ],
+        //         [
+        //             'label' => 'ECS',
+        //             'required_features' => [],
+        //             'type' => 'tree',
+        //             'children' => [
+        //                 [
+        //                     'label' => 'Device',
+        //                     'required_features' => [28,29],
+        //                     'active' => '\View::shared("menu_active") == "browse-ecs"',
+        //                     'url' => 'browse/ecs',
+        //                 ],
+        //                 [
+        //                     'label' => 'Pricing',
+        //                     'required_features' => [28,29],
+        //                     'active' => '\View::shared("menu_active") == "pricing-ecs"',
+        //                     'url' => 'browse/ecs/pricing',
+        //                 ],
+        //             ],
+        //             'icon' => 'fa fa-plug'
+        //         ],
+        //         [
+        //             'label' => 'Apply For Casion',
+        //             'required_features' => [9,10],
+        //             'active' => '\View::shared("menu_active") == "browse-apply-casion"',
+        //             'url' => 'browse/apply-casion',
+        //             'icon' => 'fa fa-star'
+        //         ],
+        //         [
+        //             'label' => 'Mobile Users',
+        //             'required_features' => [11,12],
+        //             'active' => '\View::shared("menu_active") == "browse-mobile-user"',
+        //             'url' => 'browse/mobile-user',
+        //             'icon' => 'fa fa-users'
+        //         ],
+        //     ]
+        // ],
         [
             'type' => 'group',
             'label' => 'Settings',

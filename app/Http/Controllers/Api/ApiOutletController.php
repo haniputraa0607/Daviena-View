@@ -11,7 +11,7 @@ class ApiOutletController extends Controller
 {
     public function index(Request $request): JsonResponse
     {
-        $outlets = $request->length ? Outlet::with('district')->paginate($request->length ?? 10) : Outlet::with('district')->get();
+        $outlets = $request->length ? Outlet::paginate($request->length ?? 10) : Outlet::get();
         return $this->ok("succes", $outlets);
     }
     public function show(Outlet $outlet): JsonResponse

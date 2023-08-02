@@ -9,6 +9,7 @@ use Illuminate\Routing\Controller as BaseController;
 use App\Lib\MyHelper;
 use App\Traits\ApiResponse;
 use GoogleReCaptchaV3;
+use Illuminate\Support\Facades\Http;
 
 class Controller extends BaseController
 {
@@ -23,7 +24,7 @@ class Controller extends BaseController
         //     return redirect()->back()->withErrors(['Recaptcha failed']);
         // }
         $login = MyHelper::postLogin($request);
-        // dd($login);
+         // dd($login);
         if (isset($login['error'])) {
             $loginClient =  MyHelper::postLoginClient();
 
@@ -71,50 +72,62 @@ class Controller extends BaseController
         }
         if ($login['status'] == 'success') {
             $user_login = $login['data'];
-
+ 
+ 
+        if (isset($login['access_token'])) {
             session([
-                'access_token'      => 'Bearer ' . $user_login['token'],
-                'user_id'           => $user_login['id'],
-                'user_name'         => $user_login['name'],
-                'user_email'        => $user_login['email'],
-                'user_role'         => $user_login['role'],
+                'access_token'  => 'Bearer ' . $login['access_token']
             ]);
 
-            $role = MyHelper::get('core-user', 'v1/role/detail/' . $login['data']['role_id']);
+            $userData = MyHelper::get('be/user/detail');
+            // dd($userData);
 
-            $owned_features = [];
-            if (isset($role['status']) && $role['status'] == "success") {
-                foreach ($role['data']['Features'] as $value) {
-                    $owned_features[] = $value['id'];
-                }
+            if (isset($userData['status']) && $userData['status'] == 'success' && !empty($userData['result'])) {
+                $dataUser = $userData['result'];
             }
 
             session([
-                'granted_features'  => $owned_features
+                'access_token'      => 'Bearer ' . $login['access_token'],
+                'user_id'           => $dataUser['user']['id'],
+                'user_name'         => $dataUser['user']['name'],
+                'user_email'        => $dataUser['user']['email'],
+                'user_role'         => $dataUser['user']['admin_id'],
+                'granted_features'  => $dataUser['features'],
             ]);
-
-            $bearer_token = session('access_token');
-            $decoded_token = MyHelper::extractToken($bearer_token);
-            $payload_logger = [
-                "user_id" => $decoded_token['id'],
-                "user_email" => $decoded_token['email'],
-                "path" => $request->getPathInfo(),
-                "action" => "CMS Login",
-                "ip_address" => $request->ip(),
-                "user_agent" => $request->header('user-agent')
-            ];
-            MyHelper::post('core-user', 'v1/cms-activity-log', $payload_logger);
-
             return redirect('home');
         }
+        return  redirect('login')->withErrors(['invalid_credentials' => 'Invalid username / password'])->withInput();
     }
 
     public function getHome()
     {
-        $data = [ 'title'             => 'Home',
-                  'menu_active'       => 'home',
-                  'submenu_active'    => ''
-                ];
+        $data = [
+            'title'             => 'Home',
+            'menu_active'       => 'home',
+            'submenu_active'    => ''
+        ];
         return view('home', $data);
+    }
+
+    public function conncetionTest()
+    {
+
+        $response = Http::asMultipart()
+            ->withHeaders([
+                'Accept' => 'application/json',
+                'X-CSRF-TOKEN' => '',
+            ])
+            ->post('https://api-daviena.belum.live/oauth/token', [
+                'grant_type' => 'password',
+                'client_id' => '2',
+                'client_secret' => 'TPpNwS8QBqdVKL7cYkOv1EWfcl1Vqgs8Ks9CciF3',
+                'scope' => 'be',
+                'username' => '08111222334',
+                'password' => '777777',
+            ]);
+
+        // Handle the response data here
+        $data = $response->json();
+        dd($data);
     }
 }

@@ -113,7 +113,7 @@
                                 </div>
                                 <div class="col-md-9">
                                     <div class="col-md-10">
-                                        <input type="number" class="form-control" name="price" value="@if(isset($detail['price'])){{ $detail['price'] }}@endif" placeholder="Price" required>
+                                        <input type="number" class="form-control" name="price" value="@if(isset($detail['global_price']['price'])){{ $detail['global_price']['price'] }}@endif" placeholder="Price" required>
                                     </div>
                                 </div>
                             </div>

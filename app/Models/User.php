@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Laravel\Passport\HasApiTokens;
 use Illuminate\Notifications\Notifiable;
+use KodePandai\Indonesia\Models\District;
 
 class User extends Authenticatable
 {
@@ -75,7 +76,7 @@ class User extends Authenticatable
 
     public function district(): BelongsTo
     {
-        return $this->belongsTo(Districtphp::class, 'district_code', 'code');
+        return $this->belongsTo(District::class, 'district_code', 'code');
     }
 
 //     public function employee_schedules(): HasMany
@@ -106,7 +107,7 @@ class User extends Authenticatable
 
     public function scopeDisplay(Builder $query): Builder
     {
-        return $query->with(['outlet:id,name,outlet_phone,outlet_email,district_code', 'outlet.district'])
+        return $query->with(['outlet'])
             ->select('id', 'name', 'idc', 'email', 'phone', 'birthdate', 'type', 'outlet_id');
     }
 

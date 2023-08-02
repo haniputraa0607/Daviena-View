@@ -56,7 +56,7 @@ class OutletController extends Controller
             "outlet_code"   => $request->outlet_code,
             "activities"    => $request->activities
         ];
-
+ 
         $save = MyHelper::post('be/outlet', $payload);
         if (isset($save['status']) && $save['status'] == "success") {
             return redirect('outlet')->withSuccess(['New Outlet successfully added.']);
