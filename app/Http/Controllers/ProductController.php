@@ -15,8 +15,6 @@ class ProductController extends Controller
             'menu_active'       => 'product',
         ];
         $product = MyHelper::get('be/product');
-        print_r($product);
-        die;
         if (isset($product['status']) && $product['status'] == "success") {
             $data['products'] = $product['result'];
         } else {
