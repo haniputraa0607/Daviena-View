@@ -81,7 +81,7 @@ class ArticleController extends Controller
             "release_date" => $request->release_date,
             "description" => $request->description,
         ];
-        
+
         if ($request->hasFile('image')) {
             $name_file = $request->file('image')->getClientOriginalName();
             $path = public_path('\images');
