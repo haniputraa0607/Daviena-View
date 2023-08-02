@@ -15,7 +15,7 @@ class ApiProductController extends Controller
         $product = $request->length ?  Product::paginate($request->length ?? 10) : Product::get();
         return $this->ok("success get data all users", $product);
     }
-    
+
     public function show(Request $request, $id): JsonResponse
     {
         $product = Product::with('global_price')->find($id);

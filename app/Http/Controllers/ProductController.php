@@ -15,6 +15,8 @@ class ProductController extends Controller
             'menu_active'       => 'product',
         ];
         $product = MyHelper::get('be/product');
+        print_r($product);
+        die;
         if (isset($product['status']) && $product['status'] == "success") {
             $data['products'] = $product['result'];
         } else {
@@ -66,7 +68,7 @@ class ProductController extends Controller
             'title'             => 'CMS Detail Product',
             'sub_title'         => 'Detail',
         ];
-        $product = MyHelper::get('be/product/'.$id);
+        $product = MyHelper::get('be/product/' . $id);
         $category = MyHelper::get('be/product-category');
 
         if (isset($product['status']) && $product['status'] == "success" && isset($category['status']) && $category['status'] == 'success') {

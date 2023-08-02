@@ -14,7 +14,7 @@ class ApiProductCategoryController extends Controller
         $product = $request->length ?  ProductCategory::paginate($request->length ?? 10) : ProductCategory::get();
         return $this->ok("success get data all users", $product);
     }
-    
+
     public function show(ProductCategory $product_category): JsonResponse
     {
         return $this->ok("success", $product_category);
