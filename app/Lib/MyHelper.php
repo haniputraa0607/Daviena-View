@@ -18,7 +18,7 @@ class MyHelper
 {
     public static function postLogin($request)
     {
-        $api = env('APP_API_URL');
+        $api = env('APP_API_URL_CMS');
         $form_params =  [
             'form_params' => [
                 'grant_type'    => 'password',
@@ -149,8 +149,8 @@ class MyHelper
     public static function get($url)
     {
 
-        // $host = env('APP_API_URL_CMS');
-        $host = env('APP_API_URL');
+        $host = env('APP_API_URL_CMS');
+        // $host = env('APP_API_URL');
 
         $client = new Client();
         $bearer = session('access_token');

@@ -16,7 +16,7 @@ class Controller extends BaseController
     use AuthorizesRequests;
     use ValidatesRequests;
     use ApiResponse;
-
+ 
 public function login(LoginRequest $request)
 {
     // $captcha = GoogleReCaptchaV3::verifyResponse($request->input('g-recaptcha-response'))->isSuccess();
@@ -35,7 +35,7 @@ public function login(LoginRequest $request)
         }
         return redirect('login')->withErrors(['invalid_credentials' => 'Invalid username / password'])->withInput();
     } else {
-        if (isset($login['status']) && $login['status'] == "fail") {
+        if (isset($login['status']) && $login['status'] == "fail") { 
             $loginClient =  MyHelper::postLoginClient();
 
             if (isset($loginClient['access_token'])) {
@@ -56,7 +56,7 @@ public function login(LoginRequest $request)
             if (isset($userData['status']) && $userData['status'] == 'success' && !empty($userData['result'])) {
                 $dataUser = $userData['result'];
             }
-
+ 
             session([
                 'access_token'      => 'Bearer ' . $login['access_token'],
                 'user_id'           => $dataUser['user']['id'],
@@ -70,33 +70,41 @@ public function login(LoginRequest $request)
         }
     }
     if ($login['status'] == 'success') {
-        $user_login = $login['data'];
-
-
+        $user_login = $login['data']; 
+ 
         if (isset($login['access_token'])) {
             session([
-                'access_token'  => 'Bearer ' . $login['access_token']
+                'access_token'  => 'Bearer ' . $login['access_token'] 
             ]);
 
-            $userData = MyHelper::get('be/user/detail');
-            // dd($userData);
+            $role = MyHelper::get('core-user', 'v1/role/detail/' . $login['data']['role_id']);
 
-            if (isset($userData['status']) && $userData['status'] == 'success' && !empty($userData['result'])) {
-                $dataUser = $userData['result'];
+            $owned_features = [];
+            if (isset($role['status']) && $role['status'] == "success") {
+                foreach ($role['data']['Features'] as $value) {
+                    $owned_features[] = $value['id'];
+                }
             }
 
-            session([
-                'access_token'      => 'Bearer ' . $login['access_token'],
-                'user_id'           => $dataUser['user']['id'],
-                'user_name'         => $dataUser['user']['name'],
-                'user_email'        => $dataUser['user']['email'],
-                'user_role'         => $dataUser['user']['admin_id'],
-                'granted_features'  => $dataUser['features'],
+            session(['granted_features'  => $owned_features
             ]);
+
+            $bearer_token = session('access_token');
+            $decoded_token = MyHelper::extractToken($bearer_token);
+            $payload_logger = [
+                "user_id" => $decoded_token['id'],
+                "user_email" => $decoded_token['email'],
+                "path" => $request->getPathInfo(),
+                "action" => "CMS Login",
+                "ip_address" => $request->ip(),
+                "user_agent" => $request->header('user-agent')
+            ];
+            MyHelper::post('core-user', 'v1/cms-activity-log', $payload_logger);
+
             return redirect('home');
         }
-        return  redirect('login')->withErrors(['invalid_credentials' => 'Invalid username / password'])->withInput();
     }
+
 
     public function getHome()
     {
