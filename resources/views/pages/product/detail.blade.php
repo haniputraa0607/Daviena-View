@@ -139,25 +139,6 @@
                                 </div>
                             </div>
                         </div>
-
-                        <div class="form-group">
-                            <div class="col-md-12">
-                                <div class="col-md-3">
-                                    <label class="control-label">Type<span class="required" aria-required="true">*</span>
-                                        <i class="fa fa-question-circle tooltips" data-original-title="Type" data-container="body"></i>
-                                    </label>
-                                </div>
-                                <div class="col-md-9">
-                                    <div class="col-md-10">
-                                        <select type="text" class="form-control" name="type" required>
-                                            <option value="">Select</option>
-                                            <option value="Product" {{ @$detail['type'] ? $detail['type'] == 'Product' ? 'Selected' : '' : '' }}>Product</option>
-                                            <option value="Treatment" {{ @$detail['type'] ? $detail['type'] == 'Treatment' ? 'Selected' : '' : '' }}>Treatment</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
                         
                         <div class="form-group" id="description-selection">
                             <div class="col-md-12">

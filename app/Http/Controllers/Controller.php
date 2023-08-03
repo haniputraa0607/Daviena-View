@@ -17,15 +17,25 @@ class Controller extends BaseController
     use ValidatesRequests;
     use ApiResponse;
 
-    public function login(LoginRequest $request)
-    {
-        // $captcha = GoogleReCaptchaV3::verifyResponse($request->input('g-recaptcha-response'))->isSuccess();
-        // if (!$captcha) {
-        //     return redirect()->back()->withErrors(['Recaptcha failed']);
-        // }
-        $login = MyHelper::postLogin($request);
-         // dd($login);
-        if (isset($login['error'])) {
+public function login(LoginRequest $request)
+{
+    // $captcha = GoogleReCaptchaV3::verifyResponse($request->input('g-recaptcha-response'))->isSuccess();
+    // if (!$captcha) {
+    //     return redirect()->back()->withErrors(['Recaptcha failed']);
+    // }
+    $login = MyHelper::postLogin($request);
+     // dd($login);
+    if (isset($login['error'])) {
+        $loginClient =  MyHelper::postLoginClient();
+
+        if (isset($loginClient['access_token'])) {
+            session([
+                'access_token'  => 'Bearer ' . $loginClient['access_token']
+            ]);
+        }
+        return redirect('login')->withErrors(['invalid_credentials' => 'Invalid username / password'])->withInput();
+    } else {
+        if (isset($login['status']) && $login['status'] == "fail") {
             $loginClient =  MyHelper::postLoginClient();
 
             if (isset($loginClient['access_token'])) {
@@ -33,47 +43,36 @@ class Controller extends BaseController
                     'access_token'  => 'Bearer ' . $loginClient['access_token']
                 ]);
             }
-            return redirect('login')->withErrors(['invalid_credentials' => 'Invalid username / password'])->withInput();
+
+            return redirect('login')->withErrors($login['messages'])->withInput();
         } else {
-            if (isset($login['status']) && $login['status'] == "fail") {
-                $loginClient =  MyHelper::postLoginClient();
+            session([
+                'access_token'  => 'Bearer ' . $login['access_token'],
+                'user_name'      => $request->input('username'),
+            ]);
 
-                if (isset($loginClient['access_token'])) {
-                    session([
-                        'access_token'  => 'Bearer ' . $loginClient['access_token']
-                    ]);
-                }
-
-                return redirect('login')->withErrors($login['messages'])->withInput();
-            } else {
-                session([
-                    'access_token'  => 'Bearer ' . $login['access_token'],
-                    'user_name'      => $request->input('username'),
-                ]);
-
-
-                // $userData = MyHelper::get('be/user/');
-                $userData = MyHelper::get('be/user/detail'); 
-              if (isset($userData['status']) && $userData['status'] == 'success' && !empty($userData['result'])) {
-                    $dataUser = $userData['result'];
-                }
-
-                session([
-                    'access_token'      => 'Bearer ' . $login['access_token'],
-                    'user_id'           => $dataUser['user']['id'],
-                    'user_name'         => $dataUser['user']['name'],
-                    'user_email'        => $dataUser['user']['email'],
-                    'user_role'         => $dataUser['user']['admin_id'],
-                    'granted_features'  => $dataUser['features'],
-                ]);
-
-                return redirect('home');
+            // $userData = MyHelper::get('be/user/');
+            $userData = MyHelper::get('be/user/detail');
+            if (isset($userData['status']) && $userData['status'] == 'success' && !empty($userData['result'])) {
+                $dataUser = $userData['result'];
             }
+
+            session([
+                'access_token'      => 'Bearer ' . $login['access_token'],
+                'user_id'           => $dataUser['user']['id'],
+                'user_name'         => $dataUser['user']['name'],
+                'user_email'        => $dataUser['user']['email'],
+                'user_role'         => $dataUser['user']['admin_id'],
+                'granted_features'  => $dataUser['features'],
+            ]);
+
+            return redirect('home');
         }
-        if ($login['status'] == 'success') {
-            $user_login = $login['data'];
- 
- 
+    }
+    if ($login['status'] == 'success') {
+        $user_login = $login['data'];
+
+
         if (isset($login['access_token'])) {
             session([
                 'access_token'  => 'Bearer ' . $login['access_token']

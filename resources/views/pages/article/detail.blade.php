@@ -1,15 +1,13 @@
 @extends('layouts.main')
 
 @section('page-style')
-    <link href="{{ env('STORAGE_URL_VIEW') }}{{('assets/global/plugins/bootstrap-toastr/toastr.min.css')}}" rel="stylesheet" type="text/css" />
-    <link href="{{ env('STORAGE_URL_VIEW') }}{{('assets/global/plugins/bootstrap-switch/css/bootstrap-switch.min.css')}}" rel="stylesheet" type="text/css" />
-	<link href="{{ env('STORAGE_URL_VIEW') }}{{('assets/datemultiselect/jquery-ui.css')}}" rel="stylesheet" type="text/css" />
+    <link href="{{ env('STORAGE_URL_VIEW') }}{{('assets/datemultiselect/jquery-ui.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{env('STORAGE_URL_VIEW') }}{{('assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.css')}}" rel="stylesheet" type="text/css" />
     <link href="{{ env('STORAGE_URL_VIEW') }}{{('assets/global/plugins/bootstrap-sweetalert/sweetalert.css') }}" rel="stylesheet" type="text/css" />
 @endsection
 
 @section('page-script')
-    <script src="{{ env('STORAGE_URL_VIEW') }}{{('assets/global/plugins/bootstrap-switch/js/bootstrap-switch.min.js')}}" type="text/javascript"></script>
-    <script src="{{ env('STORAGE_URL_VIEW') }}{{('assets/global/plugins/bootstrap-toastr/toastr.min.js') }}" type="text/javascript"></script>
+    <script src="{{env('STORAGE_URL_VIEW') }}{{('assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.js')}}" type="text/javascript"></script>
     <script src="{{ env('STORAGE_URL_VIEW') }}{{('assets/global/plugins/bootstrap-sweetalert/sweetalert.min.js') }}" type="text/javascript"></script>
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/css/bootstrap-select.css" />
@@ -19,8 +17,39 @@
     <script>
         $('.selectpicker').selectpicker();
     </script>
-@endsection
+    <script src="https://cdn.tiny.cloud/1/oowsi03408mi3se06e6g73ocmflkdn4blz5jffod9wz1lc1t/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+    <script>
+      tinymce.init({
+        selector: 'textarea',
+        plugins: 'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount',
+        toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table | align lineheight | numlist bullist indent outdent | emoticons charmap | removeformat',
+      });
+      
+      function readURL(input, level) {
+        if (input.files && input.files[0]) {
+          var reader = new FileReader();
+          var fileimport = $('#' + input.id).val();
+          var allowedExtensions = /(\.png|\.jpg|\.jpeg)$/i;
+          if (!allowedExtensions.exec(fileimport)) {
+            alert('Gambar harus bertipe gambar');
+            $('#' + input.id).val('');
+            return false;
+          }
+          reader.onload = function(e) {
+            $('#blah_' + level).attr('src', e.target.result).width(200);
+            // .height();
+          };
+          reader.readAsDataURL(input.files[0]);
+        }
+      }
 
+      function imgError(data) {
+        console.log('error_img');
+        data.setAttribute('src', '{{ asset("images/logo.svg") }}');
+      }
+
+    </script>
+@endsection
 
 @section('content')
     <div class="page-bar">
@@ -37,7 +66,7 @@
             </li>
             @if (!empty($sub_title))
             <li>
-                <a href="{{ url('custom-page') }}">{{ $sub_title }}</a>
+                <span>{{ $sub_title }}</span>
             </li>
             @endif
         </ul>
@@ -48,24 +77,25 @@
     <div class="portlet light bordered">
         <div class="portlet-title">
             <div class="caption">
-                <span class="caption-subject font-blue sbold uppercase ">New Product</span>
+                <span class="caption-subject font-blue bold uppercase">Detail Article</span>
             </div>
         </div>
+
         <div class="portlet-body m-form__group row">
-            <form class="form-horizontal" role="form" action="{{ route('product.store') }}"  method="post" enctype="multipart/form-data" id="myForm">
+            <form class="form-horizontal" role="form" action="{{ route('article.update', $detail['id']) }}"  method="post" enctype="multipart/form-data" id="myForm">
                 <div class="col-md-12">
                     <div class="form-body">
 
                         <div class="form-group">
                             <div class="col-md-12">
                                 <div class="col-md-3">
-                                    <label class="control-label">Name<span class="required" aria-required="true">*</span>
-                                        <i class="fa fa-question-circle tooltips" data-original-title="Name" data-container="body"></i>
+                                    <label class="control-label">Title<span class="required" aria-required="true">*</span>
+                                        <i class="fa fa-question-circle tooltips" data-original-title="Nama" data-container="body"></i>
                                     </label>
                                 </div>
                                 <div class="col-md-9">
                                     <div class="col-md-10">
-                                        <input type="text" class="form-control" name="product_name" placeholder="Name" required>
+                                        <input type="text" class="form-control" name="title" value="@if(isset($detail['title'])){{ $detail['title'] }}@endif" placeholder="Title" required>
                                     </div>
                                 </div>
                             </div>
@@ -74,39 +104,36 @@
                         <div class="form-group">
                             <div class="col-md-12">
                                 <div class="col-md-3">
-                                    <label class="control-label">Price<span class="required" aria-required="true">*</span>
-                                        <i class="fa fa-question-circle tooltips" data-original-title="Price" data-container="body"></i>
+                                    <label class="control-label">Writer<span class="required" aria-required="true">*</span>
+                                        <i class="fa fa-question-circle tooltips" data-original-title="Writer" data-container="body"></i>
                                     </label>
                                 </div>
                                 <div class="col-md-9">
                                     <div class="col-md-10">
-                                        <input type="number" class="form-control" name="price" placeholder="Price" required>
+                                        <input type="text" class="form-control" name="writer" value="@if(isset($detail['writer'])){{ $detail['writer'] }}@endif" placeholder="Writer" required>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         
-                        <div class="form-group" id="product-category-selection">
+
+
+                        <div class="form-group">
                             <div class="col-md-12">
                                 <div class="col-md-3">
-                                    <label class="control-label">Category<span class="required" aria-required="true">*</span>
-                                        <i class="fa fa-question-circle tooltips" data-original-title="Category" data-container="body"></i>
+                                    <label class="control-label">Release Date<span class="required" aria-required="true">*</span>
+                                        <i class="fa fa-question-circle tooltips" data-original-title="Release Date" data-container="body"></i>
                                     </label>
                                 </div>
                                 <div class="col-md-9">
                                     <div class="col-md-10">
-                                        <select name="product_category_id" id="product_category_selection" class="form-control" required>
-                                            <option value="">--Select--</option>
-                                            @foreach ($categorys as $category)
-                                            <option value="{{ $category['id'] }}">{{ $category['product_category_name'] }}</option>
-                                            @endforeach
-                                        </select>
+                                        <input type="date" class="form-control" name="release_date" value="{{ @$detail['release_date'] ? $detail['release_date'] : date('Y-m-d') }}" placeholder="Release Date" required>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         
-                        <div class="form-group">
+                        <div class="form-group" id="description-selection">
                             <div class="col-md-12">
                                 <div class="col-md-3">
                                     <label class="control-label">Description<span class="required" aria-required="true">*</span>
@@ -115,7 +142,7 @@
                                 </div>
                                 <div class="col-md-9">
                                     <div class="col-md-10">
-                                        <textarea type="text" class="form-control" name="description" placeholder="Description" required></textarea>
+                                        <textarea class="form-control" name="description" required>{{ @$detail['description'] }}</textarea>
                                     </div>
                                 </div>
                             </div>
@@ -124,13 +151,17 @@
                         <div class="form-group">
                             <div class="col-md-12">
                                 <div class="col-md-3">
-                                    <label class="control-label">Product Code<span class="required" aria-required="true">*</span>
-                                        <i class="fa fa-question-circle tooltips" data-original-title="Product Code" data-container="body"></i>
+                                    <label class="control-label">Article Image<span class="required" aria-required="true">*</span>
+                                        <i class="fa fa-question-circle tooltips" data-original-title="Article Image" data-container="body"></i>
                                     </label>
                                 </div>
                                 <div class="col-md-9">
                                     <div class="col-md-10">
-                                        <input type="text" class="form-control" name="product_code" placeholder="Product  Code" required>
+                                        <div class="alert alert-success text-center col-sm-12">
+                                            <img id="blah_image" src="{{ @$detail['image'] ? asset('images/'.$detail['image']) : asset('images/logo.svg') }}" style="width:200px;" onerror="imgError(this)" alt="..." loading="lazy">
+                                        </div>
+                                        <input class="form-control" name="image" style="display:none;" id="image" type="file" onchange="readURL(this, 'image');">
+                                        <button class="btn btn-outline-success btn-sm" type="button" onclick="$('#image').click();">Upload</button>
                                     </div>
                                 </div>
                             </div>
@@ -143,7 +174,7 @@
                                 <hr style="width:95%; margin-left:auto; margin-right:auto; margin-bottom:20px">
                             </div>
                             <div class="col-md-offset-5 col-md-2 text-center">
-                                <button type="submit" class="btn green"><i class="fa fa-check"></i> Submit</button>
+                                <button type="submit" class="btn yellow btn-block"><i class="fa fa-check"></i> Update</button>
                             </div>
                         </div>
                     </div>
@@ -151,5 +182,4 @@
             </form>
         </div>
     </div>
-
 @endsection

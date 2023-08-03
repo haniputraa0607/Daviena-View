@@ -48,11 +48,11 @@
     <div class="portlet light bordered">
         <div class="portlet-title">
             <div class="caption">
-                <span class="caption-subject font-blue sbold uppercase ">New Product</span>
+                <span class="caption-subject font-blue sbold uppercase ">New Treatment</span>
             </div>
         </div>
         <div class="portlet-body m-form__group row">
-            <form class="form-horizontal" role="form" action="{{ route('product.store') }}"  method="post" enctype="multipart/form-data" id="myForm">
+            <form class="form-horizontal" role="form" action="{{ route('treatment.store') }}"  method="post" enctype="multipart/form-data" id="myForm">
                 <div class="col-md-12">
                     <div class="form-body">
 
@@ -85,27 +85,7 @@
                                 </div>
                             </div>
                         </div>
-                        
-                        <div class="form-group" id="product-category-selection">
-                            <div class="col-md-12">
-                                <div class="col-md-3">
-                                    <label class="control-label">Category<span class="required" aria-required="true">*</span>
-                                        <i class="fa fa-question-circle tooltips" data-original-title="Category" data-container="body"></i>
-                                    </label>
-                                </div>
-                                <div class="col-md-9">
-                                    <div class="col-md-10">
-                                        <select name="product_category_id" id="product_category_selection" class="form-control" required>
-                                            <option value="">--Select--</option>
-                                            @foreach ($categorys as $category)
-                                            <option value="{{ $category['id'] }}">{{ $category['product_category_name'] }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        
+                    
                         <div class="form-group">
                             <div class="col-md-12">
                                 <div class="col-md-3">
@@ -115,7 +95,7 @@
                                 </div>
                                 <div class="col-md-9">
                                     <div class="col-md-10">
-                                        <textarea type="text" class="form-control" name="description" placeholder="Description" required></textarea>
+                                        <input type="text" class="form-control" name="description" placeholder="Description" required>
                                     </div>
                                 </div>
                             </div>
@@ -124,13 +104,13 @@
                         <div class="form-group">
                             <div class="col-md-12">
                                 <div class="col-md-3">
-                                    <label class="control-label">Product Code<span class="required" aria-required="true">*</span>
-                                        <i class="fa fa-question-circle tooltips" data-original-title="Product Code" data-container="body"></i>
+                                    <label class="control-label">Treatment Code<span class="required" aria-required="true">*</span>
+                                        <i class="fa fa-question-circle tooltips" data-original-title="Treat,emt Code" data-container="body"></i>
                                     </label>
                                 </div>
                                 <div class="col-md-9">
                                     <div class="col-md-10">
-                                        <input type="text" class="form-control" name="product_code" placeholder="Product  Code" required>
+                                        <input type="text" class="form-control" name="product_code" placeholder="Treatment  Code" required>
                                     </div>
                                 </div>
                             </div>
