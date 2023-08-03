@@ -65,15 +65,14 @@ class UserController extends Controller
             'password' => 'min:6',
             'password_confirmation' => 'required_with:password|same:password|min:6',
         ]);
-
-
+ 
         $payload = [
             "equal_id"          => $request->equal_id,
             "name"       => $request->name,
             "username" => $request->username,
             "phone" => $request->phone,
             "email"  => $request->email,
-            "idc"  => $request->idc,
+            "idc"  =>  str_replace(".", "", $request->idc),
             "birthdate"    => $request->birthdate,
             "type"   => $request->admin_role,
             "outlet_id"   => $request->outlet,
@@ -83,8 +82,8 @@ class UserController extends Controller
             "password" => $request->password,
             "address" => $request->address,
             "is_active" => $request->is_active ?? 0,
-        ];
-
+        ]; 
+ 
         $save = MyHelper::post('be/user/', $payload);
 
         if (isset($save['status']) && $save['status'] == "success") {

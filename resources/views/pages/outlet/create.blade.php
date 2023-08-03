@@ -192,14 +192,14 @@
                             <div class="col-md-12">
                                 <div class="col-md-3">
                                     <label class="control-label">Name<span class="required" aria-required="true">*</span>
-                                        <i class="fa fa-question-circle tooltips" data-original-title="Nama"
+                                        <i class="fa fa-question-circle tooltips" data-original-title="Nama Outlet"
                                             data-container="body"></i>
                                     </label>
                                 </div>
                                 <div class="col-md-9">
                                     <div class="col-md-10">
-                                        <input type="text" class="form-control" name="name" placeholder="Nama"
-                                            required>
+                                        <input type="text" class="form-control" name="name"
+                                            value="{{ old('name') }}" placeholder="Name (Required)" required>
                                     </div>
                                 </div>
                             </div>
@@ -209,14 +209,14 @@
                             <div class="col-md-12">
                                 <div class="col-md-3">
                                     <label class="control-label">Address<span class="required" aria-required="true">*</span>
-                                        <i class="fa fa-question-circle tooltips" data-original-title="Address"
+                                        <i class="fa fa-question-circle tooltips" data-original-title="Alamat Outlet"
                                             data-container="body"></i>
                                     </label>
                                 </div>
                                 <div class="col-md-9">
                                     <div class="col-md-10">
-                                        <input type="text" class="form-control" name="address" placeholder="Alamat"
-                                            required>
+                                        <textarea class="form-control" id="address" name="address" placeholder="Input your address here..." rows="3"
+                                            required>{{ old('address') }}</textarea>
                                     </div>
                                 </div>
                             </div>
@@ -227,14 +227,14 @@
                                 <div class="col-md-3">
                                     <label class="control-label">District<span class="required"
                                             aria-required="true">*</span>
-                                        <i class="fa fa-question-circle tooltips" data-original-title="District"
+                                        <i class="fa fa-question-circle tooltips" data-original-title="Daerah"
                                             data-container="body"></i>
                                     </label>
                                 </div>
                                 <div class="col-md-9">
                                     <div class="col-md-10">
                                         <select name="district" id="district-input" class="form-control" required>
-                                            <option value="">--Select--</option>
+                                            <option value="">Choose District</option>
                                             @foreach ($districts as $district)
                                                 <option value="{{ $district['code'] }}">{{ $district['name'] }}</option>
                                             @endforeach
@@ -308,13 +308,13 @@
                                 <div class="col-md-3">
                                     <label class="control-label">Outlet Phone<span class="required"
                                             aria-required="true">*</span>
-                                        <i class="fa fa-question-circle tooltips" data-original-title="Phone"
+                                        <i class="fa fa-question-circle tooltips" data-original-title="Telpon Outlet"
                                             data-container="body"></i>
                                     </label>
                                 </div>
                                 <div class="col-md-9">
                                     <div class="col-md-10">
-                                        <input type="text" class="form-control" name="phone" placeholder="Phone"
+                                        <input type="text" class="form-control" name="phone" placeholder="Phone" value="{{ old('phone') }}"
                                             required>
                                     </div>
                                 </div>
@@ -326,13 +326,13 @@
                                 <div class="col-md-3">
                                     <label class="control-label">Outlet Code<span class="required"
                                             aria-required="true">*</span>
-                                        <i class="fa fa-question-circle tooltips" data-original-title="Outlet Code"
+                                        <i class="fa fa-question-circle tooltips" data-original-title="Kode Outlet"
                                             data-container="body"></i>
                                     </label>
                                 </div>
                                 <div class="col-md-9">
                                     <div class="col-md-10">
-                                        <input type="text" class="form-control" name="outlet_code"
+                                        <input type="text" class="form-control" name="outlet_code" value="{{ old('outlet_code') }}"
                                             placeholder="Outlet Code" required>
                                     </div>
                                 </div>
@@ -353,7 +353,7 @@
                                         <input width="100px;" type="checkbox" class="make-switch" data-size="small"
                                             data-on-color="info" data-on-text="Active" data-off-color="default"
                                             data-off-text="Nonactive" name="status" value="Active"
-                                            @if (old('status') ?? '') checked @endif>
+                                            @if (old('status') == 'Active') checked @endif>
                                     </div>
                                 </div>
                             </div>
@@ -371,7 +371,7 @@
                                 <div class="col-md-9">
                                     <div class="col-md-10">
                                         <select name="partner" id="partner-input" class="form-control" required>
-                                            <option value="">--Select--</option>
+                                            <option value="">Choose Partner</option>
                                             <option value="1">Partner 1</option>
                                             <option value="2">Partner 2</option>
                                             <option value="3">Partner 3</option>

@@ -20,43 +20,44 @@
         type="text/javascript"></script>
     <script src="{{ env('STORAGE_URL_VIEW') }}{{ 'assets/global/plugins/bootstrap-toastr/toastr.min.js' }}"
         type="text/javascript"></script>
+
     <script type="text/javascript">
-        $(document).ready(function() {
-            var table = $('#table_data').DataTable({
-                language: {
-                    aria: {
-                        sortAscending: ": activate to sort column ascending",
-                        sortDescending: ": activate to sort column descending"
-                    },
-                    emptyTable: "No data available in table",
-                    info: "Showing _START_ to _END_ of _TOTAL_ entries",
-                    infoEmpty: "No entries found",
-                    infoFiltered: "(filtered1 from _MAX_ total entries)",
-                    lengthMenu: "_MENU_ entries",
-                    search: "Search:",
-                    zeroRecords: "No matching records found"
+        var table = $('#table_data').DataTable({
+            language: {
+                aria: {
+                    sortAscending: ": activate to sort column ascending",
+                    sortDescending: ": activate to sort column descending"
                 },
-                responsive: {
-                    details: {
-                        type: "column",
-                        target: "tr"
-                    }
-                },
-                order: [],
-                columns: [
-                    null,
-                    null,
-                    null,
-                    {
-                        orderable: false
-                    }
-                ],
-                lengthMenu: [
-                    [5, 10, 15, 20, -1],
-                    [5, 10, 15, 20, "All"]
-                ],
-                pageLength: 10
-            });
+                emptyTable: "No data available in table",
+                info: "Showing _START_ to _END_ of _TOTAL_ entries",
+                infoEmpty: "No entries found",
+                infoFiltered: "(filtered1 from _MAX_ total entries)",
+                lengthMenu: "_MENU_ entries",
+                search: "Search:",
+                zeroRecords: "No matching records found"
+            },
+            responsive: {
+                details: {
+                    type: "column",
+                    target: "tr"
+                }
+            },
+            order: [],
+            columns: [
+                null,
+                null,
+                null,
+                null,
+                null, 
+                {
+                    orderable: false
+                }
+            ],
+            lengthMenu: [
+                [5, 10, 15, 20, -1],
+                [5, 10, 15, 20, "All"]
+            ],
+            pageLength: 10
         });
 
         $('body').on('click', '#btn-delete', function() {
@@ -98,8 +99,7 @@
                                     "error")
                             }
                         }
-                    }); 
-
+                    });
                 });
         });
     </script>
@@ -149,7 +149,7 @@
                         <th style="text-align: center"> Action </th>
                     </tr>
                 </thead>
-                <tbody id="">
+                <tbody>
                     @if (!empty($cms_users))
                         @foreach ($cms_users as $user)
                             <tr style="text-align: center; {{ $user['type'] == 'super_admin' ? 'color:red;' : '' }}">
