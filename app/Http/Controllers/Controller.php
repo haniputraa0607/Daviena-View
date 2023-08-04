@@ -23,7 +23,7 @@ class Controller extends BaseController
         // if (!$captcha) {
         //     return redirect()->back()->withErrors(['Recaptcha failed']);
         // }
-        $login = MyHelper::postLogin($request 
+        $login = MyHelper::postLogin($request);
         if (isset($login['error'])) {
             $loginClient =  MyHelper::postLoginClient();
 
@@ -36,7 +36,6 @@ class Controller extends BaseController
         } else {
             if (isset($login['status']) && $login['status'] == "fail") {
                 $loginClient =  MyHelper::postLoginClient();
- 
 
                 if (isset($loginClient['access_token'])) {
                     session([
@@ -50,12 +49,12 @@ class Controller extends BaseController
                 'access_token'  => 'Bearer ' . $login['access_token'],
                 'user_name'      => $request->input('username'),
                 ]);
- 
+
                 // $userData = MyHelper::get('be/user/');
                 $userData = MyHelper::get('be/user/detail');
                 if (isset($userData['status']) && $userData['status'] == 'success' && !empty($userData['result'])) {
                     $dataUser = $userData['result'];
-                } 
+                }
 
                 session([
                 'access_token'      => 'Bearer ' . $login['access_token'],
@@ -65,42 +64,6 @@ class Controller extends BaseController
                 'user_role'         => $dataUser['user']['admin_id'],
                 'granted_features'  => $dataUser['features'],
                 ]);
- 
-                return redirect('home');
-            }
-        }
-        if ($login['status'] == 'success') {
-            $user_login = $login['data'];
-
-            if (isset($login['access_token'])) {
-                session([ 
-                'access_token'  => 'Bearer ' . $login['access_token'] 
-                ]);
-
-                $role = MyHelper::get('core-user', 'v1/role/detail/' . $login['data']['role_id']);
-
-                $owned_features = [];
-                if (isset($role['status']) && $role['status'] == "success") {
-                    foreach ($role['data']['Features'] as $value) {
-                        $owned_features[] = $value['id'];
-                    }
-                }
- 
-                session([
-                    'granted_features'  => $owned_features 
-                ]);
-
-                $bearer_token = session('access_token');
-                $decoded_token = MyHelper::extractToken($bearer_token);
-                $payload_logger = [
-                    "user_id" => $decoded_token['id'],
-                    "user_email" => $decoded_token['email'],
-                    "path" => $request->getPathInfo(),
-                    "action" => "CMS Login",
-                    "ip_address" => $request->ip(),
-                    "user_agent" => $request->header('user-agent')
-                ];
-                MyHelper::post('core-user', 'v1/cms-activity-log', $payload_logger);
 
                 return redirect('home');
             }

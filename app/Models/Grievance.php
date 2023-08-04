@@ -7,7 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class Grievance extends Model
 {
-
     use HasFactory;
 
     protected $table = 'grievances';

@@ -7,7 +7,6 @@ use App\Models\Grievance;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
-
 class ApiGrievanceControlller extends Controller
 {
     public function index(Request $request): JsonResponse
