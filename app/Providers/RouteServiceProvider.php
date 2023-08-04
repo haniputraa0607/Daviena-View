@@ -57,6 +57,9 @@ class RouteServiceProvider extends ServiceProvider
 
             Route::middleware('web')
                 ->group(base_path('routes/grievance.php'));
+
+            Route::middleware('web')
+                ->group(base_path('routes/diagnostic.php'));
         });
     }
 

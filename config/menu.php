@@ -115,9 +115,23 @@ return [
                 [
                     'type' => 'single',
                     'label' => 'Grievance',
-                    'icon' => 'fa fa-info-circle',
+                    'icon' => 'fa fa-pencil-square',
                     'url' => 'grievance',
                     'active' => '\View::shared("menu_active") == "grievance"',
+                ],
+            ]
+        ],
+        [
+            'type' => 'group',
+            'label' => 'Diagnostic',
+            'required_features' => [],
+            'children' => [
+                [
+                    'type' => 'single',
+                    'label' => 'Diagnostic',
+                    'icon' => 'fa fa-stethoscope',
+                    'url' => 'diagnostic',
+                    'active' => '\View::shared("menu_active") == "diagnostic"',
                 ],
             ]
         ],
