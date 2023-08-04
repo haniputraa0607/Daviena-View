@@ -116,7 +116,7 @@ class OutletController extends Controller
 
     public function deleteOutlet($id)
     {
-        $delete = MyHelper::deleteApi('be/outlet/' . $id); 
+        $delete = MyHelper::deleteApi('be/outlet/' . $id);
 
         if (isset($delete['status']) && $delete['status'] == "success") {
             return response()->json(['status' => 'success', 'messages' => ['Outlet deleted successfully']]);
