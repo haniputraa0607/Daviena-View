@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\ApiArticleController;
+use App\Http\Controllers\Api\ApiGrievanceControlller;
 use App\Http\Controllers\Api\ApiOutletController;
 use App\Http\Controllers\Api\ApiPartnerController;
 use App\Http\Controllers\Api\ApiUserController;
@@ -72,5 +73,16 @@ Route::middleware('auth:api')->prefix('be')->group(function () {
         Route::get($partner, 'show')->name('partner.show');
         Route::patch($partner, 'update')->name('partner.update');
         Route::delete($partner, 'destroy')->name('partner.delete');
+    });
+    Route::controller(ApiGrievanceControlller::class)->prefix('/grievance')->group(function () {
+        $grievance = '{grievance}';
+        Route::get(
+            '',
+            'index'
+        )->name('grievance.list');
+        Route::post('', 'store')->name('grievance.create');
+        Route::get($grievance, 'show')->name('grievance.show');
+        Route::patch($grievance, 'update')->name('grievance.update');
+        Route::delete($grievance, 'destroy')->name('grievance.delete');
     });
 });
