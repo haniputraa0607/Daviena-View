@@ -11,7 +11,8 @@ class ApiGrievanceControlller extends Controller
 {
     public function index(Request $request): JsonResponse
     {
-        $data = Grievance::paginate($request->length ?? 10);
+        // $data = Grievance::paginate($request->length ?? 10);
+        $data = Grievance::get();
         return $this->ok("success", $data);
     }
 

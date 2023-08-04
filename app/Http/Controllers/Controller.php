@@ -29,7 +29,7 @@ class Controller extends BaseController
 
             if (isset($loginClient['access_token'])) {
                 session([
-                'access_token'  => 'Bearer ' . $loginClient['access_token']
+                    'access_token'  => 'Bearer ' . $loginClient['access_token']
                 ]);
             }
             return redirect('login')->withErrors(['invalid_credentials' => 'Invalid username / password'])->withInput();
@@ -39,15 +39,15 @@ class Controller extends BaseController
 
                 if (isset($loginClient['access_token'])) {
                     session([
-                    'access_token'  => 'Bearer ' . $loginClient['access_token']
+                        'access_token'  => 'Bearer ' . $loginClient['access_token']
                     ]);
                 }
 
                 return redirect('login')->withErrors($login['messages'])->withInput();
             } else {
                 session([
-                'access_token'  => 'Bearer ' . $login['access_token'],
-                'user_name'      => $request->input('username'),
+                    'access_token'  => 'Bearer ' . $login['access_token'],
+                    'user_name'      => $request->input('username'),
                 ]);
 
                 // $userData = MyHelper::get('be/user/');
@@ -57,12 +57,12 @@ class Controller extends BaseController
                 }
 
                 session([
-                'access_token'      => 'Bearer ' . $login['access_token'],
-                'user_id'           => $dataUser['user']['id'],
-                'user_name'         => $dataUser['user']['name'],
-                'user_email'        => $dataUser['user']['email'],
-                'user_role'         => $dataUser['user']['admin_id'],
-                'granted_features'  => $dataUser['features'],
+                    'access_token'      => 'Bearer ' . $login['access_token'],
+                    'user_id'           => $dataUser['user']['id'],
+                    'user_name'         => $dataUser['user']['name'],
+                    'user_email'        => $dataUser['user']['email'],
+                    'user_role'         => $dataUser['user']['admin_id'],
+                    'granted_features'  => $dataUser['features'],
                 ]);
 
                 return redirect('home');

@@ -22,7 +22,7 @@
         type="text/javascript"></script>
 
     <script type="text/javascript">
-        var table = $('#table_data').DataTable({
+   var table = $('#table_data').DataTable({
             language: {
                 aria: {
                     sortAscending: ": activate to sort column ascending",
@@ -56,8 +56,7 @@
                 [5, 10, 15, 20, "All"]
             ],
             pageLength: 10
-        });
-
+        }); 
 
         $('body').on('click', '#btn-delete', function() {
             let id = $(this).data('id');
@@ -76,7 +75,7 @@
                 function() {
                     $.ajax({
                         type: "DELETE",
-                        url: `/grievance/delete/${id}`,
+                        url: `/diagnostic/delete/${id}`,
                         data: {
                             "_token": token
                         },
@@ -84,7 +83,7 @@
                             if (response.status == "success") {
                                 swal({
                                     title: 'Deleted!',
-                                    text: 'Grievances has been deleted.',
+                                    text: 'Diagnostic has been deleted.',
                                     type: 'success',
                                     showCancelButton: false,
                                     showConfirmButton: false
@@ -130,12 +129,12 @@
     <div class="portlet light bordered">
         <div class="portlet-title">
             <div class="caption">
-                <span class="caption-subject font-blue sbold uppercase">CMS Grievance List</span>
+                <span class="caption-subject font-blue sbold uppercase">CMS Diagnostic List</span>
             </div>
         </div>
         <div class="portlet-body">
-            <a href="{{ url('grievance/create') }}" class="btn btn-success" style="margin-bottom: 15px;">
-                <i class="fa fa-plus"></i> Add New Grievance
+            <a href="{{ url('diagnostic/create') }}" class="btn btn-success" style="margin-bottom: 15px;">
+                <i class="fa fa-plus"></i> Add New Diagnostic
             </a>
             <table class="table table-striped table-bordered table-hover dt-responsive" width="100%" id="table_data">
                 <thead>
@@ -147,23 +146,23 @@
                     </tr>
                 </thead>
                 <tbody id="">
-                    @if (!empty($grievances))
-                        @foreach ($grievances as $grievance)
+                    @if (!empty($diagnostics))
+                        @foreach ($diagnostics as $diagnostic)
                             <tr style="text-align: left;">
-                                <td>{{ $grievance['grievance_name'] }}</td>
-                                <td>{{ substr($grievance['description'], 0, 100) }}</td>
+                                <td>{{ $diagnostic['diagnostic_name'] }}</td>
+                                <td>{{ substr($diagnostic['description'], 0, 100) }}</td>
                                 <td style="text-align: center;">
-                                    @if ($grievance['is_active'] == '1')
+                                    @if ($diagnostic['is_active'] == '1')
                                         <span class="badge badge-success badge-sm">Active</span>
                                     @else
                                         <span class="badge badge-danger badge-sm">Non-Active</span>
                                     @endif
                                 </td>
                                 <td style="width: 120px; text-align: center;">
-                                    <a href="{{ url('grievance/detail') }}/{{ $grievance['id'] }}"
+                                    <a href="{{ url('diagnostic/detail') }}/{{ $diagnostic['id'] }}"
                                         class="btn btn-sm blue"><i class="fa fa-search"></i></a>
                                     <a href="javascript:void(0)" class="btn btn-sm btn-danger" id="btn-delete"
-                                        data-id="{{ $grievance['id'] }}" data-name="{{ $grievance['grievance_name'] }}"><i
+                                        data-id="{{ $diagnostic['id'] }}" data-name="{{ $diagnostic['diagnostic_name'] }}"><i
                                             class="fa fa-trash-o"></i></a>
                                 </td>
                             </tr>
