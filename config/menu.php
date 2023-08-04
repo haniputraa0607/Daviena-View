@@ -107,6 +107,20 @@ return [
                 ],
             ]
         ],
+        [
+            'type' => 'group',
+            'label' => 'Grievance',
+            'required_features' => [],
+            'children' => [
+                [
+                    'type' => 'single',
+                    'label' => 'Grievance',
+                    'icon' => 'fa fa-info-circle',
+                    'url' => 'grievance',
+                    'active' => '\View::shared("menu_active") == "grievance"',
+                ],
+            ]
+        ],
         // [
         //     'type' => 'group',
         //     'label' => 'Transaction',
