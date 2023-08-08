@@ -70,7 +70,6 @@ class Controller extends BaseController
         }
         if ($login['status'] == 'success') {
             $user_login = $login['data'];
- 
         }
         if (isset($login['access_token'])) {
             session([

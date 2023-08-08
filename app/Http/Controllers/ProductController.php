@@ -55,7 +55,7 @@ class ProductController extends Controller
             $name_file = $request->file('image')->getClientOriginalName();
             $path = "img/product/";
             $request->file('image')->move($path, $name_file);
-            $payload['image'] = $path.$name_file;
+            $payload['image'] = $path . $name_file;
         }
         $save = MyHelper::post('be/product', $payload);
         if (isset($save['status']) && $save['status'] == "success") {
@@ -98,7 +98,7 @@ class ProductController extends Controller
             $name_file = $request->file('image')->getClientOriginalName();
             $path = "img/product/";
             $request->file('image')->move($path, $name_file);
-            $payload['image'] = $path.$name_file;
+            $payload['image'] = $path . $name_file;
         }
         $save = MyHelper::patch('be/product/' . $id, $payload);
 
