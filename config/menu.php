@@ -107,6 +107,34 @@ return [
                 ],
             ]
         ],
+        [
+            'type' => 'group',
+            'label' => 'Grievance',
+            'required_features' => [],
+            'children' => [
+                [
+                    'type' => 'single',
+                    'label' => 'Grievance',
+                    'icon' => 'fa fa-pencil-square',
+                    'url' => 'grievance',
+                    'active' => '\View::shared("menu_active") == "grievance"',
+                ],
+            ]
+        ],
+        [
+            'type' => 'group',
+            'label' => 'Diagnostic',
+            'required_features' => [],
+            'children' => [
+                [
+                    'type' => 'single',
+                    'label' => 'Diagnostic',
+                    'icon' => 'fa fa-stethoscope',
+                    'url' => 'diagnostic',
+                    'active' => '\View::shared("menu_active") == "diagnostic"',
+                ],
+            ]
+        ],
         // [
         //     'type' => 'group',
         //     'label' => 'Transaction',

@@ -17,6 +17,13 @@
         type="text/javascript"></script>
     <script src="{{ env('STORAGE_URL_VIEW') }}{{ 'assets/global/plugins/bootstrap-sweetalert/sweetalert.min.js' }}"
         type="text/javascript"></script>
+    <script src="{{ asset('assets/global/plugins/jquery-inputmask/jquery.inputmask.bundle.min.js') }}"
+        type="text/javascript"></script>
+    <script type="text/javascript">
+        Inputmask({
+            "mask": "9999.9999.9999.9999"
+        }).mask("#idc");
+    </script>
 @endsection
 
 
@@ -59,14 +66,14 @@
                             <div class="col-md-12">
                                 <div class="col-md-3">
                                     <label class="control-label">Name<span class="required" aria-required="true">*</span>
-                                        <i class="fa fa-question-circle tooltips" data-original-title="Name"
+                                        <i class="fa fa-question-circle tooltips" data-original-title="Nama"
                                             data-container="body"></i>
                                     </label>
                                 </div>
                                 <div class="col-md-9">
                                     <div class="col-md-10">
-                                        <input type="text" class="form-control" name="name" placeholder="Name"
-                                            value="{{ old('name') }}" required>
+                                        <input type="text" class="form-control" name="name"
+                                            placeholder="Name (Required)" value="{{ old('name') }}" required>
                                     </div>
                                 </div>
                             </div>
@@ -83,8 +90,8 @@
                                 </div>
                                 <div class="col-md-9">
                                     <div class="col-md-10">
-                                        <input type="number" class="form-control" name="equal_id" placeholder="Equal ID"
-                                            value="{{ old('equal_id') }}" required>
+                                        <input type="number" class="form-control" name="equal_id"
+                                            placeholder="Equal ID (Required)" value="{{ old('equal_id') }}" required>
                                     </div>
                                 </div>
                             </div>
@@ -96,14 +103,15 @@
                                 <div class="col-md-3">
                                     <label class="control-label">User Name<span class="required"
                                             aria-required="true">*</span>
-                                        <i class="fa fa-question-circle tooltips" data-original-title="Username"
+                                        <i class="fa fa-question-circle tooltips" data-original-title="User Name"
                                             data-container="body"></i>
                                     </label>
                                 </div>
                                 <div class="col-md-9">
                                     <div class="col-md-10">
-                                        <input type="text" class="form-control" name="username" placeholder="User Name"
-                                            value="{{ old('username') }}" required>
+                                        <input type="text" class="form-control" name="username"
+                                            placeholder="User Name (Required & Unique)" value="{{ old('username') }}"
+                                            required>
                                     </div>
                                 </div>
                             </div>
@@ -119,8 +127,8 @@
                                 </div>
                                 <div class="col-md-9">
                                     <div class="col-md-10">
-                                        <input type="email" class="form-control" name="email" placeholder="Email"
-                                            value="{{ old('email') }}" required>
+                                        <input type="email" class="form-control" name="email"
+                                            placeholder="Email (Required & Unique)" value="{{ old('email') }}" required>
                                     </div>
                                 </div>
                             </div>
@@ -130,14 +138,15 @@
                             <div class="col-md-12">
                                 <div class="col-md-3">
                                     <label class="control-label">Phone<span class="required" aria-required="true">*</span>
-                                        <i class="fa fa-question-circle tooltips" data-original-title="Phone"
-                                            data-container="body"></i>
+                                        <i class="fa fa-question-circle tooltips"
+                                            data-original-title="Nomor telpon seluler" data-container="body"></i>
                                     </label>
                                 </div>
                                 <div class="col-md-9">
                                     <div class="col-md-10">
                                         <input type="text" class="form-control" name="phone"
-                                            placeholder="Phone Number" value="{{ old('phone') }}" required>
+                                            placeholder="Phone Number(Required & Unique)"
+                                            wire:value="{{ old('phone') }}" required>
                                     </div>
                                 </div>
                             </div>
@@ -153,8 +162,8 @@
                                 </div>
                                 <div class="col-md-9">
                                     <div class="col-md-10">
-                                        <input type="text" class="form-control" name="idc" placeholder="NIK KTP"
-                                            value="{{ old('idc') }}" required>
+                                        <input type="text" class="form-control" id="idc" name="idc"
+                                            placeholder="NIK KTP (Required)" value="{{ old('idc') }}" required>
                                     </div>
                                 </div>
                             </div>
@@ -235,14 +244,15 @@
                                     <div class="col-md-10">
                                         <div class="form-check">
                                             <input class="form-check-input" type="radio" name="gender" id="gender"
-                                                value="Male">
+                                                value="Male" @if (old('gender') == 'Male') checked @endif
+                                                @if (empty(old('gender'))) checked @endif>
                                             <label class="form-check-label" for="gender">
                                                 Male
                                             </label>
                                         </div>
                                         <div class="form-check">
                                             <input class="form-check-input" type="radio" name="gender" id="gender"
-                                                value="Female">
+                                                value="Female" @if (old('gender') == 'Female') checked @endif>
                                             <label class="form-check-label" for="gender">
                                                 Female
                                             </label>
@@ -265,16 +275,20 @@
                                     <div class="col-md-10">
                                         <select name="admin_role" id="admin-role-input" class="form-control" required>
                                             <option value="">--Select--</option>
-                                            <option value="admin">Admin</option>
-                                            <option value="salesman">Salesman</option>
-                                            <option value="cashier">Cashier</option>
+                                            <option value="admin" @if (old('admin_role') == 'admin') selected @endif>Admin
+                                            </option>
+                                            <option value="salesman"
+                                                @if (old('admin_role') == 'salesman') selected @endif@if (old('admin_role') == 'admin') selected @endif>
+                                                Salesman</option>
+                                            <option value="cashier" @if (old('admin_role') == 'cashier') selected @endif>
+                                                Cashier</option>
                                         </select>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="form-group" id="admin-role-selection">
+                        <div class="form-group" id="level-role-selection">
                             <div class="col-md-12">
                                 <div class="col-md-3">
                                     <label class="control-label">Level<span class="required"
@@ -285,10 +299,12 @@
                                 </div>
                                 <div class="col-md-4">
                                     <div class="col-md-10">
-                                        <select name="level" id="admin-role-input" class="form-control" required>
+                                        <select name="level" id="level-role-input" class="form-control" required>
                                             <option value="">--Select--</option>
-                                            <option value="Admin">Admin</option>
-                                            <option value="Super Admin">Super Admin</option>
+                                            <option value="Admin" @if (old('level') == 'Admin') selected @endif>Admin
+                                            </option>
+                                            <option value="Super Admin" @if (old('level') == 'Super Admin') selected @endif>
+                                                Super Admin</option>
                                         </select>
                                     </div>
                                 </div>
@@ -361,7 +377,7 @@
                                         <input width="100px;" type="checkbox" class="make-switch" data-size="small"
                                             data-on-color="info" data-on-text="Active" data-off-color="default"
                                             data-off-text="Nonactive" name="is_active" value="1"
-                                            @if (old('is_active') ?? '') checked @endif>
+                                            @if (old('is_active') == 'Active') checked @endif>
                                     </div>
                                 </div>
                             </div>

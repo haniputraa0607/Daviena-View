@@ -21,143 +21,14 @@
         type="text/javascript"></script>
     <script src="{{ env('STORAGE_URL_VIEW') }}{{ 'assets/global/plugins/bootstrap-sweetalert/sweetalert.min.js' }}"
         type="text/javascript"></script>
-    <script>
-        $(document).ready(function() {
-            var table = $('#table_data').DataTable({
-                language: {
-                    aria: {
-                        sortAscending: ": activate to sort column ascending",
-                        sortDescending: ": activate to sort column descending"
-                    },
-                    emptyTable: "No data available in table",
-                    info: "Showing _START_ to _END_ of _TOTAL_ entries",
-                    infoEmpty: "No entries found",
-                    infoFiltered: "(filtered1 from _MAX_ total entries)",
-                    lengthMenu: "_MENU_ entries",
-                    search: "Search:",
-                    zeroRecords: "No matching records found"
-                },
-                responsive: {
-                    details: {
-                        type: "column",
-                        target: "tr"
-                    }
-                },
-                order: [],
-                lengthMenu: [
-                    [5, 10, 15, 20, -1],
-                    [5, 10, 15, 20, "All"]
-                ],
-                pageLength: 10
-            });
-        });
-    </script>
-    <script type="text/javascript">
-        var SweetAlert = function() {
-            return {
-                init: function() {
-                    $(".button-action").each(function() {
-                        var token = "{{ csrf_token() }}";
-                        let id = $(this).data('id');
-                        let email = $(this).data('email');
-                        let action = $(this).data('action');
-                        let title
-                        let text
-                        let type
-                        let confirmButtonClass
-                        let confirmButtonText
-                        if (action == 'admin') {
-                            title = "Are you sure want to change role " + email + " to admin?"
-                            type = "info"
-                            confirmButtonClass = "btn-info"
-                            confirmButtonText = "Yes, update it!"
-                        } else {
-                            title = "Are you sure want to change role " + email + " to super admin?"
-                            type = "warning"
-                            confirmButtonClass = "btn-danger"
-                            confirmButtonText = "Yes, update it!"
-                        }
-                        $(this).click(function() {
-                            let password = $(this).siblings('input[name="super_admin_password"]')
-                                .val();
-                            if (password === '') {
-                                swal({
-                                    title: "Warning",
-                                    text: "Please Enter your password!",
-                                    type: "warning"
-                                });
-                                return false;
-                            } else {
-                                swal({
-                                        title: title,
-                                        text: "Your will not be able to recover this data!",
-                                        type: type,
-                                        showCancelButton: true,
-                                        confirmButtonClass: confirmButtonClass,
-                                        confirmButtonText: confirmButtonText,
-                                        closeOnConfirm: false
-                                    },
-                                    function() {
-                                        $.ajax({
-                                            type: "POST",
-                                            url: "{{ url('browse/cms-user/update/role') }}" +
-                                                "/" + id,
-                                            data: {
-                                                _token: token,
-                                                id: id,
-                                                role: action,
-                                                super_admin_password: password
-                                            },
-                                            success: function(result) {
-                                                if (result.status == "success") {
-                                                    swal({
-                                                        title: 'Updated!',
-                                                        text: 'CMS user account role updated',
-                                                        type: 'success',
-                                                        showCancelButton: false,
-                                                        showConfirmButton: false
-                                                    })
-                                                    SweetAlert.init()
-                                                    window.location.reload(true);
-                                                } else if (result.status ==
-                                                    "fail") {
-                                                    let errorMessages = "";
-                                                    if (Array.isArray(result
-                                                            .messages)) {
-                                                        // handle messages as an array
-                                                        errorMessages = result
-                                                            .messages.join("\n");
-                                                    } else {
-                                                        // handle messages as an object
-                                                        for (const [key,
-                                                                value
-                                                            ] of Object
-                                                            .entries(result
-                                                                .messages)) {
-                                                            errorMessages += value[
-                                                                0] + "\n";
-                                                        }
-                                                    }
-                                                    swal("Error!", errorMessages,
-                                                        "error")
-                                                } else {
-                                                    swal("Error!",
-                                                        "Something went wrong. Failed to update CMS User role.",
-                                                        "error")
-                                                }
-                                            }
-                                        });
-                                    });
-                            }
-                        })
-                    })
-                }
-            }
-        }();
 
-        jQuery(document).ready(function() {
-            SweetAlert.init()
-        });
+    <script src="{{ asset('assets/global/plugins/jquery-inputmask/jquery.inputmask.bundle.min.js') }}"
+        type="text/javascript"></script>
+
+    <script type="text/javascript">
+        Inputmask({
+            "mask": "9999.9999.9999.9999"
+        }).mask("#idc");
     </script>
 @endsection
 
@@ -405,9 +276,9 @@
                                                     </label>
                                                 </div>
                                                 <div class="col-md-8">
-                                                    <input type="number" class="form-control" name="idc"
-                                                        value="{{ $detail['idc'] ?? '' }}" placeholder="NIK KTP"
-                                                        required>
+                                                    <input type="text" class="form-control" name="idc"
+                                                        id="idc" value="{{ $detail['idc'] ?? '' }}"
+                                                        placeholder="NIK KTP" required>
                                                 </div>
                                             </div>
 
@@ -554,9 +425,9 @@
                                     <div class="row">
                                         <div class="col-md-offset-4 col-md-4 text-center">
                                             <input type="hidden" name="id" value="{{ $detail['id'] }}">
-                                            <input type="password" class="form-control" width="30%"
+                                            {{-- <input type="password" class="form-control" width="30%"
                                                 name="super_admin_password" placeholder="Enter Your current Password"
-                                                required>
+                                                required> --}}
                                             <button type="submit" class="btn yellow btn-block"><i
                                                     class="fa fa-save"></i> Update</button>
                                         </div>

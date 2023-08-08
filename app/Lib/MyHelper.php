@@ -79,7 +79,7 @@ class MyHelper
 
     public static function post($url, $post)
     {
-        $host = env('APP_API_URL_CMS');
+        $api = env('APP_API_URL');
 
         $client = new Client();
         $bearer = session('access_token');
@@ -94,7 +94,7 @@ class MyHelper
         );
 
         try {
-            $response = $client->post($host . 'api/' . $url, $content);
+            $response = $client->post($api . 'api/' . $url, $content);
             return json_decode($response->getBody(), true);
         } catch (\GuzzleHttp\Exception\RequestException $e) {
             try {
@@ -114,7 +114,7 @@ class MyHelper
 
     public static function patch($url, $post)
     {
-        $host = env('APP_API_URL_CMS');
+        $api = env('APP_API_URL');
 
         $client = new Client();
         $bearer = session('access_token');
@@ -128,7 +128,7 @@ class MyHelper
 
         );
         try {
-            $response = $client->patch($host . 'api/' . $url, $content);
+            $response = $client->patch($api . 'api/' . $url, $content);
             return json_decode($response->getBody(), true);
         } catch (\GuzzleHttp\Exception\RequestException $e) {
             try {
@@ -149,8 +149,7 @@ class MyHelper
     public static function get($url)
     {
 
-        // $host = env('APP_API_URL_CMS');
-        $host = env('APP_API_URL');
+        $api = env('APP_API_URL');
 
         $client = new Client();
         $bearer = session('access_token');
@@ -162,7 +161,7 @@ class MyHelper
                         ],
         );
         try {
-            $response =  $client->request('GET', $host . 'api/' . $url, $content);
+            $response =  $client->request('GET', $api . 'api/' . $url, $content);
             return json_decode($response->getBody(), true);
         } catch (\GuzzleHttp\Exception\RequestException $e) {
             try {
@@ -186,8 +185,7 @@ class MyHelper
 
     public static function postCurl($url, $data = '')
     {
-        $host = env('APP_API_URL_CMS');
-        // $host = env('APP_API_URL');
+        $api = env('APP_API_URL');
 
         $client = new Client();
         $bearer = session('access_token');
@@ -199,7 +197,7 @@ class MyHelper
                         ],
         );
         try {
-            $response =  $client->request('POST', $host . 'api/' . $url, [
+            $response =  $client->request('POST', $api . 'api/' . $url, [
                 'headers' => $content,
                 'json' => ($data),
             ]);
@@ -226,7 +224,7 @@ class MyHelper
 
     public static function deleteApi($url, $post = null)
     {
-        $api = env('APP_API_URL_CMS');
+        $api = env('APP_API_URL');
         $client = new Client();
         $ses = session('access_token');
         $content = array(
@@ -471,127 +469,6 @@ class MyHelper
         }
 
         return $output_file;
-    }
-
-    //TODO Development only, will remove soon!
-    public static function RegisterECS($ecs_id)
-    {
-        $payload = [
-            "ecs_id" => $ecs_id
-        ];
-        $host = env('APP_API_URL_CORE');
-
-        $client = new Client();
-        $bearer = session('access_token');
-        $content = array(
-            'headers'   => [
-                            'Authorization' => $bearer,
-                            'Accept'        => 'application/json',
-                            'Content-Type'  => 'application/json',
-                        ],
-            'json'      => (array) $payload
-        );
-
-        try {
-            $response = $client->post($host . 'ecs/v1/register', $content);
-            return json_decode($response->getBody(), true);
-        } catch (\GuzzleHttp\Exception\RequestException $e) {
-            try {
-                if ($e->getResponse()) {
-                    $response = $e->getResponse()->getBody()->getContents();
-                    if (!is_array($response)) {
-                    }
-                    return json_decode($response, true);
-                } else {
-                    return ['status' => 'fail', 'messages' => [0 => 'Check your internet connection.']];
-                }
-            } catch (Exception $e) {
-                return ['status' => 'fail', 'messages' => [0 => 'Check your internet connection.']];
-            }
-        }
-    }
-
-    public static function generateReference()
-    {
-        $encryptedUserID = session('user_id');
-        $decrypt = self::get('core-api', 'v1/helper/decrypt?id=' . $encryptedUserID);
-
-        $userId = $decrypt['data'] ?? 0;
-        // $paddedUserId = str_pad($userId, 4, '0', STR_PAD_LEFT);
-
-        $currentTime = Carbon::now();
-        $formattedDate = $currentTime->format('ymdHi');
-        $reference = "CMS-" . $formattedDate;
-
-        return $reference;
-    }
-
-    public static function startCharging($post)
-    {
-        $host = env('APP_API_URL_DEVICE_CENTRAL');
-        $client = new Client();
-        $bearer = session('access_token');
-        $content = array(
-            'headers'   => [
-                            'Authorization' => $bearer,
-                            'Accept'        => 'application/json',
-                            'Content-Type'  => 'application/json',
-                        ],
-            'json'      => (array) $post
-
-        );
-
-        try {
-            $response = $client->post($host . 'api/cms/start-charging', $content);
-            return json_decode($response->getBody(), true);
-        } catch (\GuzzleHttp\Exception\RequestException $e) {
-            try {
-                if ($e->getResponse()) {
-                    $response = $e->getResponse()->getBody()->getContents();
-                    if (!is_array($response)) {
-                    }
-                    return json_decode($response, true);
-                } else {
-                    return ['status' => 'fail', 'messages' => [0 => 'Check your internet connection.']];
-                }
-            } catch (Exception $e) {
-                return ['status' => 'fail', 'messages' => [0 => 'Check your internet connection.']];
-            }
-        }
-    }
-
-    public static function stopCharging($post)
-    {
-        $host = env('APP_API_URL_DEVICE_CENTRAL');
-        $client = new Client();
-        $bearer = session('access_token');
-        $content = array(
-            'headers'   => [
-                            'Authorization' => $bearer,
-                            'Accept'        => 'application/json',
-                            'Content-Type'  => 'application/json',
-                        ],
-            'json'      => (array) $post
-
-        );
-
-        try {
-            $response = $client->post($host . 'api/cms/stop-charging', $content);
-            return json_decode($response->getBody(), true);
-        } catch (\GuzzleHttp\Exception\RequestException $e) {
-            try {
-                if ($e->getResponse()) {
-                    $response = $e->getResponse()->getBody()->getContents();
-                    if (!is_array($response)) {
-                    }
-                    return json_decode($response, true);
-                } else {
-                    return ['status' => 'fail', 'messages' => [0 => 'Check your internet connection.']];
-                }
-            } catch (Exception $e) {
-                return ['status' => 'fail', 'messages' => [0 => 'Check your internet connection.']];
-            }
-        }
     }
 
     public static function indonesian_date($timestamp = '', $time_zone = 'Asia/Jakarta', $date_format = 'l, d F Y H:i')

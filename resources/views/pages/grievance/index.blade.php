@@ -46,8 +46,6 @@
             columns: [
                 null,
                 null,
-                null,
-                null,
                 null, 
                 {
                     orderable: false
@@ -59,6 +57,7 @@
             ],
             pageLength: 10
         });
+
 
         $('body').on('click', '#btn-delete', function() {
             let id = $(this).data('id');
@@ -76,8 +75,8 @@
                 },
                 function() {
                     $.ajax({
-                        type: "POST",
-                        url: `/user/delete/${id}`,
+                        type: "DELETE",
+                        url: `/grievance/delete/${id}`,
                         data: {
                             "_token": token
                         },
@@ -85,7 +84,7 @@
                             if (response.status == "success") {
                                 swal({
                                     title: 'Deleted!',
-                                    text: 'User has been deleted.',
+                                    text: 'Grievances has been deleted.',
                                     type: 'success',
                                     showCancelButton: false,
                                     showConfirmButton: false
@@ -131,38 +130,40 @@
     <div class="portlet light bordered">
         <div class="portlet-title">
             <div class="caption">
-                <span class="caption-subject font-blue sbold uppercase">CMS User List</span>
+                <span class="caption-subject font-blue sbold uppercase">CMS Grievance List</span>
             </div>
         </div>
         <div class="portlet-body">
-            <a href="{{ url('user/create') }}" class="btn btn-success btn_add_user" style="margin-bottom: 15px;">
-                <i class="fa fa-plus"></i> Add New User
+            <a href="{{ url('grievance/create') }}" class="btn btn-success" style="margin-bottom: 15px;">
+                <i class="fa fa-plus"></i> Add New Grievance
             </a>
             <table class="table table-striped table-bordered table-hover dt-responsive" width="100%" id="table_data">
                 <thead>
                     <tr style="text-align: center">
                         <th style="text-align: center"> Name </th>
-                        <th style="text-align: center"> Idc </th>
-                        <th style="text-align: center"> Email </th>
-                        <th style="text-align: center"> Phone </th>
-                        <th style="text-align: center"> Type </th>
+                        <th style="text-align: center"> Description </th>
+                        <th style="text-align: center"> Status </th>
                         <th style="text-align: center"> Action </th>
                     </tr>
                 </thead>
-                <tbody>
-                    @if (!empty($cms_users))
-                        @foreach ($cms_users as $user)
-                            <tr style="text-align: center; {{ $user['type'] == 'super_admin' ? 'color:red;' : '' }}">
-                                <td>{{ $user['name'] }}</td>
-                                <td>{{ $user['idc'] }}</td>
-                                <td>{{ $user['email'] }}</td>
-                                <td>{{ $user['phone'] }}</td>
-                                <td>{{ $user['type'] }}</td>
-                                <td style="width: 90px;">
-                                    <a href="{{ url('user/detail/' . $user['id']) }}" class="btn btn-sm blue"><i
-                                            class="fa fa-search"></i></a>
+                <tbody id="">
+                    @if (!empty($grievances))
+                        @foreach ($grievances as $grievance)
+                            <tr style="text-align: left;">
+                                <td>{{ $grievance['grievance_name'] }}</td>
+                                <td>{{ substr($grievance['description'], 0, 100) }}</td>
+                                <td style="text-align: center;">
+                                    @if ($grievance['is_active'] == '1')
+                                        <span class="badge badge-success badge-sm">Active</span>
+                                    @else
+                                        <span class="badge badge-danger badge-sm">Non-Active</span>
+                                    @endif
+                                </td>
+                                <td style="width: 120px; text-align: center;">
+                                    <a href="{{ url('grievance/detail') }}/{{ $grievance['id'] }}"
+                                        class="btn btn-sm blue"><i class="fa fa-search"></i></a>
                                     <a href="javascript:void(0)" class="btn btn-sm btn-danger" id="btn-delete"
-                                        data-id="{{ $user['id'] }}" data-name="{{ $user['name'] }}"><i
+                                        data-id="{{ $grievance['id'] }}" data-name="{{ $grievance['grievance_name'] }}"><i
                                             class="fa fa-trash-o"></i></a>
                                 </td>
                             </tr>

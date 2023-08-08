@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\Api\ApiArticleController;
+use App\Http\Controllers\Api\ApiDiagnosticController;
+use App\Http\Controllers\Api\ApiGrievanceControlller;
 use App\Http\Controllers\Api\ApiOutletController;
 use App\Http\Controllers\Api\ApiPartnerController;
 use App\Http\Controllers\Api\ApiUserController;
@@ -18,12 +20,13 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
+
 header('Access-Control-Allow-Origin:  *');
 header('Access-Control-Allow-Methods:  POST, GET, OPTIONS, PUT, DELETE');
 header('Access-Control-Allow-Headers:  Content-Type, X-Auth-Token, Origin, Authorization');
 Route::middleware('auth:api')->prefix('be')->group(function () {
-// Route::prefix('be')->group(function () {
-    
+    // Route::prefix('be')->group(function () {
+
     Route::controller(ApiUserController::class)->prefix('/user')->group(function () {
         $user = '{user}';
         Route::get('', 'index')->name('user.list');
@@ -72,5 +75,27 @@ Route::middleware('auth:api')->prefix('be')->group(function () {
         Route::get($partner, 'show')->name('partner.show');
         Route::patch($partner, 'update')->name('partner.update');
         Route::delete($partner, 'destroy')->name('partner.delete');
+    });
+    Route::controller(ApiGrievanceControlller::class)->prefix('/grievance')->group(function () {
+        $grievance = '{grievance}';
+        Route::get(
+            '',
+            'index'
+        )->name('grievance.list');
+        Route::post('', 'store')->name('grievance.create');
+        Route::get($grievance, 'show')->name('grievance.show');
+        Route::patch($grievance, 'update')->name('grievance.update');
+        Route::delete($grievance, 'destroy')->name('grievance.delete');
+    });
+    Route::controller(ApiDiagnosticController::class)->prefix('/diagnostic')->group(function () {
+        $diagnostic = '{diagnostic}';
+        Route::get(
+            '',
+            'index'
+        )->name('diagnostic.list');
+        Route::post('', 'store')->name('diagnostic.create');
+        Route::get($diagnostic, 'show')->name('diagnostic.show');
+        Route::patch($diagnostic, 'update')->name('diagnostic.update');
+        Route::delete($diagnostic, 'destroy')->name('diagnostic.delete');
     });
 });
