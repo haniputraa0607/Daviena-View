@@ -10,9 +10,9 @@ class ArticleController extends Controller
     public function index()
     {
         $data = [
-            'title'             => 'Manage Product',
+            'title'             => 'Manage Article',
             'sub_title'         => 'List',
-            'menu_active'       => 'product',
+            'menu_active'       => 'article',
         ];
         $article = MyHelper::get('be/article');
         // print_r($product);die;

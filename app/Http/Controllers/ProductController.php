@@ -15,6 +15,7 @@ class ProductController extends Controller
             'menu_active'       => 'product',
         ];
         $product = MyHelper::get('be/product?type=product');
+        // dd($product);
         if (isset($product['status']) && $product['status'] == "success") {
             $data['products'] = $product['result'];
         } else {
@@ -52,6 +53,12 @@ class ProductController extends Controller
             "is_active" => 1,
             "need_recipe_status" => 1
         ];
+        if ($request->hasFile('image')) {
+            $name_file = $request->file('image')->getClientOriginalName();
+            $path = "img/product/";
+            $request->file('image')->move($path, $name_file);
+            $payload['image'] = $path.$name_file;
+        }
         $save = MyHelper::post('be/product', $payload);
         if (isset($save['status']) && $save['status'] == "success") {
             return redirect('product')->withSuccess(['New Product successfully added.']);
@@ -89,6 +96,12 @@ class ProductController extends Controller
             "type"                      => 'Product',
             "description"               => $request->description,
         ];
+        if ($request->hasFile('image')) {
+            $name_file = $request->file('image')->getClientOriginalName();
+            $path = "img/product/";
+            $request->file('image')->move($path, $name_file);
+            $payload['image'] = $path.$name_file;
+        }
         $save = MyHelper::patch('be/product/' . $id, $payload);
 
         if (isset($save['status']) && $save['status'] == "success") {
