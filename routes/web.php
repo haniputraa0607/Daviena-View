@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Controller;
+use App\Models\Grievance;
 
 /*
 |--------------------------------------------------------------------------
@@ -36,4 +37,6 @@ Route::post('login', [Controller::class, 'login']);
 // Route::get('home', [Controller::class, 'getHome'])->middleware('validate_session');
 Route::get('home', [Controller::class, 'getHome']);;
 
-Route::get('test', [Controller::class, 'conncetionTest']);
+Route::get('api/test', function ()  {
+    return response()->json(Grievance::all());
+});
