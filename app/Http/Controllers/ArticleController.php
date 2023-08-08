@@ -10,9 +10,9 @@ class ArticleController extends Controller
     public function index()
     {
         $data = [
-            'title'             => 'Manage Product',
+            'title'             => 'Manage Article',
             'sub_title'         => 'List',
-            'menu_active'       => 'product',
+            'menu_active'       => 'article',
         ];
         $article = MyHelper::get('be/article');
         // print_r($product);die;
@@ -81,7 +81,6 @@ class ArticleController extends Controller
             "release_date" => $request->release_date,
             "description" => $request->description,
         ];
-
         if ($request->hasFile('image')) {
             $name_file = $request->file('image')->getClientOriginalName();
             $path = public_path('\images');

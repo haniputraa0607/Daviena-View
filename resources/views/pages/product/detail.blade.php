@@ -13,37 +13,6 @@
     <script src="{{ env('STORAGE_URL_VIEW') }}{{('assets/global/plugins/datatables/datatables.min.js') }}" type="text/javascript"></script>
     <script src="{{ env('STORAGE_URL_VIEW') }}{{('assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js') }}" type="text/javascript"></script>
     <script src="{{ env('STORAGE_URL_VIEW') }}{{('assets/global/plugins/bootstrap-sweetalert/sweetalert.min.js') }}" type="text/javascript"></script>
-    <script>
-        $(document).ready(function() {
-            var table=$('#table_data').DataTable({
-                language: {
-                    aria: {
-                        sortAscending: ": activate to sort column ascending",
-                        sortDescending: ": activate to sort column descending"
-                    },
-                    emptyTable: "No data available in table",
-                    info: "Showing _START_ to _END_ of _TOTAL_ entries",
-                    infoEmpty: "No entries found",
-                    infoFiltered: "(filtered1 from _MAX_ total entries)",
-                    lengthMenu: "_MENU_ entries",
-                    search: "Search:",
-                    zeroRecords: "No matching records found"
-                },
-                responsive: {
-                    details: {
-                        type: "column",
-                        target: "tr"
-                    }
-                },
-                order: [],
-                lengthMenu: [
-                    [5, 10, 15, 20, -1],
-                    [5, 10, 15, 20, "All"]
-                ],
-                pageLength: 10
-            });
-        });
-    </script>
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/css/bootstrap-select.css" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
@@ -51,6 +20,28 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js"></script>
     <script>
         $('.selectpicker').selectpicker();
+        function readURL(input, level) {
+            if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            var fileimport = $('#' + input.id).val();
+            var allowedExtensions = /(\.png|\.jpg|\.jpeg)$/i;
+            if (!allowedExtensions.exec(fileimport)) {
+                alert('Gambar harus bertipe gambar');
+                $('#' + input.id).val('');
+                return false;
+            }
+            reader.onload = function(e) {
+                $('#blah_' + level).attr('src', e.target.result).width(200);
+                // .height();
+            };
+            reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        function imgError(data) {
+            console.log('error_img');
+            data.setAttribute('src', '{{ asset("images/logo.svg") }}');
+        }
     </script>
 @endsection
 
@@ -165,6 +156,25 @@
                                 <div class="col-md-9">
                                     <div class="col-md-10">
                                         <input type="text" class="form-control" name="product_code" value="@if(isset($detail['product_code'])){{ $detail['product_code'] }}@endif" placeholder="Product Code" required>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <div class="col-md-3">
+                                    <label class="control-label">Product Image<span class="required" aria-required="true">*</span>
+                                        <i class="fa fa-question-circle tooltips" data-original-title="Article Image" data-container="body"></i>
+                                    </label>
+                                </div>
+                                <div class="col-md-9">
+                                    <div class="col-md-10">
+                                        <div class="alert alert-success text-center col-sm-12">
+                                            <img id="blah_image" src="{{ @$detail['image'] ? url($detail['image']) : asset('images/logo.svg') }}" style="width:200px;" onerror="imgError(this)" alt="..." loading="lazy">
+                                        </div>
+                                        <input class="form-control" name="image" style="display:none;" id="image" type="file" onchange="readURL(this, 'image');">
+                                        <button class="btn btn-outline-success btn-sm" type="button" onclick="$('#image').click();">Upload</button>
                                     </div>
                                 </div>
                             </div>

@@ -18,6 +18,28 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js"></script>
     <script>
         $('.selectpicker').selectpicker();
+        function readURL(input, level) {
+            if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            var fileimport = $('#' + input.id).val();
+            var allowedExtensions = /(\.png|\.jpg|\.jpeg)$/i;
+            if (!allowedExtensions.exec(fileimport)) {
+                alert('Gambar harus bertipe gambar');
+                $('#' + input.id).val('');
+                return false;
+            }
+            reader.onload = function(e) {
+                $('#blah_' + level).attr('src', e.target.result).width(200);
+                // .height();
+            };
+            reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        function imgError(data) {
+            console.log('error_img');
+            data.setAttribute('src', '{{ asset("images/logo.svg") }}');
+        }
     </script>
 @endsection
 
@@ -112,6 +134,25 @@
                                     <div class="col-md-10">
                                         <input type="text" class="form-control" name="product_code" placeholder="Treatment  Code" required>
                                     </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <div class="col-md-12">
+                            <div class="col-md-3">
+                                <label class="control-label">Product Image<span class="required" aria-required="true">*</span>
+                                    <i class="fa fa-question-circle tooltips" data-original-title="Article Image" data-container="body"></i>
+                                </label>
+                            </div>
+                            <div class="col-md-9">
+                                <div class="col-md-10">
+                                    <div class="alert alert-success text-center col-sm-12">
+                                        <img id="blah_image" src="{{ asset('images/logo.svg') }}" style="width:200px;" onerror="imgError(this)" alt="..." loading="lazy">
+                                    </div>
+                                    <input class="form-control" name="image" style="display:none;" id="image" type="file" onchange="readURL(this, 'image');">
+                                    <button class="btn btn-outline-success btn-sm" type="button" onclick="$('#image').click();">Upload</button>
                                 </div>
                             </div>
                         </div>

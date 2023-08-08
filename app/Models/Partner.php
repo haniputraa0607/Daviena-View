@@ -19,6 +19,9 @@ class Partner extends Model
         'partner_name',
         'partner_email',
         'partner_phone',
+        'partner_location',
+        'partner_account_instagram',
+        'partner_account_shoope',
         'partner_address'
     ];
 

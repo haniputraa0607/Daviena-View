@@ -102,6 +102,51 @@
                             </div>
                         </div>
 
+                        <div class="form-group" id="type">
+                            <div class="col-md-12">
+                                <div class="col-md-3">
+                                    <label class="control-label">Location<span class="required" aria-required="true">*</span>
+                                        <i class="fa fa-question-circle tooltips" data-original-title="Location" data-container="body"></i>
+                                    </label>
+                                </div>
+                                <div class="col-md-9">
+                                    <div class="col-md-10">
+                                        <textarea type="text" name="partner_location" class="form-control" placeholder="Location" ></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group" id="type">
+                            <div class="col-md-12">
+                                <div class="col-md-3">
+                                    <label class="control-label">Account Instagram<span class="required" aria-required="true">*</span>
+                                        <i class="fa fa-question-circle tooltips" data-original-title="Account Instagram" data-container="body"></i>
+                                    </label>
+                                </div>
+                                <div class="col-md-9">
+                                    <div class="col-md-10">
+                                        <input type="text" name="partner_account_instagram" class="form-control" placeholder="Account Instagram" >
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group" id="type">
+                            <div class="col-md-12">
+                                <div class="col-md-3">
+                                    <label class="control-label">Account Shoope<span class="required" aria-required="true">*</span>
+                                        <i class="fa fa-question-circle tooltips" data-original-title="Account Shoope" data-container="body"></i>
+                                    </label>
+                                </div>
+                                <div class="col-md-9">
+                                    <div class="col-md-10">
+                                        <input type="text" name="partner_account_shoope" class="form-control" placeholder="Account Shoope" >
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                         <div class="form-group">
                             <div class="col-md-12">
                                 <div class="col-md-3">

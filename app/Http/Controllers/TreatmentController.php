@@ -28,9 +28,8 @@ class TreatmentController extends Controller
         $data = [
             'title'             => 'Create Treatment',
             'sub_title'         => 'List',
-            'menu_active'       => 'product',
+            'menu_active'       => 'treatment',
         ];
-
         $category = MyHelper::get('be/product-category');
         if (isset($category['status']) && $category['status'] == 'success') {
             $data['categorys'] = $category['result'];
@@ -51,6 +50,12 @@ class TreatmentController extends Controller
             "is_active" => 1,
             "need_recipe_status" => 1
         ];
+        if ($request->hasFile('image')) {
+            $name_file = $request->file('image')->getClientOriginalName();
+            $path = "img/product/";
+            $request->file('image')->move($path, $name_file);
+            $payload['image'] = $path . $name_file;
+        }
         $save = MyHelper::post('be/product', $payload);
         if (isset($save['status']) && $save['status'] == "success") {
             return redirect('treatment')->withSuccess(['New Treatment successfully added.']);
@@ -67,7 +72,6 @@ class TreatmentController extends Controller
         ];
         $treatment = MyHelper::get('be/product/' . $id);
         $category = MyHelper::get('be/product-category');
-
         if (isset($treatment['status']) && $treatment['status'] == "success" && isset($category['status']) && $category['status'] == 'success') {
             $data['detail'] = $treatment['result'];
             $data['categorys'] = $category['result'];
@@ -87,6 +91,12 @@ class TreatmentController extends Controller
             "type"                      => 'Treatment',
             "description"               => $request->description,
         ];
+        if ($request->hasFile('image')) {
+            $name_file = $request->file('image')->getClientOriginalName();
+            $path = "img/product/";
+            $request->file('image')->move($path, $name_file);
+            $payload['image'] = $path . $name_file;
+        }
         $save = MyHelper::patch('be/product/' . $id, $payload);
 
         if (isset($save['status']) && $save['status'] == "success") {

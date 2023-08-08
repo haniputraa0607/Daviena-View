@@ -39,6 +39,9 @@ class PartnerController extends Controller
             "partner_name" => $request->partner_name,
             "partner_email" => $request->partner_email,
             "partner_phone" => $request->partner_phone,
+            "partner_location" => $request->partner_location,
+            "partner_account_instagram" => $request->partner_account_instagram,
+            "partner_account_shoope" => $request->partner_account_shoope,
             "partner_address" => $request->partner_address,
         ];
         $save = MyHelper::post('be/partner', $payload);
@@ -72,6 +75,9 @@ class PartnerController extends Controller
             "partner_name" => $request->partner_name,
             "partner_email" => $request->partner_email,
             "partner_phone" => $request->partner_phone,
+            "partner_location" => $request->partner_location,
+            "partner_account_instagram" => $request->partner_account_instagram,
+            "partner_account_shoope" => $request->partner_account_shoope,
             "partner_address" => $request->partner_address,
         ];
         $save = MyHelper::patch('be/partner/' . $id, $payload);
