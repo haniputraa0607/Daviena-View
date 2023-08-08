@@ -15,7 +15,6 @@ class ProductController extends Controller
             'menu_active'       => 'product',
         ];
         $product = MyHelper::get('be/product?type=product');
-        // dd($product);
         if (isset($product['status']) && $product['status'] == "success") {
             $data['products'] = $product['result'];
         } else {
@@ -31,7 +30,6 @@ class ProductController extends Controller
             'sub_title'         => 'List',
             'menu_active'       => 'product',
         ];
-
         $category = MyHelper::get('be/product-category');
         if (isset($category['status']) && $category['status'] == 'success') {
             $data['categorys'] = $category['result'];

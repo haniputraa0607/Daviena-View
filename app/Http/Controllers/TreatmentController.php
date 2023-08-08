@@ -30,7 +30,6 @@ class TreatmentController extends Controller
             'sub_title'         => 'List',
             'menu_active'       => 'treatment',
         ];
-
         $category = MyHelper::get('be/product-category');
         if (isset($category['status']) && $category['status'] == 'success') {
             $data['categorys'] = $category['result'];
@@ -73,7 +72,6 @@ class TreatmentController extends Controller
         ];
         $treatment = MyHelper::get('be/product/' . $id);
         $category = MyHelper::get('be/product-category');
-
         if (isset($treatment['status']) && $treatment['status'] == "success" && isset($category['status']) && $category['status'] == 'success') {
             $data['detail'] = $treatment['result'];
             $data['categorys'] = $category['result'];
