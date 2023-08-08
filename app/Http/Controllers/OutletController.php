@@ -102,7 +102,7 @@ class OutletController extends Controller
             "activities"    => $request->activities
         ];
 
-        $save = MyHelper::patch('be/outlet/' . $id, $payload);
+        $save = MyHelper::patch('outlet/' . $id, $payload);
 
         if (isset($save['status']) && $save['status'] == "success") {
             return redirect('outlet')->withSuccess(['CMS Outlet detail has been updated.']);
