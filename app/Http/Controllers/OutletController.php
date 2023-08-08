@@ -15,7 +15,6 @@ class OutletController extends Controller
             'menu_active'       => 'outlet',
         ];
 
-        // $outlet = MyHelper::get('outlet');
         $outlet = MyHelper::get('be/outlet');
         if (isset($outlet['status']) && $outlet['status'] == "success") {
             $data['outlets'] = $outlet['result'];
