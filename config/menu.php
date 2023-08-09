@@ -81,7 +81,7 @@ return [
         ],
         [
             'type' => 'group',
-            'label' => 'Article',
+            'label' => 'Landing Page',
             'required_features' => [],
             'children' => [
                 [
@@ -90,6 +90,13 @@ return [
                     'icon' => 'fa fa-info-circle',
                     'url' => 'article',
                     'active' => '\View::shared("menu_active") == "article"',
+                ],
+                [
+                    'type' => 'single',
+                    'label' => 'Banner',
+                    'icon' => 'fa fa-info-circle',
+                    'url' => 'banner',
+                    'active' => '\View::shared("menu_active") == "banner"',
                 ],
             ]
         ],

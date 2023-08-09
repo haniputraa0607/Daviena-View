@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\ApiArticleController;
+use App\Http\Controllers\Api\ApiBannerController;
 use App\Http\Controllers\Api\ApiDiagnosticController;
 use App\Http\Controllers\Api\ApiGrievanceControlller;
 use App\Http\Controllers\Api\ApiOutletController;
@@ -80,10 +81,7 @@ Route::middleware('auth:api')->prefix('be')->group(function () {
     });
     Route::controller(ApiGrievanceControlller::class)->prefix('/grievance')->group(function () {
         $grievance = '{grievance}';
-        Route::get(
-            '',
-            'index'
-        )->name('grievance.list');
+        Route::get('', 'index')->name('grievance.list');
         Route::post('', 'store')->name('grievance.create');
         Route::get($grievance, 'show')->name('grievance.show');
         Route::patch($grievance, 'update')->name('grievance.update');
@@ -91,18 +89,16 @@ Route::middleware('auth:api')->prefix('be')->group(function () {
     });
     Route::controller(ApiDiagnosticController::class)->prefix('/diagnostic')->group(function () {
         $diagnostic = '{diagnostic}';
-        Route::get(
-            '',
-            'index'
-        )->name('diagnostic.list');
+        Route::get('', 'index')->name('diagnostic.list');
         Route::post('', 'store')->name('diagnostic.create');
         Route::get($diagnostic, 'show')->name('diagnostic.show');
         Route::patch($diagnostic, 'update')->name('diagnostic.update');
         Route::delete($diagnostic, 'destroy')->name('diagnostic.delete');
     });
-});
-
-
-Request::get('/test', function () {
-    return response()->json(Grievance::all());
+    Route::controller(ApiBannerController::class)->prefix('/banner')->group(function () {
+        $banner = '{banner}';
+        Route::get('', 'index')->name('banner.list');
+        Route::get($banner, 'show')->name('banner.show');
+        Route::patch($banner, 'update')->name('banner.update');
+    });
 });
