@@ -45,19 +45,21 @@ class ProductController extends Controller
             "product_name" => $request->product_name,
             "type"       => 'Product',
             "product_code" => $request->product_code,
-            "price" => $request->price,
-            "product_category_id"  => $request->product_category_id,
+            // "price" => $request->price,
+            // "product_category_id"  => $request->product_category_id,
             "description"  => $request->description,
             "is_active" => 1,
             "need_recipe_status" => 1
         ];
-        if ($request->hasFile('image')) {
-            $name_file = $request->file('image')->getClientOriginalName();
-            $path = "img/product/";
-            $request->file('image')->move($path, $name_file);
-            $payload['image'] = $path . $name_file;
-        }
+        // if ($request->hasFile('image')) {
+        //     $name_file = $request->file('image')->getClientOriginalName();
+        //     $path = "img/product/";
+        //     $request->file('image')->move($path, $name_file);
+        //     $payload['image'] = $path . $name_file;
+        // }
+        // dd($payload);
         $save = MyHelper::post('be/product', $payload);
+        // dd($save);
         if (isset($save['status']) && $save['status'] == "success") {
             return redirect('product')->withSuccess(['New Product successfully added.']);
         } else {
@@ -88,8 +90,8 @@ class ProductController extends Controller
     {
         $payload = [
             "product_name"              => $request->product_name,
-            "product_category_id"       => $request->product_category_id,
-            "price"                     => $request->price,
+            // "product_category_id"       => $request->product_category_id,
+            // "price"                     => $request->price,
             "product_code"              => $request->product_code,
             "type"                      => 'Product',
             "description"               => $request->description,
@@ -101,7 +103,7 @@ class ProductController extends Controller
             $payload['image'] = $path . $name_file;
         }
         $save = MyHelper::patch('be/product/' . $id, $payload);
-
+        // dd($save);
         if (isset($save['status']) && $save['status'] == "success") {
             return redirect('product')->withSuccess(['CMS Product detail has been updated.']);
         } else {

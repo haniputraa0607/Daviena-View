@@ -33,19 +33,21 @@ class ApiProductController extends Controller
     public function store(Request $request): JsonResponse
     {
         $product = Product::create($request->all());
-        $globalPrice = [
-            'price' => $request->price,
-        ];
-        $product->global_price()->create($globalPrice);
+        // $globalPrice = [
+        //     'price' => $request->price,
+        // ];
+        // $product->global_price()->create($globalPrice);
+        // $product->create($globalPrice);
         return $this->ok("succes", $product);
     }
     public function update(Request $request, Product $product): JsonResponse
     {
         $product->update($request->all());
-        $globalPrice = [
-            'price' => $request->price,
-        ];
-        $product->global_price()->update($globalPrice);
+        // $globalPrice = [
+        //     'price' => $request->price,
+        // ];
+        // $product->global_price()->update($globalPrice);
+        // $product->update($globalPrice);
         return $this->ok("succes", $product);
     }
     public function destroy(Request $request, $id): JsonResponse
