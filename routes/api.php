@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\ApiDiagnosticController;
 use App\Http\Controllers\Api\ApiGrievanceControlller;
 use App\Http\Controllers\Api\ApiOutletController;
 use App\Http\Controllers\Api\ApiPartnerController;
+use App\Http\Controllers\Api\ApiPartnerEqualController;
 use App\Http\Controllers\Api\ApiUserController;
 use App\Http\Controllers\Api\ApiProductController;
 use App\Http\Controllers\Api\ApiProductCategoryController;
@@ -27,8 +28,8 @@ use Illuminate\Support\Facades\Route;
 header('Access-Control-Allow-Origin:  *');
 header('Access-Control-Allow-Methods:  POST, GET, OPTIONS, PUT, DELETE');
 header('Access-Control-Allow-Headers:  Content-Type, X-Auth-Token, Origin, Authorization');
-Route::middleware('auth:api')->prefix('be')->group(function () {
-    // Route::prefix('be')->group(function () {
+// Route::middleware('auth:api')->prefix('be')->group(function () {
+    Route::prefix('be')->group(function () {
 
     Route::controller(ApiUserController::class)->prefix('/user')->group(function () {
         $user = '{user}';
@@ -78,6 +79,14 @@ Route::middleware('auth:api')->prefix('be')->group(function () {
         Route::get($partner, 'show')->name('partner.show');
         Route::patch($partner, 'update')->name('partner.update');
         Route::delete($partner, 'destroy')->name('partner.delete');
+    });
+    Route::controller(ApiPartnerEqualController::class)->prefix('/partner_equal')->group(function () {
+        $partner = '{partner_equal}';
+        Route::get('', 'index')->name('partner_equal.list');
+        Route::post('', 'store')->name('partner_equal.create');
+        Route::get($partner, 'show')->name('partner_equal.show');
+        Route::patch($partner, 'update')->name('partner_equal.update');
+        Route::delete($partner, 'destroy')->name('partner_equal.delete');
     });
     Route::controller(ApiGrievanceControlller::class)->prefix('/grievance')->group(function () {
         $grievance = '{grievance}';

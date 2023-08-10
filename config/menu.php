@@ -112,6 +112,13 @@ return [
                     'url' => 'partner',
                     'active' => '\View::shared("menu_active") == "partner"',
                 ],
+                [
+                    'type' => 'single',
+                    'label' => 'Partner Equal',
+                    'icon' => 'fa fa-info-circle',
+                    'url' => 'partner_equal',
+                    'active' => '\View::shared("menu_active") == "partner_equal"',
+                ],
             ]
         ],
         [

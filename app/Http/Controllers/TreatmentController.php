@@ -45,7 +45,7 @@ class TreatmentController extends Controller
             "product_name" => $request->product_name,
             "type" => 'Treatment',
             "product_code" => $request->product_code,
-            "price" => $request->price,
+            // "price" => $request->price,
             "description"  => $request->description,
             "is_active" => 1,
             "need_recipe_status" => 1
@@ -86,7 +86,7 @@ class TreatmentController extends Controller
     {
         $payload = [
             "product_name"              => $request->product_name,
-            "price"                     => $request->price,
+            // "price"                     => $request->price,
             "product_code"              => $request->product_code,
             "type"                      => 'Treatment',
             "description"               => $request->description,

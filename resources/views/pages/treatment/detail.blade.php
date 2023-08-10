@@ -126,7 +126,7 @@
                             </div>
                         </div>
 
-                        <div class="form-group">
+                        {{-- <div class="form-group">
                             <div class="col-md-12">
                                 <div class="col-md-3">
                                     <label class="control-label">Price<span class="required" aria-required="true">*</span>
@@ -139,7 +139,7 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div> --}}
                                                 
                         <div class="form-group" id="description-selection">
                             <div class="col-md-12">
@@ -171,7 +171,7 @@
                             </div>
                         </div>
                         
-                        <div class="form-group">
+                        {{-- <div class="form-group">
                             <div class="col-md-12">
                                 <div class="col-md-3">
                                     <label class="control-label">Product Image<span class="required" aria-required="true">*</span>
@@ -188,7 +188,7 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div> --}}
                     </div>
                     <div class="form-actions">
                         {{ csrf_field() }}
