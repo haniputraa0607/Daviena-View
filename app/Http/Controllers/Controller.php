@@ -24,75 +24,37 @@ class Controller extends BaseController
         //     return redirect()->back()->withErrors(['Recaptcha failed']);
         // }
         $login = MyHelper::postLogin($request);
-        if (isset($login['error'])) {
-            $loginClient =  MyHelper::postLoginClient();
-
-            if (isset($loginClient['access_token'])) {
-                session([
-                    'access_token'  => 'Bearer ' . $loginClient['access_token']
-                ]);
-            }
-            return redirect('login')->withErrors(['invalid_credentials' => 'Invalid username / password'])->withInput();
-        } else {
-            if (isset($login['status']) && $login['status'] == "fail") {
-                $loginClient =  MyHelper::postLoginClient();
-
-                if (isset($loginClient['access_token'])) {
-                    session([
-                        'access_token'  => 'Bearer ' . $loginClient['access_token']
-                    ]);
-                }
-
-                return redirect('login')->withErrors($login['messages'])->withInput();
-            } else {
-                session([
-                    'access_token'  => 'Bearer ' . $login['access_token'],
-                    'user_name'      => $request->input('username'),
-                ]);
-
-                // $userData = MyHelper::get('be/user/');
-                $userData = MyHelper::get('be/user/detail');
-                // dd($userData);
-                if (isset($userData['status']) && $userData['status'] == 'success' && !empty($userData['result'])) {
-                    $dataUser = $userData['result'];
-                }
-
-                session([
-                    'access_token'      => 'Bearer ' . $login['access_token'],
-                    'user_id'           => $dataUser['user']['id'],
-                    'user_name'         => $dataUser['user']['name'],
-                    'user_email'        => $dataUser['user']['email'],
-                    'user_role'         => $dataUser['user']['admin_id'],
-                    'granted_features'  => $dataUser['features'],
-                ]);
-
-                return redirect('home');
-            }
-        }
-        if ($login['status'] == 'success') {
-            $user_login = $login['data'];
-        }
         if (isset($login['access_token'])) {
             session([
-                'access_token'  => 'Bearer ' . $login['access_token']
+                'access_token'  => 'Bearer ' . $login['access_token'],
+                'expires_in'         => $login['expires_in'],
             ]);
-
-            $userData = MyHelper::get('be/user/detail');
-            // dd($userData);
-
-            if (isset($userData['status']) && $userData['status'] == 'success' && !empty($userData['result'])) {
-                $dataUser = $userData['result'];
-            }
-
+            $user_login = MyHelper::get('be/user/detail')['result'];
             session([
-                'access_token'      => 'Bearer ' . $login['access_token'],
-                'user_id'           => $dataUser['user']['id'],
-                'user_name'         => $dataUser['user']['name'],
-                'user_email'        => $dataUser['user']['email'],
-                'user_role'         => $dataUser['user']['admin_id'],
-                'granted_features'  => $dataUser['features'],
+                'user_id'           => $user_login['user']['id'] ?? null,
+                'user_name'         => $user_login['user']['name'] ?? null,
+                'user_email'        => $user_login['user']['email'] ?? null,
+                'user_role'         => $user_login['user']['admin_id'] ?? null,
+                'granted_features'  => $user_login['features'] ?? null,
             ]);
+
             return redirect('home');
+        } else {
+            if (isset($login['status']) && $login['status'] == "error") {
+                if ($login['message'] == 'wrong password' || $login['message'] == 'user not found') {
+                    return redirect('login')->withErrors(['invalid_credentials' => 'Invalid username / password'])->withInput();
+                } elseif ($login['message'] == 'cannot login to suspended account') {
+                    return redirect('login')->withErrors(['Cannot login. Account suspended.'])->withInput();
+                } elseif ($login['message'] == 'no role assigned to this account. Please contact Super Admin') {
+                    return redirect('login')->withErrors(['No Role assigned to this account. Please contact Super Admin.'])->withInput();
+                } elseif ($login['message'] == 'cannot login to inactive / deleted role account. Please contact Super Admin') {
+                    return redirect('login')->withErrors(['Cannot login to inactive / deleted role account. Please contact Super Admin.'])->withInput();
+                } else {
+                    return redirect('login')->withErrors($login['message'])->withInput();
+                }
+            } else {
+                return redirect('login')->withErrors(['invalid_credentials' => 'Invalid username / password'])->withInput();
+            }
         }
         return  redirect('login')->withErrors(['invalid_credentials' => 'Invalid username / password'])->withInput();
     }
