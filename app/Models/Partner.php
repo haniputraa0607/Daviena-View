@@ -22,11 +22,6 @@ class Partner extends Model
         'partner_location',
         'partner_account_instagram',
         'partner_account_shoope',
-        'partner_address'
+        'partner_address',
     ];
-
-    protected static function newFactory()
-    {
-        return PartnerFactory::new();
-    }
 }

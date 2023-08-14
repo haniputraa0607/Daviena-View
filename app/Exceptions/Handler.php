@@ -71,8 +71,7 @@ class Handler extends ExceptionHandler
                         break;
                     default:
                         $debugmode = env('APP_DEBUG', true);
-                        $error = $this->error($debugmode == true ? $e->getMessage() : "Something went wrong", $statusCode);
-                        // $error = $this->error($e->getMessage(), $statusCode);
+                        $error = $this->error($debugmode ? $e->getMessage() : "Something went wrong", $statusCode);
                         break;
                 }
             }

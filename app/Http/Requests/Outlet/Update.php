@@ -22,7 +22,33 @@ class Update extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'name' => 'required',
+            'id_partner' => 'required',
+            'outlet_code' => 'required',
+            'outlet_phone' => 'required|numeric',
+            'outlet_email' => 'required',
+            'status' => 'required',
+            // 'is_tax' => 'required',
+            'address' => 'required',
+            'district_code' => 'required|exists:indonesia_districts,code',
+            // 'postal_code' => 'required',
+            'latitude' => 'required',
+            'longitude' => 'required',
+            'activities' => 'required',
         ];
+    }
+
+    public function prepareForValidation()
+    {
+        $this->merge([
+            'outlet_phone' => $this->phone,
+            'id_partner' =>  $this->partner,
+            'outlet_email' => $this->email,
+            'coordinates' => json_encode([
+                'langitude' => $this->longitude,
+                'latitude' => $this->latitude,
+            ]),
+            'activities' => json_encode($this->activities),
+        ]);
     }
 }

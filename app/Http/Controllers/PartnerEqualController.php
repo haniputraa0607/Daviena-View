@@ -51,7 +51,7 @@ class PartnerEqualController extends Controller
         if (isset($save['status']) && $save['status'] == "success") {
             return redirect('partner_equal')->withSuccess(['New Partner successfully added.']);
         } else {
-            return back()->withErrors(['Something went wrong. Please try again.'])->withInput();
+            return back()->withErrors($save['error'])->withInput();
         }
     }
 
@@ -121,7 +121,7 @@ class PartnerEqualController extends Controller
             if (isset($save['status']) && $save['status'] == "error") {
                 return back()->withErrors($save['message'])->withInput();
             }
-            return back()->withErrors(['Something went wrong. Please try again.'])->withInput();
+            return back()->withErrors($save['error'])->withInput();
         }
     }
 

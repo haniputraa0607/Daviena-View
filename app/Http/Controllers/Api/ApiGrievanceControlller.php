@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Grievance\Request as GrievanceRequest;
 use App\Models\Grievance;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -16,7 +17,7 @@ class ApiGrievanceControlller extends Controller
         return $this->ok("success", $data);
     }
 
-    public function store(Request $request): JsonResponse
+    public function store(GrievanceRequest $request): JsonResponse
     {
         $grievance = Grievance::create($request->all());
         return $this->ok("success", $grievance);
@@ -27,7 +28,7 @@ class ApiGrievanceControlller extends Controller
         return $this->ok("success", $grievance);
     }
 
-    public function update(Request $request, Grievance $grievance): JsonResponse
+    public function update(GrievanceRequest $request, Grievance $grievance): JsonResponse
     {
         $grievance->update($request->all());
         return $this->ok("success", $grievance);

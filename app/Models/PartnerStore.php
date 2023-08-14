@@ -22,11 +22,6 @@ class PartnerStore extends Model
         'store_city'
     ];
 
-    protected static function newFactory()
-    {
-        return PartnerFactory::new();
-    }
-
     public function partner_sosial_media(): HasMany
     {
         return $this->hasMany(PartnerSosialMedia::class);

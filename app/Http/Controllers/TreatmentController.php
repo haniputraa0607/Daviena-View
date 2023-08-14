@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 
 class TreatmentController extends Controller
 {
+    private string $path = 'be/product/';
+
     public function index()
     {
         $data = [
@@ -41,26 +43,13 @@ class TreatmentController extends Controller
 
     public function store(Request $request)
     {
-        $payload = [
-            "product_name" => $request->product_name,
-            "type" => 'Treatment',
-            "product_code" => $request->product_code,
-            // "price" => $request->price,
-            "description"  => $request->description,
-            "is_active" => 1,
-            "need_recipe_status" => 1
-        ];
-        if ($request->hasFile('image')) {
-            $name_file = $request->file('image')->getClientOriginalName();
-            $path = "img/product/";
-            $request->file('image')->move($path, $name_file);
-            $payload['image'] = $path . $name_file;
-        }
-        $save = MyHelper::post('be/product', $payload);
+        $payload = $request->except('_token');
+        $save = MyHelper::post($this->path, $payload);
+
         if (isset($save['status']) && $save['status'] == "success") {
             return redirect('treatment')->withSuccess(['New Treatment successfully added.']);
         } else {
-            return back()->withErrors(['Something went wrong. Please try again.'])->withInput();
+            return back()->withErrors(!empty($save['error']) ? $save['error'] : $save['message'])->withInput();
         }
     }
 
@@ -70,7 +59,7 @@ class TreatmentController extends Controller
             'title'             => 'CMS Detail Treatment',
             'sub_title'         => 'Detail',
         ];
-        $treatment = MyHelper::get('be/product/' . $id);
+        $treatment = MyHelper::get($this->path . $id);
         $category = MyHelper::get('be/product-category');
         if (isset($treatment['status']) && $treatment['status'] == "success" && isset($category['status']) && $category['status'] == 'success') {
             $data['detail'] = $treatment['result'];
@@ -84,20 +73,8 @@ class TreatmentController extends Controller
 
     public function update(Request $request, $id)
     {
-        $payload = [
-            "product_name"              => $request->product_name,
-            // "price"                     => $request->price,
-            "product_code"              => $request->product_code,
-            "type"                      => 'Treatment',
-            "description"               => $request->description,
-        ];
-        if ($request->hasFile('image')) {
-            $name_file = $request->file('image')->getClientOriginalName();
-            $path = "img/product/";
-            $request->file('image')->move($path, $name_file);
-            $payload['image'] = $path . $name_file;
-        }
-        $save = MyHelper::patch('be/product/' . $id, $payload);
+        $payload = $request->except('_token');
+        $save = MyHelper::patch($this->path . $id, $payload);
 
         if (isset($save['status']) && $save['status'] == "success") {
             return redirect('treatment')->withSuccess(['CMS Treatment detail has been updated.']);
@@ -105,13 +82,13 @@ class TreatmentController extends Controller
             if (isset($save['status']) && $save['status'] == "error") {
                 return back()->withErrors($save['message'])->withInput();
             }
-            return back()->withErrors(['Something went wrong. Please try again.'])->withInput();
+            return back()->withErrors(!empty($save['error']) ? $save['error'] : $save['message'])->withInput();
         }
     }
 
     public function deleteTreatment($id)
     {
-        $delete = MyHelper::deleteApi('be/product/' . $id);
+        $delete = MyHelper::deleteApi($this->path . $id);
         if (isset($delete['status']) && $delete['status'] == "success") {
             return response()->json(['status' => 'success', 'messages' => ['Treatment deleted successfully']]);
         } else {

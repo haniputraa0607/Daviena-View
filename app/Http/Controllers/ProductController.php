@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
+    private string $path = 'be/product/';
+
     public function index()
     {
         $data = [
@@ -41,29 +43,13 @@ class ProductController extends Controller
 
     public function store(Request $request)
     {
-        $payload = [
-            "product_name" => $request->product_name,
-            "type"       => 'Product',
-            "product_code" => $request->product_code,
-            // "price" => $request->price,
-            // "product_category_id"  => $request->product_category_id,
-            "description"  => $request->description,
-            "is_active" => 1,
-            "need_recipe_status" => 1
-        ];
-        // if ($request->hasFile('image')) {
-        //     $name_file = $request->file('image')->getClientOriginalName();
-        //     $path = "img/product/";
-        //     $request->file('image')->move($path, $name_file);
-        //     $payload['image'] = $path . $name_file;
-        // }
-        // dd($payload);
-        $save = MyHelper::post('be/product', $payload);
-        // dd($save);
+
+        $payload = $request->except('_token');
+        $save = MyHelper::post($this->path, $payload);
         if (isset($save['status']) && $save['status'] == "success") {
             return redirect('product')->withSuccess(['New Product successfully added.']);
         } else {
-            return back()->withErrors(['Something went wrong. Please try again.'])->withInput();
+            return back()->withErrors(!empty($save['error']) ? $save['error'] : $save['message'])->withInput();
         }
     }
 
@@ -73,7 +59,7 @@ class ProductController extends Controller
             'title'             => 'CMS Detail Product',
             'sub_title'         => 'Detail',
         ];
-        $product = MyHelper::get('be/product/' . $id);
+        $product = MyHelper::get($this->path . $id);
         $category = MyHelper::get('be/product-category');
 
         if (isset($product['status']) && $product['status'] == "success" && isset($category['status']) && $category['status'] == 'success') {
@@ -88,35 +74,22 @@ class ProductController extends Controller
 
     public function update(Request $request, $id)
     {
-        $payload = [
-            "product_name"              => $request->product_name,
-            // "product_category_id"       => $request->product_category_id,
-            // "price"                     => $request->price,
-            "product_code"              => $request->product_code,
-            "type"                      => 'Product',
-            "description"               => $request->description,
-        ];
-        if ($request->hasFile('image')) {
-            $name_file = $request->file('image')->getClientOriginalName();
-            $path = "img/product/";
-            $request->file('image')->move($path, $name_file);
-            $payload['image'] = $path . $name_file;
-        }
-        $save = MyHelper::patch('be/product/' . $id, $payload);
-        // dd($save);
+        $payload = $request->except('_token');
+        $save = MyHelper::patch($this->path . $id, $payload);
+
         if (isset($save['status']) && $save['status'] == "success") {
             return redirect('product')->withSuccess(['CMS Product detail has been updated.']);
         } else {
             if (isset($save['status']) && $save['status'] == "error") {
                 return back()->withErrors($save['message'])->withInput();
             }
-            return back()->withErrors(['Something went wrong. Please try again.'])->withInput();
+            return back()->withErrors(!empty($save['error']) ? $save['error'] : $save['message'])->withInput();
         }
     }
 
     public function deleteProduct($id)
     {
-        $delete = MyHelper::deleteApi('be/product/' . $id);
+        $delete = MyHelper::deleteApi($this->path . $id);
         if (isset($delete['status']) && $delete['status'] == "success") {
             return response()->json(['status' => 'success', 'messages' => ['Product deleted successfully']]);
         } else {

@@ -21,8 +21,22 @@ class Create extends FormRequest
      */
     public function rules(): array
     {
-        return [
-            //
+        return  [
+            'equal_id' => 'required|numeric',
+            'name' => 'required',
+            'username' => 'required',
+            'email' => 'required',
+            'idc' => 'required|unique:users,idc',
+            'birthdate' => 'required',
+            'phone' => 'required|',
+            'gender' => 'required',
+            'district_code' => 'required|exists:indonesia_districts,code',
+            'admin_role' => 'required',
+            'level' => 'required',
+            'outlet_id' => 'required',
+            'address' => 'required|min:6',
+            'password' => 'min:6',
+            'password_confirmation' => 'required_with:password|same:password|min:6',
         ];
     }
 }
