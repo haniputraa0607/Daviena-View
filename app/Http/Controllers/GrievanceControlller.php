@@ -36,17 +36,13 @@ class GrievanceControlller extends Controller
 
     public function store(Request $request)
     {
-        $payload = [
-            "grievance_name" => $request->name,
-            "description"  => $request->description,
-            "is_active" => $request->is_active ?? '0',
-        ];
-
+        $payload = $request->except('_token');
         $save = MyHelper::post('be/grievance', $payload);
+
         if (isset($save['status']) && $save['status'] == "success") {
             return redirect('grievance')->withSuccess(['New Grievance successfully added.']);
         } else {
-            return back()->withErrors(['Something went wrong. Please try again.'])->withInput();
+            return back()->withErrors(!empty($save['error']) ? $save['error'] : $save['message'])->withInput();
         }
     }
 
@@ -68,21 +64,16 @@ class GrievanceControlller extends Controller
 
     public function update(Request $request, $id)
     {
-
-        $payload = [
-            "grievance_name" => $request->name,
-            "description"  => $request->description,
-            "is_active" => $request->is_active ?? '0',
-        ];
-
+        $payload = $request->except('_token');
         $save = MyHelper::patch('be/grievance/' . $id, $payload);
+
         if (isset($save['status']) && $save['status'] == "success") {
             return redirect('grievance')->withSuccess(['CMS Grievance detail has been updated.']);
         } else {
             if (isset($save['status']) && $save['status'] == "error") {
                 return back()->withErrors($save['message'])->withInput();
             }
-            return back()->withErrors(['Something went wrong. Please try again.'])->withInput();
+            return back()->withErrors(!empty($save['error']) ? $save['error'] : $save['message'])->withInput();
         }
     }
 

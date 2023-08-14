@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 
 class ArticleController extends Controller
 {
+    private string $path = 'be/article/';
     public function index()
     {
         $data = [
@@ -14,8 +15,8 @@ class ArticleController extends Controller
             'sub_title'         => 'List',
             'menu_active'       => 'article',
         ];
-        $article = MyHelper::get('be/article');
-        // print_r($product);die;
+        $article = MyHelper::get($this->path);
+
         if (isset($article['status']) && $article['status'] == "success") {
             $data['articles'] = $article['result'];
         } else {
@@ -48,11 +49,11 @@ class ArticleController extends Controller
             $payload['image'] = $name_file;
         }
 
-        $save = MyHelper::post('be/article', $payload);
+        $save = MyHelper::post($this->path, $payload);
         if (isset($save['status']) && $save['status'] == "success") {
             return redirect('article')->withSuccess(['New Article successfully added.']);
         } else {
-            return back()->withErrors(['Something went wrong. Please try again.'])->withInput();
+            return back()->withErrors($save['error'])->withInput();
         }
     }
 
@@ -62,7 +63,7 @@ class ArticleController extends Controller
             'title'             => 'CMS Detail Article',
             'sub_title'         => 'Detail',
         ];
-        $article = MyHelper::get('be/article/' . $id);
+        $article = MyHelper::get($this->path . $id);
 
         if (isset($article['status']) && $article['status'] == "success") {
             $data['detail'] = $article['result'];
@@ -87,20 +88,20 @@ class ArticleController extends Controller
             $request->file('image')->move($path, $name_file);
             $payload['image'] = $name_file;
         }
-        $save = MyHelper::patch('be/article/' . $id, $payload);
+        $save = MyHelper::patch($this->path . $id, $payload);
         if (isset($save['status']) && $save['status'] == "success") {
             return redirect('article')->withSuccess(['CMS Article detail has been updated.']);
         } else {
             if (isset($save['status']) && $save['status'] == "error") {
                 return back()->withErrors($save['message'])->withInput();
             }
-            return back()->withErrors(['Something went wrong. Please try again.'])->withInput();
+            return back()->withErrors($save['error'])->withInput();
         }
     }
 
     public function deleteArticle($id)
     {
-        $delete = MyHelper::deleteApi('be/article/' . $id);
+        $delete = MyHelper::deleteApi($this->path . $id);
         if (isset($delete['status']) && $delete['status'] == "success") {
             return response()->json(['status' => 'success', 'messages' => ['Product deleted successfully']]);
         } else {

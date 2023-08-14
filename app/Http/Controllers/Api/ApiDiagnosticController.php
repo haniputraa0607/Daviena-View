@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Diagnostic\Request as DiagnosticRequest;
 use App\Models\Diagnostic;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -16,7 +17,7 @@ class ApiDiagnosticController extends Controller
         return $this->ok("success", $data);
     }
 
-    public function store(Request $request): JsonResponse
+    public function store(DiagnosticRequest $request): JsonResponse
     {
         $diagnostic = Diagnostic::create($request->all());
         return $this->ok("success", $diagnostic);
@@ -27,7 +28,7 @@ class ApiDiagnosticController extends Controller
         return $this->ok("success", $diagnostic);
     }
 
-    public function update(Request $request, Diagnostic $diagnostic): JsonResponse
+    public function update(DiagnosticRequest $request, Diagnostic $diagnostic): JsonResponse
     {
         $diagnostic->update($request->all());
         return $this->ok("success", $diagnostic);

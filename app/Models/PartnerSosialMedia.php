@@ -20,9 +20,4 @@ class PartnerSosialMedia extends Model
         'type',
         'url',
     ];
-
-    protected static function newFactory()
-    {
-        return PartnerFactory::new();
-    }
 }

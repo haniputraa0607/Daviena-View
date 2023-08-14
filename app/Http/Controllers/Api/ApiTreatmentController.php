@@ -3,13 +3,13 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Product\Request as ProductRequest;
+use App\Http\Requests\Treatment\Request as TreatmentRequest;
 use App\Models\Product;
 use App\Models\ProductGlobalPrice;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
-class ApiProductController extends Controller
+class ApiTreatmentController extends Controller
 {
     public function index(Request $request): JsonResponse
     {
@@ -31,12 +31,12 @@ class ApiProductController extends Controller
         $product = Product::with('global_price')->find($id);
         return $this->ok("success", $product);
     }
-    public function store(ProductRequest $request): JsonResponse
+    public function store(TreatmentRequest $request): JsonResponse
     {
         $product = Product::create($request->all());
         return $this->ok("succes", $product);
     }
-    public function update(ProductRequest $request, Product $product): JsonResponse
+    public function update(TreatmentRequest $request, Product $product): JsonResponse
     {
         $product->update($request->all());
         return $this->ok("succes", $product);

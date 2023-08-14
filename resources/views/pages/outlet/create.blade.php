@@ -9,6 +9,9 @@
     <link href="{{ env('STORAGE_URL_VIEW') }}{{ 'assets/global/plugins/bootstrap-sweetalert/sweetalert.css' }}"
         rel="stylesheet" type="text/css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/css/bootstrap-select.css" />
+    <link href="{{ env('STORAGE_URL_VIEW') }}{{ 'assets/global/plugins/select2/css/select2.min.css' }}" rel="stylesheet" type="text/css" />
+    <link href="{{ env('STORAGE_URL_VIEW') }}{{ 'assets/global/plugins/select2/css/select2-bootstrap.min.css' }}" rel="stylesheet" type="text/css" />
+
 @endsection
 
 @section('page-script')
@@ -22,6 +25,8 @@
     <script src="{{ env('STORAGE_URL_VIEW') }}{{ 'assets/global/plugins/bootstrap-sweetalert/sweetalert.min.js' }}"
         type="text/javascript"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js"></script>
+    <script src="{{ env('STORAGE_URL_VIEW') }}{{ 'assets/global/plugins/select2/js/select2.min.js' }}" type="text/javascript"></script>
+
     <script>
         $('.selectpicker').selectpicker();
 
@@ -150,6 +155,118 @@
 
         google.maps.event.addDomListener(window, 'load', initialize);
     </script>
+
+<script type="text/javascript">
+   
+
+    var province_code = 0;
+    var city_code = 0;
+    
+   
+    $('#province-input').select2({
+        placeholder: 'Select Province',
+        theme: 'bootstrap',
+        width: '100%',
+        ajax: {
+            url: `{{ url('api/indonesia/provinces') }}`,
+            headers: {
+                "Authorization": "{{ session('access_token') }}"
+            },
+            dataType: 'json',
+            delay: 250,
+            processResults: function(result) {
+                return {
+                    results: $.map(result.data, function(item) {
+                        return {
+                            text: item.name,
+                            id: item.code
+                        }
+                    })
+                };
+            },
+            cache: true
+        }
+    });
+
+    // $('#city-input').select2({
+    //     placeholder: 'Select city',
+    //     theme: 'bootstrap',
+    //     width: '100%'
+    // });
+
+    // $('#district-input').select2({
+    //     placeholder: 'Select district',
+    //     theme: 'bootstrap',
+    //     width: '100%'
+    // });
+
+    $('.select2-input').on('change', function(){
+        if ($(this).attr('id') === 'province-input') {
+            $('#city-input').empty().trigger('change');
+            $('#district-input').empty().trigger('change');
+        }
+
+        if ($(this).attr('id') === 'city-input') {
+            $('#district-input').empty().trigger('change');
+        }
+
+        province_code = $('#province-input').val();
+        city_code = $('#city-input').val();
+        
+        cityUrl = `{{ url('api/indonesia/cities?province_code=') }}${province_code}`;
+        districtUrl = `{{ url('api/indonesia/districts?city_code=') }}${city_code}`;
+
+        $('#city-input').select2({
+            placeholder: 'Select city',
+            theme: 'bootstrap',
+            width: '100%',
+            ajax: {
+                url: cityUrl,
+                headers: {
+                    "Authorization": "{{ session('access_token') }}"
+                },
+                dataType: 'json',
+                delay: 250,
+                processResults: function(result) {
+                    return {
+                        results: $.map(result.data, function(item) {
+                            return {
+                                text: item.name,
+                                id: item.code
+                            }
+                        })
+                    };
+                },
+                cache: true
+            }
+        });
+
+        $('#district-input').select2({
+            placeholder: 'Select district',
+            theme: 'bootstrap',
+            width: '100%',
+            ajax: {
+                url: districtUrl,
+                headers: {
+                    "Authorization": "{{ session('access_token') }}"
+                },
+                dataType: 'json',
+                delay: 250,
+                processResults: function(result) {
+                    return {
+                        results: $.map(result.data, function(item) {
+                            return {
+                                text: item.name,
+                                id: item.code
+                            }
+                        })
+                    };
+                },
+                cache: true
+            }
+        });
+    });
+</script>
 @endsection
 
 
@@ -222,6 +339,38 @@
                             </div>
                         </div>
 
+                        <div class="form-group" id="province-selection">
+                            <div class="col-md-12">
+                                <div class="col-md-3">
+                                    <label class="control-label">Province<span class="required"
+                                            aria-required="true">*</span>
+                                        <i class="fa fa-question-circle tooltips" data-original-title="Daerah"
+                                            data-container="body"></i>
+                                    </label>
+                                </div>
+                                <div class="col-md-9">
+                                    <div class="col-md-10">
+                                        <select name="province" id="province-input" class="form-control select2-input" required> </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group" id="city-selection">
+                            <div class="col-md-12">
+                                <div class="col-md-3">
+                                    <label class="control-label">city<span class="required"
+                                            aria-required="true">*</span>
+                                        <i class="fa fa-question-circle tooltips" data-original-title="Daerah"
+                                            data-container="body"></i>
+                                    </label>
+                                </div>
+                                <div class="col-md-9">
+                                    <div class="col-md-10">
+                                        <select name="city" id="city-input" class="form-control select2-input" required> </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                         <div class="form-group" id="district-selection">
                             <div class="col-md-12">
                                 <div class="col-md-3">
@@ -233,12 +382,7 @@
                                 </div>
                                 <div class="col-md-9">
                                     <div class="col-md-10">
-                                        <select name="district" id="district-input" class="form-control" required>
-                                            <option value="">Choose District</option>
-                                            @foreach ($districts as $district)
-                                                <option value="{{ $district['code'] }}">{{ $district['name'] }}</option>
-                                            @endforeach
-                                        </select>
+                                        <select name="district_code" id="district-input" class="form-control select2-input" required> </select>
                                     </div>
                                 </div>
                             </div>
@@ -397,6 +541,7 @@
                                             <option value="product">Product</option>
                                             <option value="treatment">Treatment</option>
                                             <option value="consultation">Consultation</option>
+                                            <option value="consultation">Prescription</option>
                                         </select>
                                     </div>
                                 </div>

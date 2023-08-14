@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 
 class DiagnosticController extends Controller
 {
+    private string $path = 'be/diagnostic/';
+
     public function index()
     {
         $data = [
@@ -14,7 +16,7 @@ class DiagnosticController extends Controller
             'sub_title'         => 'List',
             'menu_active'       => 'diagnostic',
         ];
-        $diagnostic = MyHelper::get('be/diagnostic');
+        $diagnostic = MyHelper::get($this->path);
         if (isset($diagnostic['status']) && $diagnostic['status'] == "success") {
             $data['diagnostics'] = $diagnostic['result'];
         } else {
@@ -36,17 +38,13 @@ class DiagnosticController extends Controller
 
     public function store(Request $request)
     {
-        $payload = [
-            "diagnostic_name" => $request->name,
-            "description"  => $request->description,
-            "is_active" => $request->is_active ?? '0',
-        ];
+        $payload = $request->except('_token');
 
-        $save = MyHelper::post('be/diagnostic', $payload);
+        $save = MyHelper::post($this->path, $payload);
         if (isset($save['status']) && $save['status'] == "success") {
             return redirect('diagnostic')->withSuccess(['New Diagnostic successfully added.']);
         } else {
-            return back()->withErrors(['Something went wrong. Please try again.'])->withInput();
+            return back()->withErrors(!empty($save['error']) ? $save['error'] : $save['message'])->withInput();
         }
     }
 
@@ -56,7 +54,7 @@ class DiagnosticController extends Controller
             'title'             => 'CMS Detail Diagnostic',
             'sub_title'         => 'Detail',
         ];
-        $diagnostic = MyHelper::get('be/diagnostic/' . $id);
+        $diagnostic = MyHelper::get($this->path . $id);
         if (isset($diagnostic['status']) && $diagnostic['status'] == "success") {
             $data['detail'] = $diagnostic['result'];
         } else {
@@ -69,26 +67,22 @@ class DiagnosticController extends Controller
     public function update(Request $request, $id)
     {
 
-        $payload = [
-            "diagnostic_name" => $request->name,
-            "description"  => $request->description,
-            "is_active" => $request->is_active ?? '0',
-        ];
+        $payload = $request->except('_token');
+        $save = MyHelper::patch($this->path . $id, $payload);
 
-        $save = MyHelper::patch('be/diagnostic/' . $id, $payload);
         if (isset($save['status']) && $save['status'] == "success") {
             return redirect('diagnostic')->withSuccess(['CMS Diagnostic detail has been updated.']);
         } else {
             if (isset($save['status']) && $save['status'] == "error") {
                 return back()->withErrors($save['message'])->withInput();
             }
-            return back()->withErrors(['Something went wrong. Please try again.'])->withInput();
+            return back()->withErrors(!empty($save['error']) ? $save['error'] : $save['message'])->withInput();
         }
     }
 
     public function deleteDiagnostic($id)
     {
-        $delete = MyHelper::deleteApi('be/diagnostic/' . $id);
+        $delete = MyHelper::deleteApi($this->path . $id);
         if (isset($delete['status']) && $delete['status'] == "success") {
             return response()->json(['status' => 'success', 'messages' => ['Diagnostic deleted successfully']]);
         } else {

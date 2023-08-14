@@ -25,11 +25,6 @@ class PartnerEqual extends Model
         'is_suspended'
     ];
 
-    protected static function newFactory()
-    {
-        return PartnerFactory::new();
-    }
-
     public function partner_store()
     {
         return $this->hasOne(PartnerStore::class);

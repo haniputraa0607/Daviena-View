@@ -48,7 +48,7 @@ class PartnerController extends Controller
         if (isset($save['status']) && $save['status'] == "success") {
             return redirect('partner')->withSuccess(['New Partner successfully added.']);
         } else {
-            return back()->withErrors(['Something went wrong. Please try again.'])->withInput();
+            return back()->withErrors($save['error'])->withInput();
         }
     }
 
@@ -87,7 +87,7 @@ class PartnerController extends Controller
             if (isset($save['status']) && $save['status'] == "error") {
                 return back()->withErrors($save['message'])->withInput();
             }
-            return back()->withErrors(['Something went wrong. Please try again.'])->withInput();
+            return back()->withErrors($save['error'])->withInput();
         }
     }
 

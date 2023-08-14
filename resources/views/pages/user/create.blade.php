@@ -1,29 +1,160 @@
 @extends('layouts.main')
 
 @section('page-style')
-    <link href="{{ env('STORAGE_URL_VIEW') }}{{ 'assets/global/plugins/bootstrap-toastr/toastr.min.css' }}" rel="stylesheet"
-        type="text/css" />
-    <link href="{{ env('STORAGE_URL_VIEW') }}{{ 'assets/global/plugins/bootstrap-switch/css/bootstrap-switch.min.css' }}"
-        rel="stylesheet" type="text/css" />
+    <link href="{{ env('STORAGE_URL_VIEW') }}{{ 'assets/global/plugins/bootstrap-toastr/toastr.min.css' }}" rel="stylesheet" type="text/css" />
+    <link href="{{ env('STORAGE_URL_VIEW') }}{{ 'assets/global/plugins/bootstrap-switch/css/bootstrap-switch.min.css' }}" rel="stylesheet" type="text/css" />
     <link href="{{ env('STORAGE_URL_VIEW') }}{{ 'assets/datemultiselect/jquery-ui.css' }}" rel="stylesheet" type="text/css" />
-    <link href="{{ env('STORAGE_URL_VIEW') }}{{ 'assets/global/plugins/bootstrap-sweetalert/sweetalert.css' }}"
-        rel="stylesheet" type="text/css" />
+    <link href="{{ env('STORAGE_URL_VIEW') }}{{ 'assets/global/plugins/bootstrap-sweetalert/sweetalert.css' }}" rel="stylesheet" type="text/css" />
+    <link href="{{ env('STORAGE_URL_VIEW') }}{{ 'assets/global/plugins/select2/css/select2.min.css' }}" rel="stylesheet" type="text/css" />
+    <link href="{{ env('STORAGE_URL_VIEW') }}{{ 'assets/global/plugins/select2/css/select2-bootstrap.min.css' }}" rel="stylesheet" type="text/css" />
 @endsection
 
 @section('page-script')
-    <script src="{{ env('STORAGE_URL_VIEW') }}{{ 'assets/global/plugins/bootstrap-switch/js/bootstrap-switch.min.js' }}"
-        type="text/javascript"></script>
-    <script src="{{ env('STORAGE_URL_VIEW') }}{{ 'assets/global/plugins/bootstrap-toastr/toastr.min.js' }}"
-        type="text/javascript"></script>
-    <script src="{{ env('STORAGE_URL_VIEW') }}{{ 'assets/global/plugins/bootstrap-sweetalert/sweetalert.min.js' }}"
-        type="text/javascript"></script>
-    <script src="{{ asset('assets/global/plugins/jquery-inputmask/jquery.inputmask.bundle.min.js') }}"
-        type="text/javascript"></script>
+    <script src="{{ env('STORAGE_URL_VIEW') }}{{ 'assets/global/plugins/bootstrap-switch/js/bootstrap-switch.min.js' }}" type="text/javascript"></script>
+    <script src="{{ env('STORAGE_URL_VIEW') }}{{ 'assets/global/plugins/bootstrap-toastr/toastr.min.js' }}" type="text/javascript"></script>
+    <script src="{{ env('STORAGE_URL_VIEW') }}{{ 'assets/global/plugins/bootstrap-sweetalert/sweetalert.min.js' }}" type="text/javascript"></script>
+    <script src="{{ asset('assets/global/plugins/jquery-inputmask/jquery.inputmask.bundle.min.js') }}" type="text/javascript"></script>
+    <script src="{{ env('STORAGE_URL_VIEW') }}{{ 'assets/global/plugins/select2/js/select2.min.js' }}" type="text/javascript"></script>
     <script type="text/javascript">
         Inputmask({
             "mask": "9999.9999.9999.9999"
         }).mask("#idc");
     </script>
+   <script type="text/javascript">
+   
+
+    var province_code = 0;
+    var city_code = 0;
+    
+    $('#outlet-input').select2({
+        placeholder: 'Select Outlet',
+        theme: 'bootstrap',
+        width: '100%',
+        ajax: {
+            url: `{{ route('api.outlet.name.id')}}`,
+            headers: {
+                "Authorization": "{{ session('access_token') }}"
+            },
+            dataType: 'json',
+            delay: 250,
+            processResults: function(result) {
+                return {
+                    results: $.map(result.result, function(item) {
+                        return {
+                            text: item.name,
+                            id: item.id
+                        }
+                    })
+                };
+            },
+            cache: true
+        }
+    });
+    $('#province-input').select2({
+        placeholder: 'Select Province',
+        theme: 'bootstrap',
+        width: '100%',
+        ajax: {
+            url: `{{ url('api/indonesia/provinces') }}`,
+            headers: {
+                "Authorization": "{{ session('access_token') }}"
+            },
+            dataType: 'json',
+            delay: 250,
+            processResults: function(result) {
+                return {
+                    results: $.map(result.data, function(item) {
+                        return {
+                            text: item.name,
+                            id: item.code
+                        }
+                    })
+                };
+            },
+            cache: true
+        }
+    });
+
+    // $('#city-input').select2({
+    //     placeholder: 'Select city',
+    //     theme: 'bootstrap',
+    //     width: '100%'
+    // });
+
+    // $('#district-input').select2({
+    //     placeholder: 'Select district',
+    //     theme: 'bootstrap',
+    //     width: '100%'
+    // });
+
+    $('.select2-input').on('change', function(){
+        if ($(this).attr('id') === 'province-input') {
+            $('#city-input').empty().trigger('change');
+            $('#district-input').empty().trigger('change');
+        }
+
+        if ($(this).attr('id') === 'city-input') {
+            $('#district-input').empty().trigger('change');
+        }
+
+        province_code = $('#province-input').val();
+        city_code = $('#city-input').val();
+        
+        cityUrl = `{{ url('api/indonesia/cities?province_code=') }}${province_code}`;
+        districtUrl = `{{ url('api/indonesia/districts?city_code=') }}${city_code}`;
+
+        $('#city-input').select2({
+            placeholder: 'Select city',
+            theme: 'bootstrap',
+            width: '100%',
+            ajax: {
+                url: cityUrl,
+                headers: {
+                    "Authorization": "{{ session('access_token') }}"
+                },
+                dataType: 'json',
+                delay: 250,
+                processResults: function(result) {
+                    return {
+                        results: $.map(result.data, function(item) {
+                            return {
+                                text: item.name,
+                                id: item.code
+                            }
+                        })
+                    };
+                },
+                cache: true
+            }
+        });
+
+        $('#district-input').select2({
+            placeholder: 'Select district',
+            theme: 'bootstrap',
+            width: '100%',
+            ajax: {
+                url: districtUrl,
+                headers: {
+                    "Authorization": "{{ session('access_token') }}"
+                },
+                dataType: 'json',
+                delay: 250,
+                processResults: function(result) {
+                    return {
+                        results: $.map(result.data, function(item) {
+                            return {
+                                text: item.name,
+                                id: item.code
+                            }
+                        })
+                    };
+                },
+                cache: true
+            }
+        });
+    });
+</script>
+
 @endsection
 
 
@@ -137,7 +268,8 @@
                         <div class="form-group">
                             <div class="col-md-12">
                                 <div class="col-md-3">
-                                    <label class="control-label">Phone<span class="required" aria-required="true">*</span>
+                                    <label class="control-label">Phone<span class="required"
+                                            aria-required="true">*</span>
                                         <i class="fa fa-question-circle tooltips"
                                             data-original-title="Nomor telpon seluler" data-container="body"></i>
                                     </label>
@@ -169,6 +301,41 @@
                             </div>
                         </div>
 
+                        <div class="form-group" id="province-selection">
+                            <div class="col-md-12">
+                                <div class="col-md-3">
+                                    <label class="control-label">Province<span class="required"
+                                            aria-required="true">*</span>
+                                        <i class="fa fa-question-circle tooltips" data-original-title="Province"
+                                            data-container="body"></i>
+                                    </label>
+                                </div>
+                                <div class="col-md-9">
+                                    <div class="col-md-10">
+                                        <select name="province" id="province-input" class="form-control select2-input"
+                                            required data-type="provinces"></select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group" id="city-selection">
+                            <div class="col-md-12">
+                                <div class="col-md-3">
+                                    <label class="control-label">City<span class="required" aria-required="true">*</span>
+                                        <i class="fa fa-question-circle tooltips" data-original-title="City"
+                                            data-container="body"></i>
+                                    </label>
+                                </div>
+                                <div class="col-md-9">
+                                    <div class="col-md-10">
+                                        <select name="city" id="city-input" class="form-control select2-input"
+                                            required data-type="cities"></select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                         <div class="form-group" id="district-selection">
                             <div class="col-md-12">
                                 <div class="col-md-3">
@@ -180,12 +347,8 @@
                                 </div>
                                 <div class="col-md-9">
                                     <div class="col-md-10">
-                                        <select name="district" id="district-input" class="form-control" required>
-                                            <option value="">--Select--</option>
-                                            @foreach ($districts as $district)
-                                                <option value="{{ $district['code'] }}">{{ $district['name'] }}</option>
-                                            @endforeach
-                                        </select>
+                                        <select name="district_code" id="district-input" class="form-control select2-input"
+                                            required data-type="districts"></select>
                                     </div>
                                 </div>
                             </div>
@@ -202,11 +365,7 @@
                                 </div>
                                 <div class="col-md-9">
                                     <div class="col-md-10">
-                                        <select name="outlet" id="outlet-input" class="form-control" required>
-                                            <option value="">--Select--</option>
-                                            @foreach ($outlets as $outlet)
-                                                <option value="{{ $outlet['id'] }}">{{ $outlet['name'] }}</option>
-                                            @endforeach
+                                        <select name="outlet_id" id="outlet-input" class="form-control" required>
                                         </select>
                                     </div>
                                 </div>
@@ -277,8 +436,8 @@
                                             <option value="">--Select--</option>
                                             <option value="admin" @if (old('admin_role') == 'admin') selected @endif>Admin
                                             </option>
-                                            <option value="salesman"
-                                                @if (old('admin_role') == 'salesman') selected @endif@if (old('admin_role') == 'admin') selected @endif>
+                                            <option value="salesman" @if (old('admin_role') == 'salesman') selected @endif
+                                                @if (old('admin_role') == 'admin') selected @endif>
                                                 Salesman</option>
                                             <option value="cashier" @if (old('admin_role') == 'cashier') selected @endif>
                                                 Cashier</option>
