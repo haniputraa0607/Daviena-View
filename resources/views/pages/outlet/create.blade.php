@@ -188,18 +188,6 @@
         }
     });
 
-    // $('#city-input').select2({
-    //     placeholder: 'Select city',
-    //     theme: 'bootstrap',
-    //     width: '100%'
-    // });
-
-    // $('#district-input').select2({
-    //     placeholder: 'Select district',
-    //     theme: 'bootstrap',
-    //     width: '100%'
-    // });
-
     $('.select2-input').on('change', function(){
         if ($(this).attr('id') === 'province-input') {
             $('#city-input').empty().trigger('change');

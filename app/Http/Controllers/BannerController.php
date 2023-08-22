@@ -13,7 +13,7 @@ class BannerController extends Controller
         $data = [
             'title'             => 'Manage Banner',
             'sub_title'         => 'List',
-            'menu_active'       => 'Banner',
+            'menu_active'       => 'banner',
         ];
         $banner = MyHelper::get($this->path);
         if (isset($banner['status']) && $banner['status'] == "success") {
@@ -29,6 +29,7 @@ class BannerController extends Controller
         $data = [
             'title'             => 'CMS Detail Banner',
             'sub_title'         => 'Detail',
+            'menu_active'       => 'banner',
         ];
         $banner = MyHelper::get($this->path . $id);
         $products = MyHelper::get('be/product/');

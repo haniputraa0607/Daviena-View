@@ -33,6 +33,7 @@ class ApiUserController extends Controller
     }
     public function show(User $user): JsonResponse
     {
+        $user->district->city->province;
         return $this->ok("succes", $user);
     }
     public function store(Create $request): JsonResponse

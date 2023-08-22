@@ -26,7 +26,7 @@
                 bProcessing: true,
                 bServerSide: true,
                 ajax: {
-                    url: "{{ route('api.user.list') }}",
+                    url: "api/be/user",
                     headers: {
                         "Authorization": "{{ session('access_token') }}"
                     },

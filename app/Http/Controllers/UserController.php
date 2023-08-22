@@ -67,6 +67,7 @@ class UserController extends Controller
 
     public function update(Request $request, $id)
     {
+
         $payload = $request->except('_token');
         $save = MyHelper::patch($this->path . $id, $payload);
 

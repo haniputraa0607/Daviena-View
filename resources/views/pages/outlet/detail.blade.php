@@ -1,5 +1,12 @@
 @extends('layouts.main')
 
+
+@php
+$coordinates = json_decode($detail['coordinates'], true);
+$latitude = $coordinates['latitude'];
+$longitude = $coordinates['longitude']; 
+@endphp
+
 @section('page-style')
     <link href="{{ env('STORAGE_URL_VIEW') }}{{ 'assets/datemultiselect/jquery-ui.css' }}" rel="stylesheet" type="text/css" />
     <link href="{{ env('STORAGE_URL_VIEW') }}{{ 'assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.css' }}"
@@ -11,6 +18,8 @@
         type="text/css" />
     <link href="{{ env('STORAGE_URL_VIEW') }}{{ 'assets/global/plugins/bootstrap-sweetalert/sweetalert.css' }}"
         rel="stylesheet" type="text/css" />
+        <link href="{{ env('STORAGE_URL_VIEW') }}{{ 'assets/global/plugins/select2/css/select2.min.css' }}" rel="stylesheet" type="text/css" />
+        <link href="{{ env('STORAGE_URL_VIEW') }}{{ 'assets/global/plugins/select2/css/select2-bootstrap.min.css' }}" rel="stylesheet" type="text/css" />
 @endsection
 
 @section('page-script')
@@ -36,12 +45,8 @@
     <script
         src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCOHBNv3Td9_zb_7uW-AJDU6DHFYk-8e9Y&v=3.exp&signed_in=true&libraries=places">
     </script>
+    <script src="{{ env('STORAGE_URL_VIEW') }}{{ 'assets/global/plugins/select2/js/select2.min.js' }}" type="text/javascript"></script>
 
-    @php
-        $coordinates = json_decode($detail['coordinates'], true);
-        $latitude = $coordinates['latitude'];
-        $longitude = $coordinates['longitude']; 
-    @endphp
     <script>
         $('.selectpicker').selectpicker();
 
@@ -169,6 +174,93 @@
 
         google.maps.event.addDomListener(window, 'load', initialize);
     </script>
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            var province_code = {{ $detail['district']['city']['province_code'] }};
+            var city_code = {{ $detail['district']['city_code'] }};
+            var district_code = {{ $detail['district_code'] }};
+            var provinceUrl = `{{ url('api/indonesia/provinces') }}`;
+            var cityUrl = `{{ url('api/indonesia/cities?province_code=') }}`;
+            var districtUrl = `{{ url('api/indonesia/districts?city_code=') }}`;
+
+            var $provinceInput = $('#province-input');
+            var $cityInput = $('#city-input');
+            var $districtInput = $('#district-input');
+
+            function populateSelectWithAjax(url, selectElement, selectedValue) {
+                return new Promise(function(resolve, reject) {
+                    $.ajax({
+                        url: url,
+                        method: "GET",
+                        headers: {
+                            "Authorization": "{{ session('access_token') }}"
+                        },
+                        dataType: 'json',
+                        success: function(result) {
+                            var $selectElement = $(selectElement);
+                            $selectElement.empty();
+                            $.each(result.data, function(index, item) {
+                                $selectElement.append($('<option>', {
+                                    value: item.code,
+                                    text: item.name
+                                }));
+                            });
+                            $selectElement.val(selectedValue).trigger('change');
+                            $selectElement.select2({
+                                placeholder: 'Select option',
+                                theme: 'bootstrap',
+                                width: '100%'
+                            });
+                            resolve();
+                        },
+                        error: function(xhr, status, error) {
+                            console.error("Error fetching data:", error);
+                            reject(error);
+                        }
+                    });
+                });
+            }
+
+            function updateCityInput() {
+                var selectedProvince = $provinceInput.val();
+                populateSelectWithAjax(cityUrl + selectedProvince, "#city-input", city_code)
+                    .then(function() {
+                        $districtInput.empty().trigger('change'); // Reset district input
+                    })
+                    .catch(function(error) {
+                        console.error("An error occurred:", error);
+                    });
+            }
+
+            function updateDistrictInput() {
+                var selectedCity = $cityInput.val();
+                populateSelectWithAjax(districtUrl + selectedCity, "#district-input", district_code)
+                    .catch(function(error) {
+                        console.error("An error occurred:", error);
+                    });
+            }
+
+            // Initial population of province, city, and district inputs
+            populateSelectWithAjax(provinceUrl, "#province-input", province_code)
+                .then(function() {
+                    updateCityInput();
+                })
+                .catch(function(error) {
+                    console.error("An error occurred:", error);
+                });
+
+            // Event listeners for input changes
+            $provinceInput.on('change', function() {
+                updateCityInput();
+            });
+
+            $cityInput.on('change', function() {
+                updateDistrictInput();
+            });
+        });
+    </script>
+
 @endsection
 
 @section('content')
@@ -243,29 +335,7 @@
                             </div>
                         </div>
 
-                        <div class="form-group" id="district-selection">
-                            <div class="col-md-12">
-                                <div class="col-md-3">
-                                    <label class="control-label">District<span class="required"
-                                            aria-required="true">*</span>
-                                        <i class="fa fa-question-circle tooltips" data-original-title="District"
-                                            data-container="body"></i>
-                                    </label>
-                                </div>
-                                <div class="col-md-9">
-                                    <div class="col-md-10">
-                                        <select name="district" id="district-input" class="form-control" required>
-                                            <option value="">--Select--</option>
-                                            @foreach ($districts as $district)
-                                                <option value="{{ $district['code'] }}"
-                                                    {{ $district['code'] == $detail['district_code'] ? 'selected' : '' }}>
-                                                    {{ $district['name'] }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        <x-district-city-province/>
 
                         <div class="form-group featureLocation" style="margin-top: 30px;">
                             <div class="col-md-12">

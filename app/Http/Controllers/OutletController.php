@@ -67,23 +67,8 @@ class OutletController extends Controller
 
     public function update(Request $request, $id)
     {
-        $payload = [
-            "name"          => $request->name,
-            "address"       => $request->address,
-            "district_code" => $request->district,
-            "coordinates" => [
-                "latitude" => $request->latitude,
-                "longitude" => $request->longitude
-            ],
-            "outlet_phone"  => $request->phone,
-            "status"  => $request->status ?? 'Inactive',
-            "outlet_email"  => $request->email,
-            "id_partner"    => $request->partner,
-            "outlet_code"   => $request->outlet_code,
-            "activities"    => $request->activities
-        ];
 
-        $save = MyHelper::patch($this->path . $id, $payload);
+        $save = MyHelper::patch($this->path . $id, $request->except('_token'));
 
         if (isset($save['status']) && $save['status'] == "success") {
             return redirect('outlet')->withSuccess(['CMS Outlet detail has been updated.']);

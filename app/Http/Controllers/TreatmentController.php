@@ -16,12 +16,7 @@ class TreatmentController extends Controller
             'sub_title'         => 'List',
             'menu_active'       => 'treatment',
         ];
-        $treatment = MyHelper::get('be/product?type=treatment');
-        if (isset($treatment['status']) && $treatment['status'] == "success") {
-            $data['treatments'] = $treatment['result'];
-        } else {
-            return back()->withErrors(['Something went wrong. Please try again.'])->withInput();
-        }
+
         return view('pages.treatment.index', $data);
     }
 

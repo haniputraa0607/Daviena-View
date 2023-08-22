@@ -11,6 +11,7 @@ use App\Http\Controllers\Api\ApiUserController;
 use App\Http\Controllers\Api\ApiProductController;
 use App\Http\Controllers\Api\ApiProductCategoryController;
 use App\Models\Grievance;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -109,4 +110,9 @@ Route::middleware('auth:api')->prefix('be')->group(function () {
         Route::get($banner, 'show')->name('api.banner.show');
         Route::patch($banner, 'update')->name('api.banner.update');
     });
+});
+
+Route::get('test-api', function () {
+    Log::info("test log info");
+    return "ok";
 });
