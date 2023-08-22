@@ -37,6 +37,7 @@ class ApiOutletController extends Controller
     }
     public function show(Outlet $outlet): JsonResponse
     {
+        $outlet->district->city->province;
         return $this->ok("succes", $outlet);
     }
     public function store(Create $request): JsonResponse

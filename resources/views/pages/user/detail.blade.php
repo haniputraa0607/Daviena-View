@@ -8,6 +8,8 @@
         type="text/css" />
     <link href="{{ env('STORAGE_URL_VIEW') }}{{ 'assets/global/plugins/bootstrap-sweetalert/sweetalert.css' }}"
         rel="stylesheet" type="text/css" />
+        <link href="{{ env('STORAGE_URL_VIEW') }}{{ 'assets/global/plugins/select2/css/select2.min.css' }}" rel="stylesheet" type="text/css" />
+        <link href="{{ env('STORAGE_URL_VIEW') }}{{ 'assets/global/plugins/select2/css/select2-bootstrap.min.css' }}" rel="stylesheet" type="text/css" />
 @endsection
 
 @section('page-script')
@@ -29,6 +31,92 @@
         Inputmask({
             "mask": "9999.9999.9999.9999"
         }).mask("#idc");
+    </script>
+    <script src="{{ env('STORAGE_URL_VIEW') }}{{ 'assets/global/plugins/select2/js/select2.min.js' }}" type="text/javascript"></script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            var province_code = {{ $detail['district']['city']['province_code'] }};
+            var city_code = {{ $detail['district']['city_code'] }};
+            var district_code = {{ $detail['district_code'] }};
+            var provinceUrl = `{{ url('api/indonesia/provinces') }}`;
+            var cityUrl = `{{ url('api/indonesia/cities?province_code=') }}`;
+            var districtUrl = `{{ url('api/indonesia/districts?city_code=') }}`;
+
+            var $provinceInput = $('#province-input');
+            var $cityInput = $('#city-input');
+            var $districtInput = $('#district-input');
+
+            function populateSelectWithAjax(url, selectElement, selectedValue) {
+                return new Promise(function(resolve, reject) {
+                    $.ajax({
+                        url: url,
+                        method: "GET",
+                        headers: {
+                            "Authorization": "{{ session('access_token') }}"
+                        },
+                        dataType: 'json',
+                        success: function(result) {
+                            var $selectElement = $(selectElement);
+                            $selectElement.empty();
+                            $.each(result.data, function(index, item) {
+                                $selectElement.append($('<option>', {
+                                    value: item.code,
+                                    text: item.name
+                                }));
+                            });
+                            $selectElement.val(selectedValue).trigger('change');
+                            $selectElement.select2({
+                                placeholder: 'Select option',
+                                theme: 'bootstrap',
+                                width: '100%'
+                            });
+                            resolve();
+                        },
+                        error: function(xhr, status, error) {
+                            console.error("Error fetching data:", error);
+                            reject(error);
+                        }
+                    });
+                });
+            }
+
+            function updateCityInput() {
+                var selectedProvince = $provinceInput.val();
+                populateSelectWithAjax(cityUrl + selectedProvince, "#city-input", city_code)
+                    .then(function() {
+                        $districtInput.empty().trigger('change'); // Reset district input
+                    })
+                    .catch(function(error) {
+                        console.error("An error occurred:", error);
+                    });
+            }
+
+            function updateDistrictInput() {
+                var selectedCity = $cityInput.val();
+                populateSelectWithAjax(districtUrl + selectedCity, "#district-input", district_code)
+                    .catch(function(error) {
+                        console.error("An error occurred:", error);
+                    });
+            }
+
+            // Initial population of province, city, and district inputs
+            populateSelectWithAjax(provinceUrl, "#province-input", province_code)
+                .then(function() {
+                    updateCityInput();
+                })
+                .catch(function(error) {
+                    console.error("An error occurred:", error);
+                });
+
+            // Event listeners for input changes
+            $provinceInput.on('change', function() {
+                updateCityInput();
+            });
+
+            $cityInput.on('change', function() {
+                updateDistrictInput();
+            });
+        });
     </script>
 @endsection
 
@@ -370,20 +458,34 @@
                                             <div class="form-group">
                                                 <div class="input-icon right">
                                                     <label class="col-md-4 control-label">
+                                                        Province
+                                                        <span class="required" aria-required="true"> * </span>
+                                                    </label>
+                                                </div>
+                                                <div class="col-md-8">
+                                                    <select name="province" id="province-input" class="form-control select2-input" required> </select>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="input-icon right">
+                                                    <label class="col-md-4 control-label">
+                                                        City
+                                                        <span class="required" aria-required="true"> * </span>
+                                                    </label>
+                                                </div>
+                                                <div class="col-md-8">
+                                                    <select name="city" id="city-input" class="form-control select2-input" required> </select>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="input-icon right">
+                                                    <label class="col-md-4 control-label">
                                                         District
                                                         <span class="required" aria-required="true"> * </span>
                                                     </label>
                                                 </div>
                                                 <div class="col-md-8">
-                                                    <select name="district" id="district-input" class="form-control"
-                                                        required>
-                                                        <option value="">--Select--</option>
-                                                        @foreach ($districts as $district)
-                                                            <option value="{{ $district['code'] }}"
-                                                                @if ($district['code'] == $detail['district_code']) selected @endif>
-                                                                {{ $district['name'] }}</option>
-                                                        @endforeach
-                                                    </select>
+                                                        <select name="district_code" id="district-input" class="form-control select2-input" required> </select>
                                                 </div>
                                             </div>
 

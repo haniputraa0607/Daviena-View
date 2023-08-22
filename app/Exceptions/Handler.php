@@ -50,6 +50,7 @@ class Handler extends ExceptionHandler
     {
         //  $this->reportable(function (Throwable $e) {
         $this->renderable(function (Throwable $e, $request) {
+            // dd($e);
             if ($request->wantsJson() || $request->is('*api*')) {
                 /**
                  * @var \Symfony\Component\HttpFoundation\Response|\Illuminate\Http\Response $e

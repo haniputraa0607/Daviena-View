@@ -16,12 +16,8 @@ class ProductController extends Controller
             'sub_title'         => 'List',
             'menu_active'       => 'product',
         ];
-        $product = MyHelper::get('be/product?type=product');
-        if (isset($product['status']) && $product['status'] == "success") {
-            $data['products'] = $product['result'];
-        } else {
-            return back()->withErrors(['Something went wrong. Please try again.'])->withInput();
-        }
+        // $product = MyHelper::get('be/product?type=product');
+        // dd($product);
         return view('pages.product.index', $data);
     }
 

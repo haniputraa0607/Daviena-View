@@ -8,22 +8,24 @@ use App\Models\Product;
 use App\Models\ProductGlobalPrice;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Yajra\DataTables\Facades\DataTables;
 
 class ApiProductController extends Controller
 {
     public function index(Request $request): JsonResponse
     {
-        $type = $request->type ? $request->type : '';
-        if ($request->length) {
-            $product = Product::when($type, function ($q) use ($type) {
-                $q->where('type', $type);
-            })->paginate($request->length ?? 10);
-        } else {
-            $product = Product::when($type, function ($query) use ($type) {
-                return $query->where(['type' => $type]);
-            })->get();
-        }
-        return $this->ok("success get data all users", $product);
+        $query = Product::where('type', $request->type);
+        return DataTables::of($query)
+            ->addIndexColumn()
+            ->addColumn('action', function ($row) {
+                return ' <a class="btn btn-sm btn-info" href="' . route('product.detail', ['id' => $row->id]) . '">
+                            <li class="fa fa-search" aria-hidden="true"></li>
+                        </a>
+                        <a  href="javascript:void(0)" class="btn btn-sm btn-danger" id="btn-delete" data-id="' . $row->id . '" data-name="' . $row->name . '">
+                            <li class="fa fa-trash" aria-hidden="true"></li>
+                        </a>';
+            })
+            ->rawColumns(['action'])->make(true);
     }
 
     public function show(Request $request, $id): JsonResponse

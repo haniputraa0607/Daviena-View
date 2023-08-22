@@ -23,14 +23,15 @@ class Update extends FormRequest
     {
         return !$this->new_password ?
             [
-                'equal_id' => 'required|numeric|unique:users,equal_id,except,' . $this->id,
+                'equal_id' => 'required|numeric|unique:users,equal_id,' . $this->id . ',id',
+
                 'name' => 'required',
                 'username' => 'required',
                 'email' => 'required',
-                'idc' => 'required|unique:users,idc,except,' . $this->id,
+                'idc' => 'required|unique:users,idc,' . $this->id . ',id',
                 'birthdate' => 'required',
                 'phone' => 'required|',
-                'gender' => 'required',
+                'gender' => 'required|in:Male,Female',
                 'district_code' => 'required|exists:indonesia_districts,code',
                 'admin_role' => 'required',
                 'level' => 'required',
@@ -48,7 +49,8 @@ class Update extends FormRequest
         $toMerge = !$this->new_password ?
             [
                 'district_code' => $this->district_code ?? $this->distinct,
-                'outlet_id' => $this->outlet_id ?? $this->distinct,
+                'outlet_id' => $this->outlet_id ?? $this->outlet,
+                'gender' => ucfirst($this->gender),
             ] :
             [];
         $this->merge($toMerge);

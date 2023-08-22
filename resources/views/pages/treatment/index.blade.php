@@ -15,68 +15,54 @@
     <script type="text/javascript">
         $(document).ready(function() {
             var table=$('#table_data').DataTable({
-                    // bProcessing: true,
-                    // bServerSide: true,
-                    // ajax: {
-                    //     url: "{{ route('product.list') }}",
-                    //     type: "POST",
-                    //     data: {
-                    //         _token: '{{ csrf_token() }}',
-                    //     }
-                    // },
-                    language: {
-                        aria: {
-                            sortAscending: ": activate to sort column ascending",
-                            sortDescending: ": activate to sort column descending"
+				bProcessing: true,
+				bServerSide: true,
+				ajax: {
+					url: "api/be/product?type=Treatment",
+                    headers: {
+                            "Authorization": "{{ session('access_token') }}"
                         },
-                        emptyTable: "No data available in table",
-                        info: "Showing _START_ to _END_ of _TOTAL_ entries",
-                        infoEmpty: "No entries found",
-                        infoFiltered: "(filtered1 from _MAX_ total entries)",
-                        lengthMenu: "_MENU_ entries",
-                        search: "Search:",
-                        zeroRecords: "No matching records found"
+				},
+                columns: [
+                    { data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false},
+                    { data: 'product_name', name: 'product_name' },
+                    { data: 'action', name: 'action', orderable: false, searchable: false},
+                ],
+                language: {
+                    aria: {
+                        sortAscending: ": activate to sort column ascending",
+                        sortDescending: ": activate to sort column descending"
                     },
-                    responsive: {
-                        details: {
-                            type: "column",
-                            target: "tr"
-                        }
-                    },
-                    lengthMenu: [
-                        [5, 10, 15, 20, -1],
-                        [5, 10, 15, 20, "All"]
-                    ],
-                    pageLength: 10
+                    emptyTable: "No data available in table",
+                    info: "Showing _START_ to _END_ of _TOTAL_ entries",
+                    infoEmpty: "No entries found",
+                    infoFiltered: "(filtered1 from _MAX_ total entries)",
+                    lengthMenu: "_MENU_ entries",
+                    search: "Search:",
+                    zeroRecords: "No matching records found"
+                },
+                responsive: {
+                    details: {
+                        type: "column",
+                        target: "tr"
+                    }
+                },
+                order: [],
+                lengthMenu: [
+                    [5, 10, 15, 20, -1],
+                    [5, 10, 15, 20, "All"]
+                ],
+                pageLength: 10
             });
         });
 
-        var SweetAlert = function() {
-            return {
-                init: function() {
-                }
-            }
-        }();
+        $('body').on('click', '#btn-delete', function() {
+            let id = $(this).data('id');
+            let name = $(this).data('name');
+            let token = $("meta[name='csrf-token']").attr("content");
 
-        $(".btn-detail").each(function() {
-            var token  	= "{{ csrf_token() }}";
-            let id     	= $(this).data('id');
-            let name    = $(this).data('name');
-            $(this).click(function() {
-                alert('sasa');
-            })
-        })
-
-        jQuery(document).ready(function() {
-            SweetAlert.init()
-        });
-
-        const main = {
-            delete: function(that){
-                let id = $(that).data('id');
-                let name = $(that).data('name');
-                swal({
-                    title: "Are you sure want to delete "+name+"?",
+            swal({
+                    title: "Are you sure want to delete " + name + "?",
                     text: "Your will not be able to recover this data!",
                     type: "warning",
                     showCancelButton: true,
@@ -84,39 +70,34 @@
                     confirmButtonText: "Yes, delete it!",
                     closeOnConfirm: false
                 },
-                function(){
+                function() {
                     $.ajax({
-                        type : "delete",
-                        url : "{{ url('product/delete') }}"+'/'+id,
+                        type: "GET",
+                        url: `/product/delete/${id}`,
                         data: {
-                            _token: '{{ csrf_token() }}',
+                            "_token": token
                         },
-                        success : function(result) {
-                            if (result.status == "success") {
+                        success: function(response) {
+                            if (response.status == "success") {
                                 swal({
                                     title: 'Deleted!',
-                                    text: 'Outlet has been deleted.',
+                                    text: 'outlet has been deleted.',
                                     type: 'success',
                                     showCancelButton: false,
                                     showConfirmButton: false
                                 })
-                                SweetAlert.init()
                                 window.location.reload(true);
-                            } else if(result.status == "fail"){
-                                swal("Error!", result.messages[0], "error")
+                            } else if (response.status == "fail") {
+                                swal("Error!", response.messages[0], "error")
                             } else {
-                                swal("Error!", "Something went wrong. Failed to delete vehicle brand.", "error")
+                                swal("Error!",
+                                    "Something went wrong. Failed to delete vehicle brand.",
+                                    "error")
                             }
                         }
                     });
                 });
-            },
-            detail: function(that){
-                let id = $(that).data('id');
-                let name = $(that).data('name');
-                window.location.href = `{{ url('treatment/detail') }}/${id}`;
-            }
-        }
+        });
     </script>
 @endsection
 
@@ -146,39 +127,22 @@
     <div class="portlet light bordered">
         <div class="portlet-title">
             <div class="caption">
-                <span class="caption-subject font-blue sbold uppercase">CMS Treatment List</span>
+                <span class="caption-subject font-blue sbold uppercase">CMS Outlet List</span>
             </div>
         </div>
         <div class="portlet-body">
-            <a href="{{ route('treatment.create') }}" class="btn btn-success btn_add_user" style="margin-bottom: 15px;">
-                <i class="fa fa-plus"></i> Add Treatment
+            <a href="{{ url('outlet/create') }}" class="btn btn-success btn_add_user" style="margin-bottom: 15px;">
+                <i class="fa fa-plus"></i> Add New Outlet
             </a>
-            <table class="table table-striped table-bordered table-hover dt-responsive" width="100%" id="table_data">
-                <thead>
-                    <tr style="text-align: center">
-                        <th style="text-align: center"> Treatment Code </th>
-                        <th style="text-align: center"> Name </th>
-                        <th style="text-align: center"> Type </th>
-                        <th style="text-align: center"> Action </th>
+            <table class="table trace trace-as-text table-striped table-bordered table-hover dt-responsive" id="table_data">
+                <thead class="trace-head">
+                    <tr>
+                        <th>No</th>				
+                        <th>Name</th>				
+                        <th style="width: 90px;"></th>				
                     </tr>
                 </thead>
-                <tbody id="">
-                    @if (!empty($treatments))
-                        @foreach ($treatments as $treatment)
-                            <tr style="text-align: center;">
-                                <td>{{ $treatment['product_code'] }}</td>
-                                <td>{{ $treatment['product_name'] }}</td>
-                                <td>{{ $treatment['type'] }}</td>
-                                <td style="width: 90px;">                    
-                                    <a data-id="{{ $treatment['id'] }}" data-name="{{ $treatment['product_name'] }}" class="btn btn-sm blue" onclick="main.detail(this)"><i class="fa fa-search"></i></a>
-                                    <a class="btn btn-sm red sweetalert-delete btn-primary" data-id="{{ $treatment['id'] }}" data-name="{{ $treatment['product_name'] }}" onclick="main.delete(this)"><i class="fa fa-trash-o"></i></a>           
-                                </td>
-                            </tr>
-                        @endforeach
-                    @endif
-                </tbody>
             </table>
-
         </div>
     </div>
 

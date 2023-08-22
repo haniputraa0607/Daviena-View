@@ -45,7 +45,7 @@ class Update extends FormRequest
             'id_partner' =>  $this->partner,
             'outlet_email' => $this->email,
             'coordinates' => json_encode([
-                'langitude' => $this->longitude,
+                'longitude' => $this->longitude,
                 'latitude' => $this->latitude,
             ]),
             'activities' => json_encode($this->activities),

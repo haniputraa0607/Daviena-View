@@ -23,41 +23,7 @@
 
     <script type="text/javascript">
      $(document).ready(function() {
-            const fetchButton = $('#fetchButton');
-            const responseDiv = $('#response');
-
-            fetchButton.on('click', function() {
-                const url = 'http://localhost:8002/api/test';
-
-                // Make the AJAX request using jQuery
-
-                // Add your headers
-                const headers = {
-                    "Authorization": 'Token 04f7a4e33a692196c39ef9ba54c53459c9a9b25b',
-                    'Access-Control-Allow-Origin': '*',
-                    'Access-Control-Allow-Headers': 'Origin,X-Requested-With',
-                    'Accept': 'application/json',
-                    'Access-Control-Allow-Methods': 'POST',
-                    'Access-Control-Allow-Credentials': 'true'
-                };
-
-                // Make the AJAX request using jQuery
-                $.ajax({
-                    url: url,
-                    type: 'GET',
-                    dataType: 'json',
-                    // headers: headers,
-                    success: function(data) {
-                        // Process the response data
-                        console.log(data);
-                        // responseDiv.html(JSON.stringify(data, null, 2));
-                    },
-                    error: function(xhr, status, error) {
-                        console.error('Error fetching data:', error);
-                    }
-                });
-            });
-        });
+           
         var table = $('#table_data').DataTable({
             language: {
                 aria: {
@@ -208,7 +174,6 @@
                 </tbody>
             </table>
         </div>
-        <button id="fetchButton">Fetch Data</button>
         <div id="response"></div>
     </div>
 

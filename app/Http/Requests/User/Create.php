@@ -28,8 +28,8 @@ class Create extends FormRequest
             'email' => 'required',
             'idc' => 'required|unique:users,idc',
             'birthdate' => 'required',
-            'phone' => 'required|',
-            'gender' => 'required',
+            'phone' => 'required|numeric',
+            'gender' => 'required|in:Male,Female',
             'district_code' => 'required|exists:indonesia_districts,code',
             'admin_role' => 'required',
             'level' => 'required',
@@ -38,5 +38,12 @@ class Create extends FormRequest
             'password' => 'min:6',
             'password_confirmation' => 'required_with:password|same:password|min:6',
         ];
+    }
+
+    public function prepareForValidation(): void
+    {
+        $this->merge([
+            'gender' => ucfirst($this->gender),
+        ]);
     }
 }
