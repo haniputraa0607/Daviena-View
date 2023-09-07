@@ -56,6 +56,7 @@ class OutletController extends Controller
         ];
 
         $outlet = MyHelper::get($this->path . $id);
+        // dd($outlet);
         if (isset($outlet['status']) && $outlet['status'] == "success") {
             $data['detail'] = $outlet['result'];
         } else {

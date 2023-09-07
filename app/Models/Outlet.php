@@ -8,7 +8,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use KodePandai\Indonesia\Models\District;
-use Modules\Outlet\Entities\OutletSchedule;
+
+// use Modules\Outlet\Entities\OutletSchedule;
 
 class Outlet extends Model
 {
@@ -45,6 +46,6 @@ class Outlet extends Model
 
     public function outlet_schedule(): HasMany
     {
-        return $this->hasMany(OutletSchedule::class);
+        return $this->hasMany(OutletSchedule::class)->orderBy('id');
     }
 }

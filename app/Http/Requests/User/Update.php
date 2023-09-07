@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\User;
 
+use App\Lib\MyHelper;
 use Illuminate\Foundation\Http\FormRequest;
 
 class Update extends FormRequest
@@ -33,7 +34,8 @@ class Update extends FormRequest
                 'phone' => 'required|',
                 'gender' => 'required|in:Male,Female',
                 'district_code' => 'required|exists:indonesia_districts,code',
-                'admin_role' => 'required',
+                'type' => 'required',
+                'consultation_price' => 'required_if:type,salesman',
                 'level' => 'required',
                 'outlet_id' => 'required',
                 'address' => 'required|min:6',

@@ -2,17 +2,20 @@
 
 use App\Http\Controllers\Api\ApiArticleController;
 use App\Http\Controllers\Api\ApiBannerController;
+use App\Http\Controllers\Api\ApiCustomerController;
 use App\Http\Controllers\Api\ApiDiagnosticController;
+use App\Http\Controllers\Api\ApiDoctorScheduleController;
+use App\Http\Controllers\Api\ApiDoctorScheduleDateController;
+use App\Http\Controllers\Api\ApiDoctorShift;
 use App\Http\Controllers\Api\ApiGrievanceControlller;
 use App\Http\Controllers\Api\ApiOutletController;
+use App\Http\Controllers\Api\ApiOutletScheduleController;
 use App\Http\Controllers\Api\ApiPartnerController;
 use App\Http\Controllers\Api\ApiPartnerEqualController;
 use App\Http\Controllers\Api\ApiUserController;
 use App\Http\Controllers\Api\ApiProductController;
 use App\Http\Controllers\Api\ApiProductCategoryController;
-use App\Models\Grievance;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -33,11 +36,41 @@ Route::middleware('auth:api')->prefix('be')->group(function () {
     Route::controller(ApiUserController::class)->prefix('/user')->group(function () {
         $user = '{user}';
         Route::get('', 'index')->name('api.user.list');
+        Route::get('name-id', 'nameId')->name('api.user.name.id');
+        Route::get('doctor', 'getDoctorList')->name('api.user.list-doctor');
+        Route::get('cashier', 'getCashierList')->name('api.user.list-cashier');
         Route::get('detail', 'detailUser')->name('api.user.detail');
         Route::post('', 'store')->name('api.user.create');
         Route::get($user, 'show')->name('api.user.show');
         Route::patch($user, 'update')->name('api.user.update');
         Route::delete($user, 'destroy')->name('api.user.delete');
+    });
+    Route::controller(ApiDoctorShift::class)->prefix('/doctor-shift')->group(function () {
+        $doctorShift = '{doctorShift}';
+        Route::get('', 'index')->name('api.doctor-shift.list');
+        Route::get('name-id', 'nameId')->name('api.doctor-shift.name-id');
+        Route::post('', 'store')->name('api.doctor-shift.create');
+        Route::get($doctorShift, 'show')->name('api.doctor-shift.show');
+        Route::patch($doctorShift, 'update')->name('api.doctor-shift.update');
+        Route::delete($doctorShift, 'destroy')->name('api.doctor-shift.delete');
+    });
+    Route::controller(ApiDoctorScheduleController::class)->prefix('/doctor-schedule')->group(function () {
+        $doctorSchedule = '{doctorSchedule}';
+        Route::get('', 'index')->name('api.doctor-schedule.list');
+        Route::get('name-id', 'nameId')->name('api.doctor-schedule.name-id');
+        Route::post('', 'store')->name('api.doctor-schedule.create');
+        Route::get($doctorSchedule, 'show')->name('api.doctor-schedule.show');
+        Route::patch($doctorSchedule, 'update')->name('api.doctor-schedule.update');
+        Route::delete($doctorSchedule, 'destroy')->name('api.doctor-schedule.delete');
+    });
+    Route::controller(ApiDoctorScheduleDateController::class)->prefix('/doctor-schedule-date')->group(function () {
+        $doctorScheduleDate = '{doctorScheduleDate}';
+        Route::get('', 'index')->name('api.doctor-schedule-date.list');
+        Route::get('name-id', 'nameId')->name('api.doctor-schedule-date.name-id');
+        Route::post('', 'store')->name('api.doctor-schedule-date.create');
+        Route::get($doctorScheduleDate, 'show')->name('api.doctor-schedule-date.show');
+        Route::patch($doctorScheduleDate, 'update')->name('api.doctor-schedule-date.update');
+        Route::delete($doctorScheduleDate, 'destroy')->name('api.doctor-schedule-date.delete');
     });
     Route::controller(ApiOutletController::class)->prefix('/outlet')->group(function () {
         $outlet = '{outlet}';
@@ -47,6 +80,10 @@ Route::middleware('auth:api')->prefix('be')->group(function () {
         Route::get($outlet, 'show')->name('api.outlet.show');
         Route::patch($outlet, 'update')->name('api.outlet.update');
         Route::delete($outlet, 'destroy')->name('api.outlet.delete');
+        Route::get('generate-schedule/'.$outlet, 'generateSchedule')->name('api.outlet.generate-schedule');
+    });
+    Route::controller(ApiOutletScheduleController::class)->prefix('/outlet-schedule')->group(function () {
+        Route::get('update', 'update')->name('api.outlet-schedule.update');
     });
     Route::controller(ApiProductController::class)->prefix('/product')->group(function () {
         $product = '{product}';
@@ -79,6 +116,14 @@ Route::middleware('auth:api')->prefix('be')->group(function () {
         Route::get($partner, 'show')->name('api.partner.show');
         Route::patch($partner, 'update')->name('api.partner.update');
         Route::delete($partner, 'destroy')->name('api.partner.delete');
+    });
+    Route::controller(ApiCustomerController::class)->prefix('/customer')->group(function () {
+        $customer = '{customer}';
+        Route::get('', 'index')->name('api.customer.list');
+        Route::post('', 'store')->name('api.customer.create');
+        Route::get($customer, 'show')->name('api.customer.show');
+        Route::patch($customer, 'update')->name('api.customer.update');
+        Route::delete($customer, 'destroy')->name('api.customer.delete');
     });
     Route::controller(ApiPartnerEqualController::class)->prefix('/partner_equal')->group(function () {
         $partner = '{partner_equal}';

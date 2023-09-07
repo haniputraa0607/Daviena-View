@@ -6,6 +6,7 @@ use App\Models\Outlet;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Laravel\Passport\HasApiTokens;
@@ -42,6 +43,7 @@ class User extends Authenticatable
         'address',
         'gender',
         'level',
+        'consultation_price'
     ];
 
     /**
@@ -74,6 +76,16 @@ class User extends Authenticatable
         return $this->HasOne(Admin::class, 'id', 'id');
     }
 
+    public function doctorShift(): HasOne
+    {
+        return $this->HasOne(DoctorShift::class);
+    }
+
+    public function shift(): BelongsToMany
+    {
+        return $this->belongsToMany(DoctorShift::class, 'user_has_shift', 'user_id', 'shift_id');
+    }
+
     public function district(): BelongsTo
     {
         return $this->belongsTo(District::class, 'district_code', 'code');
@@ -98,7 +110,6 @@ class User extends Authenticatable
     {
         return $query->where('type', 'admin');
     }
-
 
     public function scopeCashier(Builder $query): Builder
     {

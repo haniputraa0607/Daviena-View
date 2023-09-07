@@ -18,6 +18,9 @@ class ApiUserController extends Controller
         $query = User::query();
         return DataTables::of($query)
             ->addIndexColumn()
+            ->editColumn('type', function ($row) {
+                return $row->type == 'salesman' ? 'Doctor' : ucfirst($row->type);
+            })
             ->addColumn('city', function ($row) {
                 return $row->district->name;
             })
@@ -61,5 +64,45 @@ class ApiUserController extends Controller
             "success get data user",
             $data
         );
+    }
+
+    public function getDoctorList(Request $request): JsonResponse
+    {
+        $data =  User::doctor()
+        ->when($request->q, fn($query) => $query->where('name', 'ILIKE', '%' . $request->q . '%')) //For pgsql
+        // ->when($request->q, fn($query) => $query->where('name', 'LIKE', '%' . $request->q . '%')->collate('utf8_general_ci')) //For mysql
+        ->select('name', 'id')->get();
+        return $this->ok("success get doctor list", $data);
+    }
+
+    public function getCashierList(): JsonResponse
+    {
+        $data =  User::cashier()->select('name', 'id')->get();
+        return $this->ok("success get doctor list", $data);
+    }
+
+    public function nameId(Request $request): JsonResponse
+    {
+        return $this->ok("succes get outlet", User::select('name', 'id')->get());
+    }
+
+    public function generateUsername(Request $request): JsonResponse
+    {
+        $user =  User::where('type', $request->type)->orderBy('id', 'desc')->latest()->first();
+
+        $first = match ($user->type) {
+             'salesman'=> 'Dok',
+             'cashier'=> 'Kas',
+             'admin'=> 'Adm',
+        };
+
+        $second = explode(' ', $user->name)[0];
+
+        $third = (int)str_replace($first . $second, '', $user->username);
+        $data = [
+            "current" => $third,
+            "next" => $third + 1,
+        ];
+        return $this->ok("success", $data);
     }
 }

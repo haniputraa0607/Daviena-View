@@ -18,7 +18,7 @@
 				bProcessing: true,
 				bServerSide: true,
 				ajax: {
-					url: "{{ route('api.outlet.list') }}",
+					url: "api/be/outlet",
                     headers: {
                             "Authorization": "{{ session('access_token') }}"
                         },

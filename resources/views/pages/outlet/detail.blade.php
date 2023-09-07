@@ -2,9 +2,9 @@
 
 
 @php
-$coordinates = json_decode($detail['coordinates'], true);
-$latitude = $coordinates['latitude'];
-$longitude = $coordinates['longitude']; 
+    $coordinates = json_decode($detail['coordinates'], true);
+    $latitude = $coordinates['latitude'];
+    $longitude = $coordinates['longitude'] ?? $coordinates['langitude'];
 @endphp
 
 @section('page-style')
@@ -18,8 +18,10 @@ $longitude = $coordinates['longitude'];
         type="text/css" />
     <link href="{{ env('STORAGE_URL_VIEW') }}{{ 'assets/global/plugins/bootstrap-sweetalert/sweetalert.css' }}"
         rel="stylesheet" type="text/css" />
-        <link href="{{ env('STORAGE_URL_VIEW') }}{{ 'assets/global/plugins/select2/css/select2.min.css' }}" rel="stylesheet" type="text/css" />
-        <link href="{{ env('STORAGE_URL_VIEW') }}{{ 'assets/global/plugins/select2/css/select2-bootstrap.min.css' }}" rel="stylesheet" type="text/css" />
+    <link href="{{ env('STORAGE_URL_VIEW') }}{{ 'assets/global/plugins/select2/css/select2.min.css' }}" rel="stylesheet"
+        type="text/css" />
+    <link href="{{ env('STORAGE_URL_VIEW') }}{{ 'assets/global/plugins/select2/css/select2-bootstrap.min.css' }}"
+        rel="stylesheet" type="text/css" />
 @endsection
 
 @section('page-script')
@@ -45,14 +47,15 @@ $longitude = $coordinates['longitude'];
     <script
         src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCOHBNv3Td9_zb_7uW-AJDU6DHFYk-8e9Y&v=3.exp&signed_in=true&libraries=places">
     </script>
-    <script src="{{ env('STORAGE_URL_VIEW') }}{{ 'assets/global/plugins/select2/js/select2.min.js' }}" type="text/javascript"></script>
+    <script src="{{ env('STORAGE_URL_VIEW') }}{{ 'assets/global/plugins/select2/js/select2.min.js' }}"
+        type="text/javascript"></script>
 
     <script>
         $('.selectpicker').selectpicker();
 
         var map;
 
-        var lat = {{  $latitude }};
+        var lat = {{ $latitude }};
         var long = {{ $longitude }};
 
         var markers = [];
@@ -259,8 +262,82 @@ $longitude = $coordinates['longitude'];
                 updateDistrictInput();
             });
         });
-    </script>
 
+        $("#generate-button").click(function(e) {
+            e.preventDefault();
+            $.ajax({
+                type: "GET",
+                url: "{{ route('api.outlet.generate-schedule', $detail['id']) }}",
+                headers: {
+                    "Authorization": "{{ session('access_token') }}"
+                },
+                success: function(response) {
+                    if (response.status == "success") {
+                        swal({
+                            title: 'Generated!',
+                            text: '{{ $detail['name'] }} schedule has been generated.',
+                            type: 'success',
+                            showCancelButton: false,
+                            showConfirmButton: false,
+                            delay: 500
+                        })
+                        setTimeout(() => {
+                            window.location.reload(true);
+                        }, 1500);
+                    } else if (response.status == "fail") {
+                        swal("Error!", response.messages[0], "error")
+                    } else {
+                        swal("Error!",
+                            "Something went wrong. Failed to delete vehicle brand.",
+                            "error")
+                    }
+                }
+            });
+        });
+        $(".update-schedule").click(function(e) {
+            e.preventDefault();
+            var id = $(this).attr('id')
+            var url = "{{ route('api.outlet-schedule.update') }}"
+            var data = {
+                id: $(`#${$(this).attr('id')}_id`).val(),
+                open: $(`#${$(this).attr('id')}_open`).val(),
+                close: $(`#${$(this).attr('id')}_close`).val(),
+                is_closed: $(`#${$(this).attr('id')}_is_closed`).is(':checked') === true ? 0 : 1,
+                all_products: $(`#${$(this).attr('id')}_all_products`).is(':checked') === true ? 1 : 0
+            }
+
+            $.ajax({
+                type: "GET",
+                url: url,
+                headers: {
+                    "Authorization": "{{ session('access_token') }}"
+                },
+                data: data,
+                success: function(response) {
+                    console.log(response);
+                    if (response.status == "success") {
+                        swal({
+                            title: 'Schedule Updated!',
+                            text: 'Schedule has been updated.',
+                            type: 'success',
+                            showCancelButton: false,
+                            showConfirmButton: false,
+                            timer: 2000,
+                        })
+                        // setTimeout(() => {
+                        //     window.location.reload(true);
+                        // }, 1500);
+                    } else if (response.status == "fail") {
+                        swal("Error!", response.messages[0], "error")
+                    } else {
+                        swal("Error!",
+                            "Something went wrong. Failed to delete vehicle brand.",
+                            "error")
+                    }
+                }
+            });
+        });
+    </script>
 @endsection
 
 @section('content')
@@ -293,234 +370,475 @@ $longitude = $coordinates['longitude'];
             </div>
         </div>
 
-        <div class="portlet-body m-form__group row">
-            <form class="form-horizontal" role="form" action="{{ url('outlet/update') . '/' . $detail['id'] }}"
-                method="post" enctype="multipart/form-data" id="myForm">
-                <div class="col-md-12">
-                    <div class="form-body">
-
-                        <div class="form-group">
-                            <div class="col-md-12">
-                                <div class="col-md-3">
-                                    <label class="control-label">Name<span class="required" aria-required="true">*</span>
-                                        <i class="fa fa-question-circle tooltips" data-original-title="Nama"
-                                            data-container="body"></i>
-                                    </label>
-                                </div>
-                                <div class="col-md-9">
-                                    <div class="col-md-10">
-                                        <input type="text" class="form-control" name="name"
-                                            value="@if (isset($detail['name'])) {{ $detail['name'] }} @endif"
-                                            placeholder="Nama" required>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <div class="col-md-12">
-                                <div class="col-md-3">
-                                    <label class="control-label">Address<span class="required" aria-required="true">*</span>
-                                        <i class="fa fa-question-circle tooltips" data-original-title="Address"
-                                            data-container="body"></i>
-                                    </label>
-                                </div>
-                                <div class="col-md-9">
-                                    <div class="col-md-10">
-                                        <input type="text" class="form-control" name="address"
-                                            value="@if (isset($detail['address'])) {{ $detail['address'] }} @endif"
-                                            placeholder="Alamat" required>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <x-district-city-province/>
-
-                        <div class="form-group featureLocation" style="margin-top: 30px;">
-                            <div class="col-md-12">
-                                <div class="col-md-3">
-                                    <label class="control-label">Coordinates<span class="required"
-                                            aria-required="true">*</span>
-                                        <i class="fa fa-question-circle tooltips"
-                                            data-original-title="Pin point lokasi agar mudah ditemukan melalui map"
-                                            data-container="body"></i>
-                                    </label>
-                                </div>
-                                <div class="col-md-9">
-                                    <div class="col-md-10">
-                                        <input id="pac-input" id="field_event_map" class="controls field_event"
-                                            type="text" placeholder="Enter a location" style="padding:10px;width:50%"
-                                            onkeydown="if (event.keyCode == 13) return false;" name="location_map">
-                                        <div id="map-canvas" style="width:100%;height:380px;"></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <div class="col-md-12">
-                                <div class="col-md-3">
-                                    <label for=""></label>
-                                </div>
-                                <div class="col-md-9">
-                                    <div class="col-md-10">
-                                        <div class="col-md-6">
-                                            <input type="text" class="form-control" name="latitude" id="lat"
-                                                readonly>
+        <ul class="nav nav-tabs">
+            <li class="active">
+                <a href="#tab_overview" data-toggle="tab" aria-expanded="true"> Overview </a>
+            </li>
+            <li class="">
+                <a href="#tab_detail" data-toggle="tab" aria-expanded="false"> Update Detail </a>
+            </li>
+            <li class="">
+                <a href="#tab_password" data-toggle="tab" aria-expanded="false">Schedule </a>
+            </li>
+        </ul>
+        <div class="tab-content">
+            <div class="tab-content">
+                <div class="tab-pane fade active in" id="tab_overview">
+                    <form class="form-horizontal" role="form">
+                        <div class="portlet light">
+                            <div class="portlet-body form">
+                                <div class="form-body">
+                                    <div class="form-group">
+                                        <div class="input-icon right">
+                                            <label class="col-md-4 control-label">
+                                                Status
+                                            </label>
                                         </div>
-                                        <div class="col-md-6">
-                                            <input type="text" class="form-control" name="longitude" id="lng"
-                                                readonly>
+                                        <div class="col-md-8">
+                                            @if ($detail['status'])
+                                                <span class="badge badge-success badge-lg">Active</span>
+                                            @else
+                                                <span class="badge badge-danger badge-lg">Non-Active</span>
+                                            @endif
                                         </div>
                                     </div>
+
+                                    <div class="form-group">
+                                        <div class="input-icon right">
+                                            <label class="col-md-4 control-label">
+                                                Name
+                                            </label>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <label class="control-label">{{ $detail['name'] }}</label>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <div class="input-icon right">
+                                            <label class="col-md-4 control-label">
+                                                Email
+                                            </label>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <label class="control-label">{{ $detail['outlet_email'] }}</label>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <div class="input-icon right">
+                                            <label class="col-md-4 control-label">
+                                                Phone
+                                            </label>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <label class="control-label">{{ $detail['outlet_phone'] }}</label>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <div class="input-icon right">
+                                            <label class="col-md-4 control-label">
+                                                Code
+                                            </label>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <label class="control-label">{{ $detail['outlet_code'] }}</label>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <div class="input-icon right">
+                                            <label class="col-md-4 control-label">
+                                                Address
+                                            </label>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <label class="control-label">{{ $detail['address'] }}</label>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <div class="input-icon right">
+                                            <label class="col-md-4 control-label">
+                                                Province
+                                            </label>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <label
+                                                class="control-label">{{ $detail['district']['city']['province']['name'] }}</label>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <div class="input-icon right">
+                                            <label class="col-md-4 control-label">
+                                                City
+                                            </label>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <label class="control-label">{{ $detail['district']['city']['name'] }}</label>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <div class="input-icon right">
+                                            <label class="col-md-4 control-label">
+                                                District
+                                            </label>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <label class="control-label">{{ $detail['district']['name'] }}</label>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <div class="input-icon right">
+                                            <label class="col-md-4 control-label">
+                                                Activities
+                                            </label>
+                                        </div>
+                                        <div class="col-md-8">
+                                            @php
+                                                $jsonString = '["treatment", "example", "test"]';
+                                                $array = json_decode($detail['activities'], true);
+                                                $capitalizedArray = array_map('ucfirst', $array);
+                                            @endphp
+                                            <label class="control-label">{{ implode(', ', $capitalizedArray) }}</label>
+                                        </div>
+                                    </div>
+
                                 </div>
                             </div>
                         </div>
 
-                        <div class="form-group">
+                    </form>
+                </div>
+
+                <div class="tab-pane fade in" id="tab_detail">
+                    <div class="portlet-body m-form__group row">
+                        <form class="form-horizontal" role="form"
+                            action="{{ url('outlet/update') . '/' . $detail['id'] }}" method="post"
+                            enctype="multipart/form-data" id="myForm">
                             <div class="col-md-12">
-                                <div class="col-md-3">
-                                    <label class="control-label">Outlet Email<span class="required"
-                                            aria-required="true">*</span>
-                                        <i class="fa fa-question-circle tooltips" data-original-title="Email"
-                                            data-container="body"></i>
-                                    </label>
+                                <div class="form-body">
+
+                                    <div class="form-group">
+                                        <div class="col-md-12">
+                                            <div class="col-md-3">
+                                                <label class="control-label">Name<span class="required"
+                                                        aria-required="true">*</span>
+                                                    <i class="fa fa-question-circle tooltips" data-original-title="Nama"
+                                                        data-container="body"></i>
+                                                </label>
+                                            </div>
+                                            <div class="col-md-9">
+                                                <div class="col-md-10">
+                                                    <input type="text" class="form-control" name="name"
+                                                        value="@if (isset($detail['name'])) {{ $detail['name'] }} @endif"
+                                                        placeholder="Nama" required>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <div class="col-md-12">
+                                            <div class="col-md-3">
+                                                <label class="control-label">Address<span class="required"
+                                                        aria-required="true">*</span>
+                                                    <i class="fa fa-question-circle tooltips"
+                                                        data-original-title="Address" data-container="body"></i>
+                                                </label>
+                                            </div>
+                                            <div class="col-md-9">
+                                                <div class="col-md-10">
+                                                    <input type="text" class="form-control" name="address"
+                                                        value="@if (isset($detail['address'])) {{ $detail['address'] }} @endif"
+                                                        placeholder="Alamat" required>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <x-district-city-province />
+
+                                    <div class="form-group featureLocation" style="margin-top: 30px;">
+                                        <div class="col-md-12">
+                                            <div class="col-md-3">
+                                                <label class="control-label">Coordinates<span class="required"
+                                                        aria-required="true">*</span>
+                                                    <i class="fa fa-question-circle tooltips"
+                                                        data-original-title="Pin point lokasi agar mudah ditemukan melalui map"
+                                                        data-container="body"></i>
+                                                </label>
+                                            </div>
+                                            <div class="col-md-9">
+                                                <div class="col-md-10">
+                                                    <input id="pac-input" id="field_event_map"
+                                                        class="controls field_event" type="text"
+                                                        placeholder="Enter a location" style="padding:10px;width:50%"
+                                                        onkeydown="if (event.keyCode == 13) return false;"
+                                                        name="location_map">
+                                                    <div id="map-canvas" style="width:100%;height:380px;"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <div class="col-md-12">
+                                            <div class="col-md-3">
+                                                <label for=""></label>
+                                            </div>
+                                            <div class="col-md-9">
+                                                <div class="col-md-10">
+                                                    <div class="col-md-6">
+                                                        <input type="text" class="form-control" name="latitude"
+                                                            id="lat" readonly>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <input type="text" class="form-control" name="longitude"
+                                                            id="lng" readonly>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <div class="col-md-12">
+                                            <div class="col-md-3">
+                                                <label class="control-label">Outlet Email<span class="required"
+                                                        aria-required="true">*</span>
+                                                    <i class="fa fa-question-circle tooltips" data-original-title="Email"
+                                                        data-container="body"></i>
+                                                </label>
+                                            </div>
+                                            <div class="col-md-9">
+                                                <div class="col-md-10">
+                                                    <input type="text" class="form-control" name="email"
+                                                        value="@if (isset($detail['outlet_email'])) {{ $detail['outlet_email'] }} @endif"
+                                                        placeholder="Email" required>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <div class="col-md-12">
+                                            <div class="col-md-3">
+                                                <label class="control-label">Outlet Phone<span class="required"
+                                                        aria-required="true">*</span>
+                                                    <i class="fa fa-question-circle tooltips" data-original-title="Phone"
+                                                        data-container="body"></i>
+                                                </label>
+                                            </div>
+                                            <div class="col-md-9">
+                                                <div class="col-md-10">
+                                                    <input type="text" class="form-control" name="phone"
+                                                        value="@if (isset($detail['outlet_phone'])) {{ $detail['outlet_phone'] }} @endif"
+                                                        placeholder="Phone" required>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <div class="col-md-12">
+                                            <div class="col-md-3">
+                                                <label class="control-label">Outlet Code<span class="required"
+                                                        aria-required="true">*</span>
+                                                    <i class="fa fa-question-circle tooltips"
+                                                        data-original-title="Outlet Code" data-container="body"></i>
+                                                </label>
+                                            </div>
+                                            <div class="col-md-9">
+                                                <div class="col-md-10">
+                                                    <input type="text" class="form-control" name="outlet_code"
+                                                        value="@if (isset($detail['outlet_code'])) {{ $detail['outlet_code'] }} @endif"
+                                                        placeholder="Outlet Code" required>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <div class="col-md-12">
+                                            <div class="col-md-3">
+                                                <label class="control-label">Status<span class="required"
+                                                        aria-required="true">*</span>
+                                                    <i class="fa fa-question-circle tooltips" data-original-title="Active"
+                                                        data-container="body"></i>
+                                                </label>
+                                            </div>
+                                            <div class="col-md-9">
+                                                <div class="col-md-10">
+                                                    <input width="100px;" type="checkbox" class="make-switch"
+                                                        data-size="small" data-on-color="info" data-on-text="Active"
+                                                        data-off-color="default" data-off-text="Nonactive" name="status"
+                                                        value="Active" @if ($detail['status'] == 'Active') checked @endif>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="form-group" id="admin-role-selection">
+                                        <div class="col-md-12">
+                                            <div class="col-md-3">
+                                                <label class="control-label">Partner<span class="required"
+                                                        aria-required="true">*</span>
+                                                    <i class="fa fa-question-circle tooltips"
+                                                        data-original-title="Partner" data-container="body"></i>
+                                                </label>
+                                            </div>
+                                            <div class="col-md-9">
+                                                <div class="col-md-10">
+                                                    <select name="partner" id="partner-input" class="form-control"
+                                                        required>
+                                                        <option value="">--Select--</option>
+                                                        <option value="1">Partner 1</option>
+                                                        <option value="2">Partner 2</option>
+                                                        <option value="3">Partner 3</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group" id="activities-selection">
+                                        <div class="col-md-12">
+                                            <div class="col-md-3">
+                                                <label class="control-label">Activities<span class="required"
+                                                        aria-required="true">*</span>
+                                                    <i class="fa fa-question-circle tooltips"
+                                                        data-original-title="Activities" data-container="body"></i>
+                                                </label>
+                                            </div>
+                                            <div class="col-md-9">
+                                                <div class="col-md-10">
+                                                    <select name="activities[]" class="selectpicker form-control" multiple
+                                                        data-live-search="true" required>
+                                                        <option value="product"
+                                                            {{ in_array('product', json_decode($detail['activities'])) ? 'selected' : '' }}>
+                                                            Product</option>
+                                                        <option value="treatment"
+                                                            {{ in_array('treatment', json_decode($detail['activities'])) ? 'selected' : '' }}>
+                                                            Treatment</option>
+                                                        <option value="consultation"
+                                                            {{ in_array('consultation', json_decode($detail['activities'])) ? 'selected' : '' }}>
+                                                            Consultation</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
                                 </div>
-                                <div class="col-md-9">
-                                    <div class="col-md-10">
-                                        <input type="text" class="form-control" name="email"
-                                            value="@if (isset($detail['outlet_email'])) {{ $detail['outlet_email'] }} @endif"
-                                            placeholder="Email" required>
+                                <div class="form-actions">
+                                    {{ csrf_field() }}
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <hr style="width:95%; margin-left:auto; margin-right:auto; margin-bottom:20px">
+                                        </div>
+                                        <div class="col-md-offset-5 col-md-2 text-center">
+                                            <button type="submit" class="btn yellow btn-block"><i
+                                                    class="fa fa-check"></i>
+                                                Update</button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-
-                        <div class="form-group">
-                            <div class="col-md-12">
-                                <div class="col-md-3">
-                                    <label class="control-label">Outlet Phone<span class="required"
-                                            aria-required="true">*</span>
-                                        <i class="fa fa-question-circle tooltips" data-original-title="Phone"
-                                            data-container="body"></i>
-                                    </label>
-                                </div>
-                                <div class="col-md-9">
-                                    <div class="col-md-10">
-                                        <input type="text" class="form-control" name="phone"
-                                            value="@if (isset($detail['outlet_phone'])) {{ $detail['outlet_phone'] }} @endif"
-                                            placeholder="Phone" required>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <div class="col-md-12">
-                                <div class="col-md-3">
-                                    <label class="control-label">Outlet Code<span class="required"
-                                            aria-required="true">*</span>
-                                        <i class="fa fa-question-circle tooltips" data-original-title="Outlet Code"
-                                            data-container="body"></i>
-                                    </label>
-                                </div>
-                                <div class="col-md-9">
-                                    <div class="col-md-10">
-                                        <input type="text" class="form-control" name="outlet_code"
-                                            value="@if (isset($detail['outlet_code'])) {{ $detail['outlet_code'] }} @endif"
-                                            placeholder="Outlet Code" required>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <div class="col-md-12">
-                                <div class="col-md-3">
-                                    <label class="control-label">Status<span class="required"
-                                            aria-required="true">*</span>
-                                        <i class="fa fa-question-circle tooltips" data-original-title="Active"
-                                            data-container="body"></i>
-                                    </label>
-                                </div>
-                                <div class="col-md-9">
-                                    <div class="col-md-10">
-                                        <input width="100px;" type="checkbox" class="make-switch" data-size="small"
-                                            data-on-color="info" data-on-text="Active" data-off-color="default"
-                                            data-off-text="Nonactive" name="status" value="Active"
-                                            @if ($detail['status'] == "Active") checked @endif>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-
-                        <div class="form-group" id="admin-role-selection">
-                            <div class="col-md-12">
-                                <div class="col-md-3">
-                                    <label class="control-label">Partner<span class="required"
-                                            aria-required="true">*</span>
-                                        <i class="fa fa-question-circle tooltips" data-original-title="Partner"
-                                            data-container="body"></i>
-                                    </label>
-                                </div>
-                                <div class="col-md-9">
-                                    <div class="col-md-10">
-                                        <select name="partner" id="partner-input" class="form-control" required>
-                                            <option value="">--Select--</option>
-                                            <option value="1">Partner 1</option>
-                                            <option value="2">Partner 2</option>
-                                            <option value="3">Partner 3</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="form-group" id="activities-selection">
-                            <div class="col-md-12">
-                                <div class="col-md-3">
-                                    <label class="control-label">Activities<span class="required"
-                                            aria-required="true">*</span>
-                                        <i class="fa fa-question-circle tooltips" data-original-title="Activities"
-                                            data-container="body"></i>
-                                    </label>
-                                </div>
-                                <div class="col-md-9">
-                                    <div class="col-md-10">
-                                        <select name="activities[]" class="selectpicker form-control" multiple
-                                            data-live-search="true" required>
-                                            <option value="product"
-                                                {{ in_array('product', json_decode($detail['activities'])) ? 'selected' : '' }}>
-                                                Product</option>
-                                            <option value="treatment"
-                                                {{ in_array('treatment', json_decode($detail['activities'])) ? 'selected' : '' }}>
-                                                Treatment</option>
-                                            <option value="consultation"
-                                                {{ in_array('consultation', json_decode($detail['activities'])) ? 'selected' : '' }}>
-                                                Consultation</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-                    <div class="form-actions">
-                        {{ csrf_field() }}
-                        <div class="row">
-                            <div class="col-md-12">
-                                <hr style="width:95%; margin-left:auto; margin-right:auto; margin-bottom:20px">
-                            </div>
-                            <div class="col-md-offset-5 col-md-2 text-center">
-                                <button type="submit" class="btn yellow btn-block"><i class="fa fa-check"></i>
-                                    Update</button>
-                            </div>
-                        </div>
+                        </form>
                     </div>
                 </div>
-            </form>
+
+                <div class="tab-pane fade in" id="tab_password">
+                    {{-- @dd($detail['outlet_schedule']) --}}
+
+                    <table class="table trace trace-as-text table-striped table-bordered table-hover dt-responsive"
+                        id="table_data">
+                        <thead class="trace-head">
+                            <tr>
+                                <th>Day</th>
+                                <th>Open Hour</th>
+                                <th>Close Hour</th>
+                                <th>Is Closed</th>
+                                <th>All Products</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @forelse ($detail['outlet_schedule'] as $item)
+                                <tr>
+                                    <td>
+                                        <input id="{{ $item['id'] . '_id' }}" type="hidden" name="id[]"
+                                            value="{{ $item['id'] }}">
+                                        {{ $item['day'] }}
+                                    </td>
+                                    <td>
+                                        @isset($item['open'])
+                                            <input id="{{ $item['id'] . '_open' }}" type="time" class="form-control"
+                                                name="open[]" placeholder="open (Required)" value="{{ $item['open'] }}"
+                                                required>
+                                        @else
+                                            <input id="{{ $item['id'] . '_open' }}" type="time" class="form-control"
+                                                name="open[]" placeholder="open (Required)" value="{{ old('open') }}"
+                                                required>
+                                        @endisset
+                                    </td>
+                                    <td>
+                                        @isset($item['close'])
+                                            <input id="{{ $item['id'] . '_close' }}" type="time" class="form-control"
+                                                name="close[]" placeholder="close (Required)" value="{{ $item['close'] }}"
+                                                required>
+                                        @else
+                                            <input id="{{ $item['id'] . '_close' }}" type="time" class="form-control"
+                                                name="close[]" placeholder="close (Required)" value="{{ old('close') }}"
+                                                required>
+                                        @endisset
+                                    </td>
+                                    <td>
+                                        <input id="{{ $item['id'] . '_is_closed' }}" width="50px;" type="checkbox"
+                                            class="make-switch" data-on-color="info" data-on-text="Open"
+                                            data-off-color="default" data-off-text="Closed" name="is_close"
+                                            @if ($item['is_closed'] == 0) checked @endif>
+                                    </td>
+                                    <td>
+                                        <input id="{{ $item['id'] . '_all_products' }}" width="50px;" type="checkbox"
+                                            class="make-switch" data-on-color="info" data-on-text="True"
+                                            data-off-color="default" data-off-text="False" name="all_products"
+                                            @if ($item['all_products'] == true) checked @endif>
+                                    </td>
+                                    <td>
+                                        <a id="{{ $item['id'] }}" class="update-schedule btn yellow ">
+                                            <li class="fa fa-pencil" aria-hidden="true"></li>
+                                        </a>
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="6">
+                                        <center>
+                                            <p><span><strong class="text-primary">{{ $detail['name'] }}</strong> doesn't
+                                                    have any schedule yet, click the button bellow to generate
+                                                    schedule!</span></p>
+                                        </center>
+                                        <center>
+                                            <a id='generate-button' class="btn blue"
+                                                data-id="{{ $detail['id'] }}">Generate Schedule</a>
+                                        </center>
+                                    </td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
+
+
+
     </div>
 @endsection

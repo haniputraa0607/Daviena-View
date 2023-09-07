@@ -32,6 +32,8 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $payload = $request->except('_token');
+        $payload['consultation_price'] = MyHelper::unrupiah($request->consultation_price);
+
         $save = MyHelper::post($this->path, $payload);
 
         if (isset($save['status']) && $save['status'] == "success") {
@@ -69,6 +71,8 @@ class UserController extends Controller
     {
 
         $payload = $request->except('_token');
+        $payload['consultation_price'] = MyHelper::unrupiah($request->consultation_price);
+
         $save = MyHelper::patch($this->path . $id, $payload);
 
         if (isset($save['status']) && $save['status'] == "success") {
