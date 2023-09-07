@@ -548,4 +548,34 @@ class MyHelper
 
         return $versions;
     }
+
+    public static function rupiah(int $angka = 0)
+    {
+        return 'Rp. ' . number_format($angka ?? 0, 0, ",", ".");
+    }
+
+    public static function unrupiah(string $nominal)
+    {
+        return str_replace('Rp.', '', str_replace('.00', '', str_replace(',', '', str_replace('Rp ', '', $nominal))));
+    }
+
+    public static function getMonth(int $month)
+    {
+        $months = [
+            1 => 'January',
+            2 => 'February',
+            3 => 'March',
+            4 => 'April',
+            5 => 'May',
+            6 => 'June',
+            7 => 'July',
+            8 => 'August',
+            9 => 'September',
+            10 => 'Oktober',
+            11 => 'November',
+            12 => 'December',
+        ];
+
+        return $months[$month];
+    }
 }

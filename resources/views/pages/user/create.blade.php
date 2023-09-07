@@ -19,9 +19,66 @@
         Inputmask({
             "mask": "9999.9999.9999.9999"
         }).mask("#idc");
+        Inputmask({ alias : "currency", prefix: 'Rp. ' }).mask("#consultation_price");
     </script>
    <script type="text/javascript">
+
+    var username, type
+    function getFirstWord(sentence) {
+        // Split the sentence into words using space as the delimiter
+        const words = sentence.split(' ');
+        
+        // Get the first word (element at index 0)
+        const firstWord = words[0];
+        
+        return firstWord;
+    }
+
+    function generateUsername(type) {
+        $.ajax({
+            url: 'http://timeless.test:8001/generate-username?type=' + type,
+            type: 'GET',
+            dataType: 'json',
+            success: function(response) {
+                
+                switch ($('#admin-role-input').val()) {
+                    case 'salesman':
+                        type = 'Dok'
+                        break;
+                
+                    case 'cashier':
+                        type = 'Kas'
+                        break;
+                        
+                    default:
+                        type = 'Adm'
+                        break;
+                }
+                username = type+getFirstWord($('#name').val())+response.result.next
+                $('#username').val(username)
+
+            },
+            error: function(xhr, status, error) {
+                console.error('Error');
+            }
+        });
+    }
+
    
+    $('#admin-role-input').change(function () {
+         // Example usage:
+        generateUsername($(this).val());
+
+        if ($(this).val() === 'salesman'){
+            $('#field-consultation-price').removeClass('hidden')
+        } else{
+            $('#field-consultation-price').addClass('hidden')
+            $('#consultation_price').val('')
+        }
+    })
+    $('#name').on('keyup',function () {
+        generateUsername($('#admin-role-input').val());
+    })
 
     var province_code = 0;
     var city_code = 0;
@@ -193,6 +250,32 @@
                 <div class="col-md-12">
                     <div class="form-body">
 
+                        <div class="form-group" id="admin-role-selection">
+                            <div class="col-md-12">
+                                <div class="col-md-3">
+                                    <label class="control-label">Admin Role<span class="required"
+                                            aria-required="true">*</span>
+                                        <i class="fa fa-question-circle tooltips"
+                                            data-original-title="Specific role for admin" data-container="body"></i>
+                                    </label>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="col-md-10">
+                                        <select name="type" id="admin-role-input" class="form-control" required>
+                                            <option value="">--Select--</option>
+                                            <option value="admin" @if (old('admin_role') == 'admin') selected @endif>Admin
+                                            </option>
+                                            <option value="salesman" @if (old('admin_role') == 'salesman') selected @endif
+                                                @if (old('admin_role') == 'admin') selected @endif>
+                                                Doctor</option>
+                                            <option value="cashier" @if (old('admin_role') == 'cashier') selected @endif>
+                                                Cashier</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                         <div class="form-group">
                             <div class="col-md-12">
                                 <div class="col-md-3">
@@ -203,8 +286,7 @@
                                 </div>
                                 <div class="col-md-9">
                                     <div class="col-md-10">
-                                        <input type="text" class="form-control" name="name"
-                                            placeholder="Name (Required)" value="{{ old('name') }}" required>
+                                        <input type="text" class="form-control" name="name" id="name" placeholder="Name (Required)" value="{{ old('name') }}" required>
                                     </div>
                                 </div>
                             </div>
@@ -240,9 +322,9 @@
                                 </div>
                                 <div class="col-md-9">
                                     <div class="col-md-10">
-                                        <input type="text" class="form-control" name="username"
+                                        <input type="text" class="form-control" name="username" id='username'
                                             placeholder="User Name (Required & Unique)" value="{{ old('username') }}"
-                                            required>
+                                            readonly>
                                     </div>
                                 </div>
                             </div>
@@ -421,27 +503,20 @@
                             </div>
                         </div>
 
-                        <div class="form-group" id="admin-role-selection">
+                        
+
+                        <div class="form-group hidden" id="field-consultation-price">
                             <div class="col-md-12">
                                 <div class="col-md-3">
-                                    <label class="control-label">Admin Role<span class="required"
-                                            aria-required="true">*</span>
-                                        <i class="fa fa-question-circle tooltips"
-                                            data-original-title="Specific role for admin" data-container="body"></i>
+                                    <label class="control-label">Consultation Price<span class="required" aria-required="true">*</span>
+                                        <i class="fa fa-question-circle tooltips" data-original-title="Consultation Price"
+                                            data-container="body"></i>
                                     </label>
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-md-9">
                                     <div class="col-md-10">
-                                        <select name="admin_role" id="admin-role-input" class="form-control" required>
-                                            <option value="">--Select--</option>
-                                            <option value="admin" @if (old('admin_role') == 'admin') selected @endif>Admin
-                                            </option>
-                                            <option value="salesman" @if (old('admin_role') == 'salesman') selected @endif
-                                                @if (old('admin_role') == 'admin') selected @endif>
-                                                Salesman</option>
-                                            <option value="cashier" @if (old('admin_role') == 'cashier') selected @endif>
-                                                Cashier</option>
-                                        </select>
+                                        <input type="text" class="form-control" id="consultation_price" name="consultation_price"
+                                            placeholder="Consultation Price (Required)" value="{{ old('consultation_price') }}" required>
                                     </div>
                                 </div>
                             </div>

@@ -42,6 +42,41 @@ return [
                     'url' => 'user',
                     'active' => '\View::shared("menu_active") == "user"',
                 ],
+                // [
+                //     'type' => 'single',
+                //     'label' => 'Doctor Shift',
+                //     'icon' => 'icon-clock',
+                //     'url' => 'doctor-shift',
+                //     'active' => '\View::shared("menu_active") == "doctor-shift"',
+                // ],
+                // [
+                //     'type' => 'single',
+                //     'label' => 'Doctor Schedule',
+                //     'icon' => 'icon-user',
+                //     'url' => 'doctor-schedule',
+                //     'active' => '\View::shared("menu_active") == "doctor-schedule"',
+                // ],
+                // [
+                //     'type' => 'single',
+                //     'label' => 'Doctor Schedule Date',
+                //     'icon' => 'icon-user',
+                //     'url' => 'doctor-schedule-date',
+                //     'active' => '\View::shared("menu_active") == "doctor-schedule-date"',
+                // ],
+                // [
+                //     'type' => 'single',
+                //     'label' => 'Employee Schedule',
+                //     'icon' => 'icon-user',
+                //     'url' => 'user',
+                //     'active' => '\View::shared("menu_active") == "employee-schedule"',
+                // ],
+                // [
+                //     'type' => 'single',
+                //     'label' => 'Employee Schedule date',
+                //     'icon' => 'icon-user',
+                //     'url' => 'user',
+                //     'active' => '\View::shared("menu_active") == "employee-schedule-date"',
+                // ],
             ]
         ],
         [
@@ -55,7 +90,7 @@ return [
                     'icon' => 'fa fa-info-circle',
                     'url' => 'outlet',
                     'active' => '\View::shared("menu_active") == "outlet"',
-                ],
+                ]
             ]
         ],
         [
@@ -97,6 +132,20 @@ return [
                     'icon' => 'fa fa-info-circle',
                     'url' => 'banner',
                     'active' => '\View::shared("menu_active") == "banner"',
+                ],
+            ]
+        ],
+        [
+            'type' => 'group',
+            'label' => 'Customer',
+            'required_features' => [],
+            'children' => [
+                [
+                    'type' => 'single',
+                    'label' => 'Customer',
+                    'icon' => 'fa fa-users',
+                    'url' => 'customer',
+                    'active' => '\View::shared("menu_active") == "customer"',
                 ],
             ]
         ],

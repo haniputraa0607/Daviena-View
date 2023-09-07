@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Outlet\Create;
 use App\Http\Requests\Outlet\Update;
 use App\Models\Outlet;
+use App\Models\OutletSchedule;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
@@ -38,11 +39,21 @@ class ApiOutletController extends Controller
     public function show(Outlet $outlet): JsonResponse
     {
         $outlet->district->city->province;
+        $outlet->outlet_schedule;
         return $this->ok("succes", $outlet);
     }
     public function store(Create $request): JsonResponse
     {
         $outlet = Outlet::create($request->all());
+        $days = collect(config('days'));
+        $schedules = $days->map(function ($day) {
+            return new OutletSchedule([
+                'day' => $day,
+                'is_closed' => 0,
+                'all_products' => 1,
+            ]);
+        });
+        $outlet->outlet_schedule()->saveMany($schedules);
         return $this->ok("succes", $outlet);
     }
     public function update(Update $request, Outlet $outlet): JsonResponse
@@ -54,5 +65,19 @@ class ApiOutletController extends Controller
     {
         $outlet->delete();
         return $this->ok("succes", $outlet);
+    }
+
+    public function generateSchedule(Outlet $outlet): JsonResponse
+    {
+        $days = collect(config('days'));
+        $schedules = $days->map(function ($day) {
+            return new OutletSchedule([
+                'day' => $day,
+                'is_closed' => 0,
+                'all_products' => 1,
+            ]);
+        });
+        $outlet->outlet_schedule()->saveMany($schedules);
+        return $this->ok("succes", $outlet->outlet_schedule);
     }
 }

@@ -1,5 +1,7 @@
 @extends('layouts.main')
-
+@php
+    use App\Lib\MyHelper;
+@endphp
 @section('page-style')
     <link href="{{ env('STORAGE_URL_VIEW') }}{{ 'assets/datemultiselect/jquery-ui.css' }}" rel="stylesheet" type="text/css" />
     <link href="{{ env('STORAGE_URL_VIEW') }}{{ 'assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.css' }}"
@@ -31,9 +33,67 @@
         Inputmask({
             "mask": "9999.9999.9999.9999"
         }).mask("#idc");
+        Inputmask({ alias : "currency", prefix: 'Rp. ' }).mask("#consultation_price");
     </script>
     <script src="{{ env('STORAGE_URL_VIEW') }}{{ 'assets/global/plugins/select2/js/select2.min.js' }}" type="text/javascript"></script>
     <script type="text/javascript">
+        var username, type
+        function getFirstWord(sentence) {
+            // Split the sentence into words using space as the delimiter
+            const words = sentence.split(' ');
+            
+            // Get the first word (element at index 0)
+            const firstWord = words[0];
+            
+            return firstWord;
+        }
+
+        function generateUsername(type) {
+            $.ajax({
+                url: 'http://timeless.test:8001/generate-username?type=' + type,
+                type: 'GET',
+                dataType: 'json',
+                success: function(response) {
+                    
+                    switch ($('#admin-role-input').val()) {
+                        case 'salesman':
+                            type = 'Dok'
+                            break;
+                    
+                        case 'cashier':
+                            type = 'Kas'
+                            break;
+                            
+                        default:
+                            type = 'Adm'
+                            break;
+                    }
+                    username = type+getFirstWord($('#name').val())+response.result.next
+                    $('#username').val(username)
+
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error');
+                }
+            });
+        }
+
+    
+        $('#admin-role-input').change(function () {
+            // Example usage:
+            generateUsername($(this).val());
+
+            if ($(this).val() === 'salesman'){
+                $('#field-consultation-price').removeClass('hidden')
+            } else{
+                $('#field-consultation-price').addClass('hidden')
+                $('#consultation_price').val('')
+            }
+        })
+        $('#name').on('keyup',function () {
+            generateUsername($('#admin-role-input').val());
+        })
+        
         $(document).ready(function() {
             var province_code = {{ $detail['district']['city']['province_code'] }};
             var city_code = {{ $detail['district']['city_code'] }};
@@ -219,6 +279,17 @@
                                             <div class="form-group">
                                                 <div class="input-icon right">
                                                     <label class="col-md-4 control-label">
+                                                        Consultation Fee
+                                                    </label>
+                                                </div>
+                                                <div class="col-md-8">
+                                                    <label class="control-label">{{ MyHelper::rupiah($detail['consultation_price'] ?? 0) }}</label>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <div class="input-icon right">
+                                                    <label class="col-md-4 control-label">
                                                         Username
                                                     </label>
                                                 </div>
@@ -287,6 +358,29 @@
                                                         @if ($detail['is_active'] ?? '') checked @endif>
                                                 </div>
                                             </div>
+
+                                            <div class="form-group">
+                                                <div class="input-icon right">
+                                                    <label class="col-md-4 control-label">
+                                                        Admin Role
+                                                        <span class="required" aria-required="true"> * </span>
+                                                    </label>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <select name="type" id="admin-role-input" class="form-control"
+                                                        required>
+                                                        <option value="admin"
+                                                            @if ($detail['type'] == 'admin') selected @endif>Admin</option>
+                                                        <option value="salesman"
+                                                            @if ($detail['type'] == 'salesman') selected @endif>Doctor
+                                                        </option>
+                                                        <option value="cashier"
+                                                            @if ($detail['type'] == 'cashier') selected @endif>Cashier
+                                                        </option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            
                                             <div class="form-group">
                                                 <div class="input-icon right">
                                                     <label class="col-md-4 control-label">
@@ -295,7 +389,7 @@
                                                     </label>
                                                 </div>
                                                 <div class="col-md-8">
-                                                    <input type="text" class="form-control" name="name"
+                                                    <input type="text" class="form-control" name="name" id="name"
                                                         value="{{ $detail['name'] ?? '' }}" placeholder="Name" required>
                                                 </div>
                                             </div>
@@ -314,6 +408,8 @@
                                                 </div>
                                             </div>
 
+                                            
+
                                             <div class="form-group">
                                                 <div class="input-icon right">
                                                     <label class="col-md-4 control-label">
@@ -322,9 +418,22 @@
                                                     </label>
                                                 </div>
                                                 <div class="col-md-8">
-                                                    <input type="text" class="form-control" name="username"
+                                                    <input type="text" class="form-control" name="username" id="username"
                                                         value=" {{ $detail['username'] ?? '' }} " placeholder="Username"
-                                                        required>
+                                                        readonly>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group @if ($detail['type'] != 'salesman') hidden @endif" id="field-consultation-price">
+                                                <div class="input-icon right">
+                                                    <label class="col-md-4 control-label">
+                                                        Consultation Price
+                                                        <span class="required" aria-required="true"> * </span>
+                                                    </label>
+                                                </div>
+                                                <div class="col-md-8">
+                                                    <input type="text" class="form-control" name="consultation_price"  id="consultation_price"
+                                                        value=" {{ $detail['consultation_price'] ?? '' }} " placeholder="Consultation Price">
                                                 </div>
                                             </div>
 
@@ -412,27 +521,8 @@
                                                 </div>
                                             </div>
 
-                                            <div class="form-group">
-                                                <div class="input-icon right">
-                                                    <label class="col-md-4 control-label">
-                                                        Admin Role
-                                                        <span class="required" aria-required="true"> * </span>
-                                                    </label>
-                                                </div>
-                                                <div class="col-md-4">
-                                                    <select name="admin_role" id="admin-role-input" class="form-control"
-                                                        required>
-                                                        <option value="admin"
-                                                            @if ($detail['type'] == 'admin') selected @endif>Admin</option>
-                                                        <option value="salesman"
-                                                            @if ($detail['type'] == 'salesman') selected @endif>Salesman
-                                                        </option>
-                                                        <option value="cashier"
-                                                            @if ($detail['type'] == 'cashier') selected @endif>Cashier
-                                                        </option>
-                                                    </select>
-                                                </div>
-                                            </div>
+                                            <
+
 
                                             <div class="form-group">
                                                 <div class="input-icon right">

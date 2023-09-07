@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\ApiUserController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Controller;
 use App\Models\Grievance;
@@ -40,3 +41,5 @@ Route::get('home', [Controller::class, 'getHome']);;
 Route::get('api/test', function ()  {
     return response()->json(Grievance::all());
 });
+
+Route::get('generate-username', [ApiUserController::class, 'generateUsername']);
