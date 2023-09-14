@@ -18,14 +18,17 @@
 				bProcessing: true,
 				bServerSide: true,
 				ajax: {
-					url: "api/be/product/list?type=Product",
+					url: "{{ url('api/be/contact_message/list') }}",
                     headers: {
                             "Authorization": "{{ session('access_token') }}"
                         },
 				},
                 columns: [
                     { data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false},
-                    { data: 'product_name', name: 'product_name' },
+                    { data: 'created_at', name: 'created_at' },
+                    { data: 'name', name: 'name' },
+                    { data: 'email', name: 'email' },
+                    { data: 'message', name: 'mesasge' },
                     { data: 'action', name: 'action', orderable: false, searchable: false},
                 ],
                 language: {
@@ -56,48 +59,6 @@
             });
         });
 
-        $('body').on('click', '#btn-delete', function() {
-            let id = $(this).data('id');
-            let name = $(this).data('name');
-            let token = $("meta[name='csrf-token']").attr("content");
-
-            swal({
-                    title: "Are you sure want to delete " + name + "?",
-                    text: "Your will not be able to recover this data!",
-                    type: "warning",
-                    showCancelButton: true,
-                    confirmButtonClass: "btn-danger",
-                    confirmButtonText: "Yes, delete it!",
-                    closeOnConfirm: false
-                },
-                function() {
-                    $.ajax({
-                        type: "GET",
-                        url: `/product/delete/${id}`,
-                        data: {
-                            "_token": token
-                        },
-                        success: function(response) {
-                            if (response.status == "success") {
-                                swal({
-                                    title: 'Deleted!',
-                                    text: 'product has been deleted.',
-                                    type: 'success',
-                                    showCancelButton: false,
-                                    showConfirmButton: false
-                                })
-                                window.location.reload(true);
-                            } else if (response.status == "fail") {
-                                swal("Error!", response.messages[0], "error")
-                            } else {
-                                swal("Error!",
-                                    "Something went wrong. Failed to delete vehicle brand.",
-                                    "error")
-                            }
-                        }
-                    });
-                });
-        });
     </script>
 @endsection
 
@@ -138,7 +99,10 @@
                 <thead class="trace-head">
                     <tr>
                         <th>No</th>				
+                        <th>Date</th>				
                         <th>Name</th>				
+                        <th>Email</th>				
+                        <th>Message</th>				
                         <th style="width: 90px;"></th>				
                     </tr>
                 </thead>

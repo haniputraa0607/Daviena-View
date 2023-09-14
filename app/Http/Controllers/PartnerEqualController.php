@@ -38,16 +38,34 @@ class PartnerEqualController extends Controller
             "name" => $request->name,
             "email" => $request->email,
             "phone" => $request->phone,
+            "city_code" => $request->city_code,
             "store_name" => $request->store_name,
             "store_address" => $request->store_address,
             "store_city" => $request->store_city,
+            "username_instagram" => $request->username_instagram,
             "url_instagram" => $request->url_instagram,
+            "username_tiktok" => $request->username_tiktok,
             "url_tiktok" => $request->url_tiktok,
+            "username_tokopedia" => $request->username_tokopedia,
             "url_tokopedia" => $request->url_tokopedia,
+            "username_shopee" => $request->username_shopee,
             "url_shopee" => $request->url_shopee,
+            "username_buka_lapak" => $request->username_buka_lapak,
             "url_buka_lapak" => $request->url_buka_lapak
         ];
+        
+        if ($request->file('image')) {
+            $image = $request->file('image');
+            $folder_image = 'partners';
+            $upload = MyHelper::uploadImageApi($image, $folder_image);
+            if (isset($upload['status']) && $upload['status'] == "success") {
+                $payload['images'] = json_encode($upload['result']);
+            } elseif (isset($upload['status']) && $upload['status'] == 'fail') {
+                return back()->withErrors($upload['messages'])->withInput();
+            }
+        }
         $save = MyHelper::post('be/partner_equal', $payload);
+        dd($save);
         if (isset($save['status']) && $save['status'] == "success") {
             return redirect('partner_equal')->withSuccess(['New Partner successfully added.']);
         } else {
@@ -104,19 +122,35 @@ class PartnerEqualController extends Controller
             "name" => $request->name,
             "email" => $request->email,
             "phone" => $request->phone,
+            "city_code" => $request->city_code,
             "store_name" => $request->store_name,
             "store_address" => $request->store_address,
             "store_city" => $request->store_city,
+            "username_instagram" => $request->username_instagram,
             "url_instagram" => $request->url_instagram,
+            "username_tiktok" => $request->username_tiktok,
             "url_tiktok" => $request->url_tiktok,
+            "username_tokopedia" => $request->username_tokopedia,
             "url_tokopedia" => $request->url_tokopedia,
+            "username_shopee" => $request->username_shopee,
             "url_shopee" => $request->url_shopee,
+            "username_buka_lapak" => $request->username_buka_lapak,
             "url_buka_lapak" => $request->url_buka_lapak
         ];
+        if ($request->file('image')) {
+            $image = $request->file('image');
+            $folder_image = 'partners';
+            $upload = MyHelper::uploadImageApi($image, $folder_image);
+            if (isset($upload['status']) && $upload['status'] == "success") {
+                $payload['images'] = json_encode($upload['result']);
+            } elseif (isset($upload['status']) && $upload['status'] == 'fail') {
+                return back()->withErrors($upload['messages'])->withInput();
+            }
+        }
         $save = MyHelper::patch('be/partner_equal/' . $id, $payload);
         // dd($save);
         if (isset($save['status']) && $save['status'] == "success") {
-            return redirect('partner')->withSuccess(['CMS Partner detail has been updated.']);
+            return redirect('partner_equal')->withSuccess(['CMS Partner detail has been updated.']);
         } else {
             if (isset($save['status']) && $save['status'] == "error") {
                 return back()->withErrors($save['message'])->withInput();

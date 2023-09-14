@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Product\Request as ProductRequest;
+use App\Http\Requests\Product\ProductRequest;
 use App\Models\Product;
 use App\Models\ProductGlobalPrice;
 use Illuminate\Http\JsonResponse;
@@ -12,7 +12,13 @@ use Yajra\DataTables\Facades\DataTables;
 
 class ApiProductController extends Controller
 {
-    public function index(Request $request): JsonResponse
+
+    public function index(Product $product): JsonResponse
+    {
+        return $this->ok('success', $product->all());
+    }
+
+    public function list(Request $request): JsonResponse
     {
         $query = Product::where('type', $request->type);
         return DataTables::of($query)

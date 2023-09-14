@@ -87,7 +87,7 @@ return [
                 [
                     'type' => 'single',
                     'label' => 'Outlet',
-                    'icon' => 'fa fa-info-circle',
+                    'icon' => 'fa fa-bank',
                     'url' => 'outlet',
                     'active' => '\View::shared("menu_active") == "outlet"',
                 ]
@@ -101,16 +101,23 @@ return [
                 [
                     'type' => 'single',
                     'label' => 'Product',
-                    'icon' => 'fa fa-info-circle',
+                    'icon' => 'fa fa-file-o',
                     'url' => 'product',
                     'active' => '\View::shared("menu_active") == "product"',
                 ],
                 [
                     'type' => 'single',
                     'label' => 'Treatment',
-                    'icon' => 'fa fa-info-circle',
+                    'icon' => 'fa fa-file-text-o',
                     'url' => 'treatment',
                     'active' => '\View::shared("menu_active") == "treatment"',
+                ],
+                [
+                    'type' => 'single',
+                    'label' => 'Package',
+                    'icon' => 'fa fa-file-powerpoint-o',
+                    'url' => 'product_package',
+                    'active' => '\View::shared("menu_active") == "product_package"',
                 ],
             ]
         ],
@@ -120,18 +127,51 @@ return [
             'required_features' => [],
             'children' => [
                 [
+                    'label' => 'Landing Page Home',
+                    'required_features' => [],
+                    'type' => 'tree',
+                    'icon' => 'fa fa-university',
+                    'children' => [
+                        [
+                            'label' => 'Banner',
+                            'required_features' => '',
+                            'active' => '\View::shared("submenu_active") == "banner"',
+                            'url' => 'banner'
+                        ],
+                        [
+                            'label' => 'Treatment & Consultation',
+                            'required_features' => '',
+                            'active' => '\View::shared("submenu_active") == "treatment_and_consultation"',
+                            'url' => 'landing_page/home/treatment_and_consultation'
+                        ],
+                        [
+                            'label' => 'Product Trending',
+                            'required_features' => '',
+                            'active' => '\View::shared("submenu_active") == "product_trending"',
+                            'url' => 'landing_page/home/product_trending'
+                        ],
+                    ],
+                ],
+                [
+                    'type' => 'single',
+                    'label' => 'Official Partner',
+                    'icon' => 'fa fa-columns',
+                    'url' => 'landing_page/official_partner',
+                    'active' => '\View::shared("menu_active") == "official_partner"',
+                ],
+                [
                     'type' => 'single',
                     'label' => 'Article',
-                    'icon' => 'fa fa-info-circle',
+                    'icon' => 'fa fa-clone',
                     'url' => 'article',
                     'active' => '\View::shared("menu_active") == "article"',
                 ],
                 [
                     'type' => 'single',
-                    'label' => 'Banner',
-                    'icon' => 'fa fa-info-circle',
-                    'url' => 'banner',
-                    'active' => '\View::shared("menu_active") == "banner"',
+                    'label' => 'Contact Message',
+                    'icon' => 'fa fa-comments-o',
+                    'url' => 'landing_page/contact_message',
+                    'active' => '\View::shared("menu_active") == "contact_message"',
                 ],
             ]
         ],
@@ -154,17 +194,17 @@ return [
             'label' => 'Partner',
             'required_features' => [],
             'children' => [
+                // [
+                //     'type' => 'single',
+                //     'label' => 'Partner',
+                //     'icon' => 'fa fa-info-circle',
+                //     'url' => 'partner',
+                //     'active' => '\View::shared("menu_active") == "partner"',
+                // ],
                 [
                     'type' => 'single',
                     'label' => 'Partner',
-                    'icon' => 'fa fa-info-circle',
-                    'url' => 'partner',
-                    'active' => '\View::shared("menu_active") == "partner"',
-                ],
-                [
-                    'type' => 'single',
-                    'label' => 'Partner Equal',
-                    'icon' => 'fa fa-info-circle',
+                    'icon' => 'fa fa-user-md',
                     'url' => 'partner_equal',
                     'active' => '\View::shared("menu_active") == "partner_equal"',
                 ],

@@ -14,7 +14,11 @@ use App\Http\Controllers\Api\ApiPartnerController;
 use App\Http\Controllers\Api\ApiPartnerEqualController;
 use App\Http\Controllers\Api\ApiUserController;
 use App\Http\Controllers\Api\ApiProductController;
+use App\Http\Controllers\Api\ApiProductPackageController;
 use App\Http\Controllers\Api\ApiProductCategoryController;
+use App\Http\Controllers\Api\ApiProductTrendingController;
+use App\Http\Controllers\Api\ApiOfficialPartnerController;
+use App\Http\Controllers\Api\ApiContactMessageController;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
 
@@ -87,11 +91,36 @@ Route::middleware('auth:api')->prefix('be')->group(function () {
     });
     Route::controller(ApiProductController::class)->prefix('/product')->group(function () {
         $product = '{product}';
-        Route::get('', 'index')->name('api.product.list');
+        Route::get('', 'index')->name('api.product.index');
+        Route::get('list', 'list')->name('api.product.list');
         Route::post('', 'store')->name('api.product.create');
         Route::get($product, 'show')->name('api.product.show');
         Route::patch($product, 'update')->name('api.product.update');
         Route::delete($product, 'destroy')->name('api.product.delete');
+    });
+    Route::controller(ApiProductPackageController::class)->prefix('/product_package')->group(function () {
+        $product = '{product_package}';
+        Route::get('', 'index')->name('api.product_package.index');
+        Route::get('list', 'list')->name('api.product_package.list');
+        Route::post('', 'store')->name('api.product_package.create');
+        Route::get($product, 'show')->name('api.product_package.show');
+        Route::patch($product, 'update')->name('api.product_package.update');
+        Route::delete($product, 'destroy')->name('api.product_package.delete');
+    });
+    Route::controller(ApiProductTrendingController::class)->prefix('/product_trending')->group(function () {
+        Route::get('', 'index')->name('api.product_trending.index');
+        Route::post('', 'update')->name('api.product_trending.update');
+    });
+    Route::controller(ApiOfficialPartnerController::class)->prefix('/official_partner')->group(function () {
+        Route::get('', 'index')->name('api.official_partner.index');
+        Route::post('', 'update')->name('api.official_partner.update');
+    });
+    
+    Route::controller(ApiContactMessageController::class)->prefix('/contact_message')->group(function () {
+        $contact_message = '{contact_message}';
+        Route::get('', 'index')->name('api.contact_message.index');
+        Route::get('list', 'list')->name('api.contact_message.list');
+        Route::get($contact_message, 'show')->name('api.contact_message.show');
     });
     Route::controller(ApiProductCategoryController::class)->prefix('/product-category')->group(function () {
         $product_category = '{product_category}';

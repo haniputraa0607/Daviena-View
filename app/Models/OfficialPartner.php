@@ -4,21 +4,19 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use KodePandai\Indonesia\Models\District;
-use Modules\Outlet\Entities\OutletSchedule;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use App\Models\TreatmentPatient;
 
-class PartnerSosialMedia extends Model
+class OfficialPartner extends Model
 {
     use HasFactory;
 
-    protected $table = 'partner_sosial_medias';
+    protected $table = 'official_partner';
     protected $fillable = [
-        'equal_id',
-        'partner_store_id',
-        'username',
-        'type',
-        'url',
+        'description',
     ];
+
 }

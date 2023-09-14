@@ -16,8 +16,9 @@ class ApiPartnerEqualController extends Controller
         return $this->ok("Success Get Data All partner", $partner);
     }
 
-    public function show(PartnerEqual $partner_equal): JsonResponse
+    public function show($id): JsonResponse
     {
+        $partner_equal = PartnerEqual::with('city.province')->find($id);
         $store = $partner_equal->partner_store()->first();
         $sosial_media = $store->partner_sosial_media()->get();
         $result = [
@@ -35,7 +36,11 @@ class ApiPartnerEqualController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'phone' => $request->phone,
+            'city_code' => $request->city_code
         ];
+        if($request->images){
+            $partner_payload['images'] = $request->images;
+        }
         $partner = PartnerEqual::create($partner_payload);
         $partner_store_payload = [
             'equal_id' => 0,
@@ -48,6 +53,7 @@ class ApiPartnerEqualController extends Controller
             $payload_ig = [
                 'equal_id' => 0,
                 'type' => 'Instagram',
+                'username' => $request->username_instagram,
                 'url' => $request->url_instagram
             ];
             $partner_sosial_media_1 = $partner_store->partner_sosial_media()->create($payload_ig);
@@ -56,6 +62,7 @@ class ApiPartnerEqualController extends Controller
             $payload_tiktok = [
                 'equal_id' => 0,
                 'type' => 'Tiktok',
+                'username' => $request->username_tiktok,
                 'url' => $request->url_tiktok
             ];
             $partner_sosial_media_2 = $partner_store->partner_sosial_media()->create($payload_tiktok);
@@ -64,6 +71,7 @@ class ApiPartnerEqualController extends Controller
             $payload_tokopedia = [
                 'equal_id' => 0,
                 'type' => 'Tokopedia',
+                'username' => $request->username_tokopedia,
                 'url' => $request->url_tokopedia
             ];
             $partner_sosial_media_3 = $partner_store->partner_sosial_media()->create($payload_tokopedia);
@@ -71,7 +79,8 @@ class ApiPartnerEqualController extends Controller
         if ($request->url_shopee) {
             $payload_shopee = [
                 'equal_id' => 0,
-                'type' => 'Shoope',
+                'type' => 'Shopee',
+                'username' => $request->username_shopee,
                 'url' => $request->url_shopee
             ];
             $partner_sosial_media_4 = $partner_store->partner_sosial_media()->create($payload_shopee);
@@ -80,6 +89,7 @@ class ApiPartnerEqualController extends Controller
             $payload_bk = [
                 'equal_id' => 0,
                 'type' => 'Bukalapak',
+                'username' => $request->username_buka_lapak,
                 'url' => $request->url_buka_lapak
             ];
             $partner_sosial_media_5 = $partner_store->partner_sosial_media()->create($payload_bk);
@@ -91,10 +101,14 @@ class ApiPartnerEqualController extends Controller
     {
         $partner_payload = [
             'equal_id' => 0,
-            'name1' => $request->name,
+            'name' => $request->name,
             'email' => $request->email,
             'phone' => $request->phone,
+            'city_code' => $request->city_code
         ];
+        if($request->images){
+            $partner_payload['images'] = $request->images;
+        }
         $partner_update = PartnerEqual::find($id)->update($partner_payload);
         $partner = PartnerEqual::find($id);
         $partner_store_payload = [
@@ -108,6 +122,7 @@ class ApiPartnerEqualController extends Controller
             $payload_ig = [
                 'equal_id' => 0,
                 'type' => 'Instagram',
+                'username' => $request->username_instagram,
                 'url' => $request->url_instagram
             ];
             $partner_sosial_media_1 = $partner_store->partner_sosial_media()->updateOrCreate($payload_ig);
@@ -116,6 +131,7 @@ class ApiPartnerEqualController extends Controller
             $payload_tiktok = [
                 'equal_id' => 0,
                 'type' => 'Tiktok',
+                'username' => $request->username_tiktok,
                 'url' => $request->url_tiktok
             ];
             $partner_sosial_media_2 = $partner_store->partner_sosial_media()->updateOrCreate($payload_tiktok);
@@ -124,6 +140,7 @@ class ApiPartnerEqualController extends Controller
             $payload_tokopedia = [
                 'equal_id' => 0,
                 'type' => 'Tokopedia',
+                'username' => $request->username_tokopedia,
                 'url' => $request->url_tokopedia
             ];
             $partner_sosial_media_3 = $partner_store->partner_sosial_media()->updateOrCreate($payload_tokopedia);
@@ -132,6 +149,7 @@ class ApiPartnerEqualController extends Controller
             $payload_shopee = [
                 'equal_id' => 0,
                 'type' => 'Shopee',
+                'username' => $request->username_shopee,
                 'url' => $request->url_shopee
             ];
             $partner_sosial_media_4 = $partner_store->partner_sosial_media()->updateOrCreate($payload_shopee);
@@ -140,6 +158,7 @@ class ApiPartnerEqualController extends Controller
             $payload_bk = [
                 'equal_id' => 0,
                 'type' => 'Bukalapak',
+                'username' => $request->username_buka_lapak,
                 'url' => $request->url_buka_lapak
             ];
             $partner_sosial_media_5 = $partner_store->partner_sosial_media()->updateOrCreate($payload_bk);

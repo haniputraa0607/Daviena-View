@@ -29,7 +29,7 @@
         if (input.files && input.files[0]) {
           var reader = new FileReader();
           var fileimport = $('#' + input.id).val();
-          var allowedExtensions = /(\.png|\.jpg|\.jpeg)$/i;
+          var allowedExtensions = /(\.png)$/i;
           if (!allowedExtensions.exec(fileimport)) {
             alert('Gambar harus bertipe gambar');
             $('#' + input.id).val('');
@@ -52,6 +52,7 @@
 @endsection
 
 @section('content')
+    
     <div class="page-bar">
         <ul class="page-breadcrumb">
             <li>
@@ -59,16 +60,12 @@
                 <i class="fa fa-circle"></i>
             </li>
             <li>
-                <span>{{ $title }}</span>
-                @if (!empty($sub_title))
-                    <i class="fa fa-circle"></i>
-                @endif
+                <span>Landing Page</span>
+                <i class="fa fa-circle"></i>
             </li>
-            @if (!empty($sub_title))
             <li>
-                <span>{{ $sub_title }}</span>
+                <strong>Official Partner</strong>
             </li>
-            @endif
         </ul>
     </div><br>
 
@@ -77,95 +74,49 @@
     <div class="portlet light bordered">
         <div class="portlet-title">
             <div class="caption">
-                <span class="caption-subject font-blue bold uppercase">Detail Article</span>
+                <span class="caption-subject font-blue bold uppercase">Official Partner</span>
             </div>
         </div>
 
         <div class="portlet-body m-form__group row">
-            <form class="form-horizontal" role="form" action="{{ route('article.update', $detail['id']) }}"  method="post" enctype="multipart/form-data" id="myForm">
+            <form class="form-horizontal" role="form" action="{{ route('landing_page.official_partner.update') }}"  method="post" enctype="multipart/form-data" id="myForm">
                 <div class="col-md-12">
                     <div class="form-body">
 
                         <div class="form-group">
                             <div class="col-md-12">
                                 <div class="col-md-3">
-                                    <label class="control-label">Title<span class="required" aria-required="true">*</span>
+                                    <label class="control-label">Description<span class="required" aria-required="true">*</span>
                                         <i class="fa fa-question-circle tooltips" data-original-title="Nama" data-container="body"></i>
                                     </label>
                                 </div>
                                 <div class="col-md-9">
                                     <div class="col-md-10">
-                                        <input type="text" class="form-control" name="title" value="@if(isset($detail['title'])){{ $detail['title'] }}@endif" placeholder="Title" required>
+                                        <textarea type="text" class="form-control" name="description_official" placeholder="Description" required>{{ $detail['official']['description'] ?? '' }}</textarea>
                                     </div>
                                 </div>
                             </div>
                         </div>
-
+                        @foreach($detail['detail'] as $key)
                         <div class="form-group">
                             <div class="col-md-12">
                                 <div class="col-md-3">
-                                    <label class="control-label">Writer<span class="required" aria-required="true">*</span>
-                                        <i class="fa fa-question-circle tooltips" data-original-title="Writer" data-container="body"></i>
+                                    <label class="control-label">{{ $key['title'] }}<span class="required" aria-required="true">*</span>
+                                        <i class="fa fa-question-circle tooltips" data-original-title="Nama" data-container="body"></i>
                                     </label>
                                 </div>
                                 <div class="col-md-9">
                                     <div class="col-md-10">
-                                        <input type="text" class="form-control" name="writer" value="@if(isset($detail['writer'])){{ $detail['writer'] }}@endif" placeholder="Writer" required>
+                                        <input type="hidden" name="detail_id[]" value="{{ $key['id'] ?? '' }}">
+                                        <input type="text" name="link[]" placeholder="Link" class="form-control" required value="{{ $key['link'] ?? '' }}">
+                                        <Br>
+                                        <textarea type="text" class="form-control" name="description[]" placeholder="Description" required>{{ $key['description'] ?? '' }}</textarea>
                                     </div>
                                 </div>
                             </div>
                         </div>
+                        @endforeach
                         
-
-
-                        <div class="form-group">
-                            <div class="col-md-12">
-                                <div class="col-md-3">
-                                    <label class="control-label">Release Date<span class="required" aria-required="true">*</span>
-                                        <i class="fa fa-question-circle tooltips" data-original-title="Release Date" data-container="body"></i>
-                                    </label>
-                                </div>
-                                <div class="col-md-9">
-                                    <div class="col-md-10">
-                                        <input type="date" class="form-control" name="release_date" value="{{ @$detail['release_date'] ? $detail['release_date'] : date('Y-m-d') }}" placeholder="Release Date" required>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="form-group" id="description-selection">
-                            <div class="col-md-12">
-                                <div class="col-md-3">
-                                    <label class="control-label">Description<span class="required" aria-required="true">*</span>
-                                        <i class="fa fa-question-circle tooltips" data-original-title="Description" data-container="body"></i>
-                                    </label>
-                                </div>
-                                <div class="col-md-9">
-                                    <div class="col-md-10">
-                                        <textarea class="form-control" name="description" required>{{ @$detail['description'] }}</textarea>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <div class="col-md-12">
-                                <div class="col-md-3">
-                                    <label class="control-label">Article Image<span class="required" aria-required="true">*</span>
-                                        <i class="fa fa-question-circle tooltips" data-original-title="Article Image" data-container="body"></i>
-                                    </label>
-                                </div>
-                                <div class="col-md-9">
-                                    <div class="col-md-10">
-                                        <div class="alert alert-success text-center col-sm-12">
-                                            <img id="blah_image" src="{{ @$detail['image'] ? env('API_URL').json_decode($detail['image']) : asset('images/logo.svg') }}" style="width:200px;" onerror="imgError(this)" alt="..." loading="lazy">
-                                        </div>
-                                        <input class="form-control" name="image" style="display:none;" id="image" type="file" onchange="readURL(this, 'image');">
-                                        <button class="btn btn-outline-success btn-sm" type="button" onclick="$('#image').click();">Upload</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
                     </div>
                     <div class="form-actions">
                         {{ csrf_field() }}

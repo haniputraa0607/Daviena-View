@@ -13,6 +13,7 @@ use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use Intervention\Image\Facades\Image;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Log;
+use GuzzleHttp\Psr7\MultipartStream;
 
 class MyHelper
 {
@@ -577,5 +578,117 @@ class MyHelper
         ];
 
         return $months[$month];
+    }
+    
+    public static function curlApi($url, $method, $data_post='')
+    {
+        $api = env('API_URL');
+
+        $client = new Client();
+        $bearer = session('access_token');
+        switch($method){
+            case 'GET':
+                $content = array(
+                    'headers' => [
+                        'Authorization' => $bearer,
+                        'Accept'        => 'application/json',
+                        'Content-Type'  => 'application/json',
+                    ]
+                );
+                break;
+            case 'POST':
+                $content = array(
+                    'headers' => [
+                        'Authorization' => $bearer,
+                        'Accept'        => 'application/json',
+                        'Content-Type'  => 'application/json',
+                    ],
+                    'json'      => (array) $data_post
+                );
+                break;
+            
+            case 'POST_IMAGE':
+                $headers = [
+                    'Authorization' =>  $bearer,
+                    'Accept'        => 'application/json',
+                ];
+                // dd($data_post);
+                $data_multipart = [];
+                foreach($data_post as $name => $value){
+                    if (is_file($value)) {
+                        $data_multipart[] = [
+                            'name' => $name,
+                            'contents' => fopen($value, 'r')
+                        ];
+                    } else {
+                        $data_multipart[] = [
+                            'name' => $name,
+                            'contents' => $value
+                        ];
+                    }
+                }
+                
+                $multipart = new MultipartStream($data_multipart);
+                $content = [
+                    'headers' => $headers,
+                    'body' => $multipart,
+                ];
+                $method = 'POST';
+                break;
+        }
+
+        try {
+            $url_curl = $api . 'api/' . $url;
+            $response =  $client->request($method, $url_curl, $content);
+            return json_decode($response->getBody(), true);
+        } catch (\GuzzleHttp\Exception\RequestException $e) {
+            try {
+                if ($e->getResponse()) {
+                    $response = $e->getResponse()->getBody()->getContents();
+                    if (!is_array($response)) {
+                    }
+                    return json_decode($response, true);
+                } else {
+                    return ['status' => 'fail', 'messages' => [0 => 'Check your internet connection.']];
+                }
+            } catch (Exception $e) {
+                return ['status' => 'fail', 'messages' => [0 => 'Check your internet connection.']];
+            }
+        }
+    }
+
+    public static function uploadImageApi($image, $folder_image)
+    {
+        $client = new Client();
+        $bearer = session('access_token');
+        $headers = [
+            'Authorization' =>  $bearer,
+            'Accept'        => 'application/json',
+        ];
+        $multipart = new MultipartStream([
+            [
+                'name' => 'folder',
+                'contents' => 'public/'.$folder_image,
+            ],
+            [
+                'name' => 'images[]',
+                'contents' => fopen($image, 'r'),
+            ],
+        ]);
+        $options = [
+            'headers' => $headers,
+            'body' => $multipart,
+        ];
+        try {
+            $res = $client->request('POST', env('API_URL') . 'api/upload-file', $options);
+            $response = json_decode($res->getBody());
+            $filename = basename($response->result[0]);
+            return [
+                'status' => 'success',
+                'result' => 'storage/' . $folder_image . '/' . $filename
+            ];
+        } catch (Exception $e) {
+            return ['status' => 'fail', 'messages' => $e->getMessage()];
+        }
     }
 }

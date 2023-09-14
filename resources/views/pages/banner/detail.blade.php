@@ -103,18 +103,47 @@
                         <div class="form-group">
                             <div class="col-md-12">
                                 <div class="col-md-3">
+                                    <label class="control-label">Description<span class="required" aria-required="true">*</span>
+                                        <i class="fa fa-question-circle tooltips" data-original-title="Description" data-container="body"></i>
+                                    </label>
+                                </div>
+                                <div class="col-md-9">
+                                    <div class="col-md-10">
+                                        <textarea type="text" class="form-control" name="description" placeholder="Description">@if(isset($detail['description'])){{ $detail['description'] }}@endif</textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <div class="col-md-3">
+                                    <label class="control-label">Link<span class="required" aria-required="true">*</span>
+                                        <i class="fa fa-question-circle tooltips" data-original-title="Link" data-container="body"></i>
+                                    </label>
+                                </div>
+                                <div class="col-md-9">
+                                    <div class="col-md-10">
+                                        <input type="text" class="form-control" name="link" value="@if(isset($detail['link'])){{ $detail['link'] }}@endif" placeholder="Link" required>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <div class="col-md-3">
                                     <label class="control-label">Product<span class="required" aria-required="true">*</span>
                                         <i class="fa fa-question-circle tooltips" data-original-title="Nama" data-container="body"></i>
                                     </label>
                                 </div>
                                 <div class="col-md-9">
                                     <div class="col-md-10">
-                                        {{-- @dd($products) --}}
                                         <select class="form-control" name="product_id" id="">
                                             <option value="" disabled>Pilih Product</option>
-                                            @foreach ($products as $product)
-                                            <option value="{{ $product['id'] }}" @if ($product['id'] == $detail['product_id']) selected @endif >{{ $product['product_name'] }}</option>
-                                            @endforeach
+                                            @if(!empty($products))
+                                                @foreach ($products as $product)
+                                                    <option value="{{ $product['id'] }}" @if ($product['id'] == $detail['product_id']) selected @endif >{{ $product['product_name'] }}</option>
+                                                @endforeach
+                                            @endisset
                                         </select>
                                     </div>
                                 </div>
