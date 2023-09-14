@@ -20,5 +20,4 @@ class OfficialPartnerDetail extends Model
         'description',
         'link',
     ];
-
 }

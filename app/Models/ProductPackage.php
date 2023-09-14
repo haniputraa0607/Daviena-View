@@ -25,5 +25,4 @@ class ProductPackage extends Model
     {
         return $this->hasMany(ProductPackage::class, 'product_id', 'id');
     }
-
 }

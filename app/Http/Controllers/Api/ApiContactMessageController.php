@@ -11,7 +11,6 @@ use Yajra\DataTables\Facades\DataTables;
 
 class ApiContactMessageController extends Controller
 {
-
     public function index(ContactMessage $contact_message): JsonResponse
     {
         return $this->ok('success', $contact_message->all());
@@ -22,7 +21,7 @@ class ApiContactMessageController extends Controller
         $query = ContactMessage::orderBy('created_at', 'DESC');
         return DataTables::of($query)
             ->addIndexColumn()
-            ->editColumn('created_at', function($row) {
+            ->editColumn('created_at', function ($row) {
                 return MyHelper::indonesian_date($row->created_at);
             })
             ->addColumn('action', function ($row) {
@@ -38,5 +37,4 @@ class ApiContactMessageController extends Controller
         $contact_message = ContactMessage::find($id);
         return $this->ok("success", $contact_message);
     }
-
 }

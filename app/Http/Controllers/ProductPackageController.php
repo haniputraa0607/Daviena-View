@@ -58,7 +58,7 @@ class ProductPackageController extends Controller
         $category = MyHelper::get('be/product-category');
         $product = MyHelper::get('be/product');
 
-        if (isset($product['status']) && $product['status'] == "success" && isset($category['status']) && $category['status'] == 'success'&& isset($product['status']) && $product['status'] == 'success') {
+        if (isset($product['status']) && $product['status'] == "success" && isset($category['status']) && $category['status'] == 'success' && isset($product['status']) && $product['status'] == 'success') {
             $data['detail'] = $detail['result'];
             $data['products'] = $product['result'];
             $data['categorys'] = $category['result'];

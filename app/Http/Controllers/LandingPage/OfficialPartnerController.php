@@ -25,7 +25,8 @@ class OfficialPartnerController extends Controller
         return view('pages.landing_page.official_partner', $data);
     }
 
-    public function update(Request $request){
+    public function update(Request $request)
+    {
         $payload = $request->except('_token');
         $save = MyHelper::post('be/official_partner', $payload);
         // dd($save);/

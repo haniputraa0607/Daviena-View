@@ -32,7 +32,7 @@ class PartnerEqual extends Model
     {
         return $this->hasOne(PartnerStore::class);
     }
-    
+
     public function city(): BelongsTo
     {
         return $this->belongsTo(City::class, 'city_code', 'code');

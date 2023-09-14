@@ -12,7 +12,6 @@ use Yajra\DataTables\Facades\DataTables;
 
 class ApiProductController extends Controller
 {
-
     public function index(Product $product): JsonResponse
     {
         return $this->ok('success', $product->all());

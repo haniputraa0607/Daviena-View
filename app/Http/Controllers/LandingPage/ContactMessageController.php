@@ -28,7 +28,7 @@ class ContactMessageController extends Controller
             'menu_active' => 'contact_message'
         ];
         $detail = MyHelper::get($this->path . $id);
-        
+
         if (isset($detail['status']) && $detail['status'] == "success") {
             $data['detail'] = $detail['result'];
         } else {

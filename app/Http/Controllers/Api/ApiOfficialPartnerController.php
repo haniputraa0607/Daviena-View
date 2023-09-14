@@ -12,9 +12,8 @@ use Yajra\DataTables\Facades\DataTables;
 
 class ApiOfficialPartnerController extends Controller
 {
-
     public function index(): JsonResponse
-    {   
+    {
         $official = OfficialPartner::first();
         $detail = OfficialPartnerDetail::all();
         return $this->ok('success', [

@@ -18,5 +18,4 @@ class OfficialPartner extends Model
     protected $fillable = [
         'description',
     ];
-
 }

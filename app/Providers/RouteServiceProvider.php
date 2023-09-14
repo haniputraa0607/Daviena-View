@@ -75,10 +75,10 @@ class RouteServiceProvider extends ServiceProvider
 
             Route::middleware('web')
                 ->group(base_path('routes/doctor_schedule_date.php'));
-        
+
             Route::middleware('web')
                 ->group(base_path('routes/landing_page.php'));
-        
+
             Route::middleware('web')
                 ->group(base_path('routes/product_package.php'));
         });

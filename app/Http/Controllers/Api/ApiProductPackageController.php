@@ -13,7 +13,6 @@ use Yajra\DataTables\Facades\DataTables;
 
 class ApiProductPackageController extends Controller
 {
-
     public function index(Product $product): JsonResponse
     {
         $product = $product->where('type', 'Package');
@@ -52,7 +51,7 @@ class ApiProductPackageController extends Controller
         ];
         $product = Product::create($payload);
         $id_package = $product->id;
-        foreach($request->product as $key){
+        foreach ($request->product as $key) {
             ProductPackage::create([
                 'package_id' => $id_package,
                 'product_id' => $key
@@ -69,7 +68,7 @@ class ApiProductPackageController extends Controller
         ];
         $product = Product::find($id)->update($payload);
         ProductPackage::where(['package_id' => $id])->delete();
-        foreach($request->product as $key){
+        foreach ($request->product as $key) {
             ProductPackage::create([
                 'package_id' => $id,
                 'product_id' => $key
@@ -77,7 +76,7 @@ class ApiProductPackageController extends Controller
         }
         return $this->ok("succes", $product);
     }
-    
+
     public function destroy($id): JsonResponse
     {
         $product = Product::find($id);
@@ -88,8 +87,8 @@ class ApiProductPackageController extends Controller
             return $this->error('The product is still connected to the global price');
         }
         if ($productPackageCount > 0) {
-            return $this->error('The product is still connected to the package');    
-        }   
+            return $this->error('The product is still connected to the package');
+        }
         $product->delete();
         return $this->ok("succes", true);
     }

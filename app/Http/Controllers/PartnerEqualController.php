@@ -53,7 +53,7 @@ class PartnerEqualController extends Controller
             "username_buka_lapak" => $request->username_buka_lapak,
             "url_buka_lapak" => $request->url_buka_lapak
         ];
-        
+
         if ($request->file('image')) {
             $image = $request->file('image');
             $folder_image = 'partners';

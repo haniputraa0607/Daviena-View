@@ -86,7 +86,7 @@ class ArticleController extends Controller
             "release_date" => $request->release_date,
             "description" => $request->description,
         ];
-        
+
         if ($request->file('image')) {
             $image = $request->file('image');
             $folder_image = 'articles';

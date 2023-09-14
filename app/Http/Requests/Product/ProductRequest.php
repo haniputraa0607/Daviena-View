@@ -27,5 +27,4 @@ class ProductRequest extends FormRequest
             "description"   => 'required',
         ];
     }
-
 }

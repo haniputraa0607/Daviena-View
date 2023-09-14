@@ -38,7 +38,7 @@ class ApiPartnerEqualController extends Controller
             'phone' => $request->phone,
             'city_code' => $request->city_code
         ];
-        if($request->images){
+        if ($request->images) {
             $partner_payload['images'] = $request->images;
         }
         $partner = PartnerEqual::create($partner_payload);
@@ -106,7 +106,7 @@ class ApiPartnerEqualController extends Controller
             'phone' => $request->phone,
             'city_code' => $request->city_code
         ];
-        if($request->images){
+        if ($request->images) {
             $partner_payload['images'] = $request->images;
         }
         $partner_update = PartnerEqual::find($id)->update($partner_payload);

@@ -579,14 +579,14 @@ class MyHelper
 
         return $months[$month];
     }
-    
-    public static function curlApi($url, $method, $data_post='')
+
+    public static function curlApi($url, $method, $data_post = '')
     {
         $api = env('API_URL');
 
         $client = new Client();
         $bearer = session('access_token');
-        switch($method){
+        switch ($method) {
             case 'GET':
                 $content = array(
                     'headers' => [
@@ -606,7 +606,7 @@ class MyHelper
                     'json'      => (array) $data_post
                 );
                 break;
-            
+
             case 'POST_IMAGE':
                 $headers = [
                     'Authorization' =>  $bearer,
@@ -614,7 +614,7 @@ class MyHelper
                 ];
                 // dd($data_post);
                 $data_multipart = [];
-                foreach($data_post as $name => $value){
+                foreach ($data_post as $name => $value) {
                     if (is_file($value)) {
                         $data_multipart[] = [
                             'name' => $name,
@@ -627,7 +627,7 @@ class MyHelper
                         ];
                     }
                 }
-                
+
                 $multipart = new MultipartStream($data_multipart);
                 $content = [
                     'headers' => $headers,
@@ -668,7 +668,7 @@ class MyHelper
         $multipart = new MultipartStream([
             [
                 'name' => 'folder',
-                'contents' => 'public/'.$folder_image,
+                'contents' => 'public/' . $folder_image,
             ],
             [
                 'name' => 'images[]',

@@ -14,7 +14,6 @@ use Yajra\DataTables\Facades\DataTables;
 
 class ApiProductTrendingController extends Controller
 {
-
     public function index(ProductTrending $product_trending): JsonResponse
     {
         return $this->ok('success', $product_trending->all());
@@ -23,7 +22,7 @@ class ApiProductTrendingController extends Controller
     public function update(Request $request): JsonResponse
     {
         ProductTrending::truncate();
-        foreach($request->product as $key){
+        foreach ($request->product as $key) {
             ProductTrending::create([
                 'product_id' => $key
             ]);

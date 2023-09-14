@@ -48,7 +48,7 @@ class HomeController extends Controller
         } else {
             return back()->withErrors(['Something went wrong. Please try again.']);
         }
-        return view('pages.landing_page.home.product_trending',$data);
+        return view('pages.landing_page.home.product_trending', $data);
     }
 
     public function productTrendingUpdate(Request $request)
@@ -61,5 +61,4 @@ class HomeController extends Controller
             return back()->withErrors(!empty($save['error']) ? $save['error'] : $save['message'])->withInput();
         }
     }
-
 }
