@@ -42,11 +42,15 @@ class ArticleController extends Controller
             "release_date" => $request->release_date,
             "description" => $request->description,
         ];
-        if ($request->hasFile('image')) {
-            $name_file = $request->file('image')->getClientOriginalName();
-            $path = public_path('\images');
-            $request->file('image')->move($path, $name_file);
-            $payload['image'] = $name_file;
+        if ($request->file('image')) {
+            $image = $request->file('image');
+            $folder_image = 'articles';
+            $upload = MyHelper::uploadImageApi($image, $folder_image);
+            if (isset($upload['status']) && $upload['status'] == "success") {
+                $payload['image'] = json_encode($upload['result']);
+            } elseif (isset($upload['status']) && $upload['status'] == 'fail') {
+                return back()->withErrors($upload['messages'])->withInput();
+            }
         }
 
         $save = MyHelper::post($this->path, $payload);
@@ -82,12 +86,18 @@ class ArticleController extends Controller
             "release_date" => $request->release_date,
             "description" => $request->description,
         ];
-        if ($request->hasFile('image')) {
-            $name_file = $request->file('image')->getClientOriginalName();
-            $path = public_path('\images');
-            $request->file('image')->move($path, $name_file);
-            $payload['image'] = $name_file;
+
+        if ($request->file('image')) {
+            $image = $request->file('image');
+            $folder_image = 'articles';
+            $upload = MyHelper::uploadImageApi($image, $folder_image);
+            if (isset($upload['status']) && $upload['status'] == "success") {
+                $payload['image'] = json_encode($upload['result']);
+            } elseif (isset($upload['status']) && $upload['status'] == 'fail') {
+                return back()->withErrors($upload['messages'])->withInput();
+            }
         }
+
         $save = MyHelper::patch($this->path . $id, $payload);
         if (isset($save['status']) && $save['status'] == "success") {
             return redirect('article')->withSuccess(['CMS Article detail has been updated.']);

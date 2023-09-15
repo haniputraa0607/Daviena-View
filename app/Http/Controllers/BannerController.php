@@ -33,9 +33,10 @@ class BannerController extends Controller
         ];
         $banner = MyHelper::get($this->path . $id);
         $products = MyHelper::get('be/product/');
+        // dd($products);
         if (isset($banner['status']) && $banner['status'] == "success") {
             $data['detail'] = $banner['result'];
-            $data['products'] = $products['result'];
+            $data['products'] = $products['result'] ?? '';
         } else {
             return back()->withErrors(['Something went wrong. Please try again.'])->withInput();
         }

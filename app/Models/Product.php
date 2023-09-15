@@ -70,4 +70,9 @@ class Product extends Model
     {
         return $this->hasMany(TreatmentPatient::class, 'treatment_id', 'id');
     }
+
+    public function product_package(): HasMany
+    {
+        return $this->hasMany(ProductPackage::class, 'package_id', 'id');
+    }
 }

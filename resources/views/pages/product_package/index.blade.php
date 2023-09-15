@@ -18,7 +18,7 @@
 				bProcessing: true,
 				bServerSide: true,
 				ajax: {
-					url: "api/be/product/list?type=Product",
+					url: "api/be/product_package/list",
                     headers: {
                             "Authorization": "{{ session('access_token') }}"
                         },
@@ -73,7 +73,7 @@
                 function() {
                     $.ajax({
                         type: "GET",
-                        url: `/product/delete/${id}`,
+                        url: `/product_package/delete/${id}`,
                         data: {
                             "_token": token
                         },
@@ -81,7 +81,7 @@
                             if (response.status == "success") {
                                 swal({
                                     title: 'Deleted!',
-                                    text: 'product has been deleted.',
+                                    text: 'product package has been deleted.',
                                     type: 'success',
                                     showCancelButton: false,
                                     showConfirmButton: false
@@ -127,12 +127,12 @@
     <div class="portlet light bordered">
         <div class="portlet-title">
             <div class="caption">
-                <span class="caption-subject font-blue sbold uppercase">CMS Product List</span>
+                <span class="caption-subject font-blue sbold uppercase">CMS Product Package List</span>
             </div>
         </div>
         <div class="portlet-body">
-            <a href="{{ url('product/create') }}" class="btn btn-success btn_add_user" style="margin-bottom: 15px;">
-                <i class="fa fa-plus"></i> Add New Product
+            <a href="{{ url('product_package/create') }}" class="btn btn-success btn_add_user" style="margin-bottom: 15px;">
+                <i class="fa fa-plus"></i> Add New Product Package
             </a>
             <table class="table trace trace-as-text table-striped table-bordered table-hover dt-responsive" id="table_data">
                 <thead class="trace-head">

@@ -30,6 +30,7 @@ class Controller extends BaseController
                 'expires_in'         => $login['expires_in'],
             ]);
             $user_login = MyHelper::get('be/user/detail')['result'];
+
             session([
                 'user_id'           => $user_login['user']['id'] ?? null,
                 'user_name'         => $user_login['user']['name'] ?? null,

@@ -5,6 +5,8 @@
     <link href="{{ env('STORAGE_URL_VIEW') }}{{('assets/global/plugins/bootstrap-switch/css/bootstrap-switch.min.css')}}" rel="stylesheet" type="text/css" />
 	<link href="{{ env('STORAGE_URL_VIEW') }}{{('assets/datemultiselect/jquery-ui.css')}}" rel="stylesheet" type="text/css" />
     <link href="{{ env('STORAGE_URL_VIEW') }}{{('assets/global/plugins/bootstrap-sweetalert/sweetalert.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ env('STORAGE_URL_VIEW') }}{{ 'assets/global/plugins/select2/css/select2.min.css' }}" rel="stylesheet" type="text/css" />
+    <link href="{{ env('STORAGE_URL_VIEW') }}{{ 'assets/global/plugins/select2/css/select2-bootstrap.min.css' }}" rel="stylesheet" type="text/css" />
 @endsection
 
 @section('page-script')
@@ -16,8 +18,95 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js"></script>
+    <script src="{{ env('STORAGE_URL_VIEW') }}{{ 'assets/global/plugins/select2/js/select2.min.js' }}" type="text/javascript"></script>
     <script>
         $('.selectpicker').selectpicker();
+        var province_code = 0;
+        var city_code = 0;
+        
+        $('#province-input').select2({
+            placeholder: 'Select Province',
+            theme: 'bootstrap',
+            width: '100%',
+            ajax: {
+                url: `{{ url('api/indonesia/provinces') }}`,
+                headers: {
+                    "Authorization": "{{ session('access_token') }}"
+                },
+                dataType: 'json',
+                delay: 250,
+                processResults: function(result) {
+                    return {
+                        results: $.map(result.data, function(item) {
+                            return {
+                                text: item.name,
+                                id: item.code
+                            }
+                        })
+                    };
+                },
+                cache: true
+            }
+        });
+
+        $('.select2-input').on('change', function(){
+            if ($(this).attr('id') === 'province-input') {
+                $('#city-input').empty().trigger('change');
+            }
+
+            province_code = $('#province-input').val();
+            city_code = $('#city-input').val();
+            
+            cityUrl = `{{ url('api/indonesia/cities?province_code=') }}${province_code}`;
+
+            $('#city-input').select2({
+                placeholder: 'Select city',
+                theme: 'bootstrap',
+                width: '100%',
+                ajax: {
+                    url: cityUrl,
+                    headers: {
+                        "Authorization": "{{ session('access_token') }}"
+                    },
+                    dataType: 'json',
+                    delay: 250,
+                    processResults: function(result) {
+                        return {
+                            results: $.map(result.data, function(item) {
+                                return {
+                                    text: item.name,
+                                    id: item.code
+                                }
+                            })
+                        };
+                    },
+                    cache: true
+                }
+            });
+        });
+        
+        function readURL(input, level) {
+            if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            var fileimport = $('#' + input.id).val();
+            var allowedExtensions = /(\.png|\.jpg|\.jpeg)$/i;
+            if (!allowedExtensions.exec(fileimport)) {
+                alert('Gambar harus bertipe gambar');
+                $('#' + input.id).val('');
+                return false;
+            }
+            reader.onload = function(e) {
+                $('#blah_' + level).attr('src', e.target.result).width(200);
+                // .height();
+            };
+            reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        function imgError(data) {
+            console.log('error_img');
+            data.setAttribute('src', '{{ asset("images/logo.svg") }}');
+        }
     </script>    
     
 @endsection
@@ -104,7 +193,57 @@
                                     </div>
                                 </div>
                             </div>
+
+                            <div class="form-group" id="type">
+                                <div class="col-md-12">
+                                    <div class="col-md-3">
+                                        <label class="control-label">Province<span class="required" aria-required="true">*</span>
+                                            <i class="fa fa-question-circle tooltips" data-original-title="City Code" data-container="body"></i>
+                                        </label>
+                                    </div>
+                                    <div class="col-md-9">
+                                        <div class="col-md-10">
+                                            <select name="province" id="province-input" class="form-control select2-input" required> </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group" id="type">
+                                <div class="col-md-12">
+                                    <div class="col-md-3">
+                                        <label class="control-label">City<span class="required" aria-required="true">*</span>
+                                            <i class="fa fa-question-circle tooltips" data-original-title="City Code" data-container="body"></i>
+                                        </label>
+                                    </div>
+                                    <div class="col-md-9">
+                                        <div class="col-md-10">
+                                            <select name="city_code" id="city-input" class="form-control select2-input" required> </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
+
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <div class="col-md-3">
+                                    <label class="control-label">Image<span class="required" aria-required="true">*</span>
+                                        <i class="fa fa-question-circle tooltips" data-original-title="Image" data-container="body"></i>
+                                    </label>
+                                </div>
+                                <div class="col-md-9">
+                                    <div class="col-md-10">
+                                        <div class="alert alert-success text-center col-sm-12">
+                                            <img id="blah_image" src="{{ asset('images/logo.svg') }}" style="width:200px;" onerror="imgError(this)" alt="..." loading="lazy">
+                                        </div>
+                                        <input class="form-control" name="image" style="display:none;" id="image" type="file" onchange="readURL(this, 'image');">
+                                        <button class="btn btn-outline-success btn-sm" type="button" onclick="$('#image').click();">Upload</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                         <hr>
                         <div class="col-12 mt-2">
                             <div class="portlet-title mb-2">
@@ -169,6 +308,8 @@
                                     </div>
                                     <div class="col-md-9">
                                         <div class="col-md-10">
+                                            <input type="text" class="form-control" name="username_instagram" placeholder="Username Instagram" required>
+                                            <br>
                                             <input type="text" class="form-control" name="url_instagram" placeholder="URL Instagram" required>
                                         </div>
                                     </div>
@@ -183,6 +324,8 @@
                                     </div>
                                     <div class="col-md-9">
                                         <div class="col-md-10">
+                                            <input type="text" class="form-control" name="username_tiktok" placeholder="Username Tiktok" required>
+                                            <br>
                                             <input type="text" class="form-control" name="url_tiktok" placeholder="URL Tiktok" required>
                                         </div>
                                     </div>
@@ -197,6 +340,8 @@
                                     </div>
                                     <div class="col-md-9">
                                         <div class="col-md-10">
+                                            <input type="text" class="form-control" name="username_tokopedia" placeholder="Username Tokopedia" required>
+                                            <br>
                                             <input type="text" class="form-control" name="url_tokopedia" placeholder="URL Tokopedia" required>
                                         </div>
                                     </div>
@@ -211,6 +356,8 @@
                                     </div>
                                     <div class="col-md-9">
                                         <div class="col-md-10">
+                                            <input type="text" class="form-control" name="username_shopee" placeholder="Username Shopee" required>
+                                            <br>
                                             <input type="text" class="form-control" name="url_shopee" placeholder="URL Shopee" required>
                                         </div>
                                     </div>
@@ -225,6 +372,8 @@
                                     </div>
                                     <div class="col-md-9">
                                         <div class="col-md-10">
+                                            <input type="text" class="form-control" name="username_buka_lapak" placeholder="Username Buka Lapak" required>
+                                            <br>
                                             <input type="text" class="form-control" name="url_buka_lapak" placeholder="URL Buka Lapak" required>
                                         </div>
                                     </div>

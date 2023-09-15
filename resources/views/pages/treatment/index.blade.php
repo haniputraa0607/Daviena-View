@@ -18,7 +18,7 @@
 				bProcessing: true,
 				bServerSide: true,
 				ajax: {
-					url: "api/be/product?type=Treatment",
+					url: "api/be/product/list?type=Treatment",
                     headers: {
                             "Authorization": "{{ session('access_token') }}"
                         },
@@ -131,8 +131,8 @@
             </div>
         </div>
         <div class="portlet-body">
-            <a href="{{ url('outlet/create') }}" class="btn btn-success btn_add_user" style="margin-bottom: 15px;">
-                <i class="fa fa-plus"></i> Add New Outlet
+            <a href="{{ url('treatment/create') }}" class="btn btn-success btn_add_user" style="margin-bottom: 15px;">
+                <i class="fa fa-plus"></i> Add New Treatment
             </a>
             <table class="table trace trace-as-text table-striped table-bordered table-hover dt-responsive" id="table_data">
                 <thead class="trace-head">
