@@ -75,7 +75,7 @@
                     {!!  GoogleReCaptchaV3::renderField('captcha_div','login', 'captcha_div') !!}
                 </div>
                 <div class="form-actions">
-                    <button type="submit" class="btn uppercase btn-block" style="background: {{env('BUTTON_LOGIN')}}; color: #fff">Login</button>
+                    <button type="submit" class="btn uppercase btn-block" style="background-color: #4db3a5; color: #fff">Login</button>
                 </div>
             </form>
             <!-- END LOGIN FORM -->
