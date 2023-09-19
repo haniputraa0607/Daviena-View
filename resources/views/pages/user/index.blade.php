@@ -41,10 +41,10 @@
                         data: 'name',
                         name: 'name'
                     },
-                    {
-                        data: 'idc',
-                        name: 'idc'
-                    },
+                    // {
+                    //     data: 'idc',
+                    //     name: 'idc'
+                    // },
                     {
                         data: 'email',
                         name: 'email'
@@ -175,12 +175,12 @@
                     <tr>
                         <th style="text-align: center"> No </th>
                         <th style="text-align: center"> Name </th>
-                        <th style="text-align: center"> Idc </th>
+                        {{-- <th style="text-align: center"> Idc </th> --}}
                         <th style="text-align: center"> Email </th>
                         <th style="text-align: center"> Phone </th>
                         <th style="text-align: center"> Type </th>
                         <th style="text-align: center"> Action </th>
-                        <th style="width: 90px;"></th>
+                        {{-- <th style="width: 90px;"></th> --}}
                     </tr>
                 </thead>
             </table>
