@@ -338,6 +338,57 @@
             });
         });
     </script>
+
+    <script>
+            
+        $('#partner_equal_id').select2({
+            placeholder: 'Select Partner',
+            theme: 'bootstrap',
+            width: '100%',
+            ajax: {
+                url: `{{ url('api/be/outlet/partner-equal-filter') }}`,
+                headers: {
+                    "Authorization": "{{ session('access_token') }}"
+                },
+                dataType: 'json',
+                delay: 250,
+                processResults: function(data) {
+                    return {
+                        results: $.map(data, function(item) {
+                            return {
+                                text: item.name,
+                                id: item.id
+                            }
+                        })
+                    };
+                },
+                cache: true
+            }
+        });
+        
+        function readURL(input, level) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                var fileimport = $('#' + input.id).val();
+                var allowedExtensions = /(\.png)$/i;
+                if (!allowedExtensions.exec(fileimport)) {
+                alert('Gambar harus bertipe gambar');
+                $('#' + input.id).val('');
+                return false;
+                }
+                reader.onload = function(e) {
+                $('#blah_' + level).attr('src', e.target.result).width(200);
+                // .height();
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        function imgError(data) {
+            console.log('error_img');
+            data.setAttribute('src', '{{ asset("images/logo.svg") }}');
+        }
+    </script>
 @endsection
 
 @section('content')

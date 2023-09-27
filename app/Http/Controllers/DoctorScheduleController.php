@@ -67,7 +67,6 @@ class DoctorScheduleController extends Controller
 
         $payload = $request->except('_token');
         $save = MyHelper::patch($this->path . $id, $payload);
-
         if (isset($save['status']) && $save['status'] == "success") {
             return redirect('doctor-schedule')->withSuccess(['CMS Doctor Schedule detail has been updated.']);
         } else {

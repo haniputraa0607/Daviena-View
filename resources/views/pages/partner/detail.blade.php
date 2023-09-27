@@ -138,7 +138,7 @@
                                 </div>
                                 <div class="col-md-9">
                                     <div class="col-md-10">
-                                        <input type="text" name="partner_account_shoope" class="form-control" placeholder="Account Shoope" value="{{ @$detail['partner_account_shoope'] ? $detail['partner_account_shoope'] : '' }}">
+                                        <input type="text" name="partner_account_shoope" class="form-control" placeholder="Account Shoope" value="{{ @$detail['partner_account_shoope'] ?? $detail['partner_account_shoope'] }}">
                                     </div>
                                 </div>
                             </div>

@@ -4,6 +4,8 @@
     <link href="{{ env('STORAGE_URL_VIEW') }}{{('assets/datemultiselect/jquery-ui.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{env('STORAGE_URL_VIEW') }}{{('assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.css')}}" rel="stylesheet" type="text/css" />
     <link href="{{ env('STORAGE_URL_VIEW') }}{{('assets/global/plugins/bootstrap-sweetalert/sweetalert.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ env('STORAGE_URL_VIEW') }}{{ 'assets/global/plugins/select2/css/select2.min.css' }}" rel="stylesheet" type="text/css" />
+    <link href="{{ env('STORAGE_URL_VIEW') }}{{ 'assets/global/plugins/select2/css/select2-bootstrap.min.css' }}" rel="stylesheet" type="text/css" />
 @endsection
 
 @section('page-script')
@@ -14,41 +16,17 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js"></script>
+    <script src="{{ env('STORAGE_URL_VIEW') }}{{ 'assets/global/plugins/select2/js/select2.min.js' }}" type="text/javascript"></script>
     <script>
         $('.selectpicker').selectpicker();
+        $('#product').select2({
+            placeholder: 'Select Products',
+            theme: 'bootstrap',
+            width: '100%',
+            allowClear: true,
+        });
     </script>
-    <script src="https://cdn.tiny.cloud/1/oowsi03408mi3se06e6g73ocmflkdn4blz5jffod9wz1lc1t/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
-    <script>
-      tinymce.init({
-        selector: 'textarea',
-        plugins: 'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount',
-        toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table | align lineheight | numlist bullist indent outdent | emoticons charmap | removeformat',
-      });
-      
-      function readURL(input, level) {
-        if (input.files && input.files[0]) {
-          var reader = new FileReader();
-          var fileimport = $('#' + input.id).val();
-          var allowedExtensions = /(\.png)$/i;
-          if (!allowedExtensions.exec(fileimport)) {
-            alert('Gambar harus bertipe gambar');
-            $('#' + input.id).val('');
-            return false;
-          }
-          reader.onload = function(e) {
-            $('#blah_' + level).attr('src', e.target.result).width(200);
-            // .height();
-          };
-          reader.readAsDataURL(input.files[0]);
-        }
-      }
-
-      function imgError(data) {
-        console.log('error_img');
-        data.setAttribute('src', '{{ asset("images/logo.svg") }}');
-      }
-
-    </script>
+    <script src="{{ env('STORAGE_URL_VIEW') }}{{ 'assets/global/plugins/select2/js/select2.min.js' }}" type="text/javascript"></script>
 @endsection
 
 @section('content')
@@ -64,7 +42,7 @@
                 <i class="fa fa-circle"></i>
             </li>
             <li>
-                <strong>Treatment and Consultation</strong>
+                <strong>Product Finest</strong>
             </li>
         </ul>
     </div><br>
@@ -74,15 +52,15 @@
     <div class="portlet light bordered">
         <div class="portlet-title">
             <div class="caption">
-                <span class="caption-subject font-blue bold uppercase">Treatment and Consultation</span>
+                <span class="caption-subject font-blue bold uppercase">Product Finest</span>
             </div>
         </div>
 
         <div class="portlet-body m-form__group row">
-            <form class="form-horizontal" role="form" action="{{ route('landing_page.home.treatment_consultation.update') }}"  method="post" enctype="multipart/form-data" id="myForm">
+            <form class="form-horizontal" role="form" action="{{ route('landing_page.home.product_finest.update') }}"  method="post" enctype="multipart/form-data" id="myForm">
                 <div class="col-md-12">
                     <div class="form-body">
-
+                        
                         <div class="form-group">
                             <div class="col-md-12">
                                 <div class="col-md-3">
@@ -97,6 +75,7 @@
                                 </div>
                             </div>
                         </div>
+                        
                         <div class="form-group">
                             <div class="col-md-12">
                                 <div class="col-md-3">
@@ -106,7 +85,7 @@
                                 </div>
                                 <div class="col-md-9">
                                     <div class="col-md-10">
-                                        <textarea type="text" class="form-control" name="description" placeholder="Description">@if(isset($detail['description'])){{ $detail['description'] }}@endif</textarea>
+                                        <input type="text" class="form-control" name="description" value="@if(isset($detail['description'])){{ $detail['description'] }}@endif" placeholder="Description" required>
                                     </div>
                                 </div>
                             </div>
@@ -114,22 +93,31 @@
                         <div class="form-group">
                             <div class="col-md-12">
                                 <div class="col-md-3">
-                                    <label class="control-label">Image<span class="required" aria-required="true">*</span>
-                                        <i class="fa fa-question-circle tooltips" data-original-title="Image" data-container="body"></i>
+                                    <label class="control-label">Product<span class="required" aria-required="true">*</span>
+                                        <i class="fa fa-question-circle tooltips" data-original-title="Product" data-container="body"></i>
                                     </label>
                                 </div>
                                 <div class="col-md-9">
                                     <div class="col-md-10">
-                                        <div class="alert alert-success text-center col-sm-12">
-                                            <img id="blah_image" src="{{ @$detail['image'] ? $detail['image'] : asset('images/logo.svg') }}" style="width:200px;" onerror="imgError(this)" alt="..." loading="lazy">
-                                        </div>
-                                        <input class="form-control" name="image" style="display:none;" id="image" type="file" onchange="readURL(this, 'image');">
-                                        <button class="btn btn-outline-success btn-sm" type="button" onclick="$('#image').click();">Upload</button>
+                                        <select type="text" class="form-control" name="product[]" id="product" placeholder="Product Code" required multiple>
+                                            <option value="">Choose Product</option>
+                                            @foreach($products as $product)
+                                                @php
+                                                $selected = '';
+                                                foreach($detail['list'] as $key){
+                                                    if($key['product_id'] == $product['id']){
+                                                        $selected = 'selected';
+                                                    }
+                                                }
+                                                @endphp
+                                                <option value="{{$product['id']}}" {{ $selected }}>{{$product['product_name']}}</option>
+                                            @endforeach
+                                        </select>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        
+
                     </div>
                     <div class="form-actions">
                         {{ csrf_field() }}

@@ -49,13 +49,13 @@ return [
                 //     'url' => 'doctor-shift',
                 //     'active' => '\View::shared("menu_active") == "doctor-shift"',
                 // ],
-                // [
-                //     'type' => 'single',
-                //     'label' => 'Doctor Schedule',
-                //     'icon' => 'icon-user',
-                //     'url' => 'doctor-schedule',
-                //     'active' => '\View::shared("menu_active") == "doctor-schedule"',
-                // ],
+                [
+                    'type' => 'single',
+                    'label' => 'Doctor Schedule',
+                    'icon' => 'icon-user',
+                    'url' => 'doctor-schedule',
+                    'active' => '\View::shared("menu_active") == "doctor-schedule"',
+                ],
                 // [
                 //     'type' => 'single',
                 //     'label' => 'Doctor Schedule Date',
@@ -139,6 +139,18 @@ return [
                             'url' => 'banner'
                         ],
                         [
+                            'label' => 'Product Finest',
+                            'required_features' => '',
+                            'active' => '\View::shared("submenu_active") == "product_finest"',
+                            'url' => 'landing_page/home/product_finest'
+                        ],
+                        [
+                            'label' => 'Official Partner',
+                            'required_features' => '',
+                            'active' => '\View::shared("submenu_active") == "official_partner_home"',
+                            'url' => 'landing_page/home/official_partner'
+                        ],
+                        [
                             'label' => 'Treatment & Consultation',
                             'required_features' => '',
                             'active' => '\View::shared("submenu_active") == "treatment_and_consultation"',
@@ -150,7 +162,27 @@ return [
                             'active' => '\View::shared("submenu_active") == "product_trending"',
                             'url' => 'landing_page/home/product_trending'
                         ],
+                        [
+                            'label' => 'Article Recommendation',
+                            'required_features' => '',
+                            'active' => '\View::shared("submenu_active") == "article_recommendation"',
+                            'url' => 'landing_page/home/article_recommendation'
+                        ],
                     ],
+                ],
+                [
+                    'type' => 'single',
+                    'label' => 'Banner Clinic',
+                    'icon' => 'fa fa-file-image-o',
+                    'url' => 'landing_page/banner_clinic',
+                    'active' => '\View::shared("menu_active") == "banner_clinic"',
+                ],
+                [
+                    'type' => 'single',
+                    'label' => 'Contact Official',
+                    'icon' => 'fa fa-comments-o',
+                    'url' => 'landing_page/contact_official',
+                    'active' => '\View::shared("menu_active") == "contact_official"',
                 ],
                 [
                     'type' => 'single',

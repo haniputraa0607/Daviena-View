@@ -19,6 +19,11 @@ use App\Http\Controllers\Api\ApiProductCategoryController;
 use App\Http\Controllers\Api\ApiProductTrendingController;
 use App\Http\Controllers\Api\ApiOfficialPartnerController;
 use App\Http\Controllers\Api\ApiContactMessageController;
+use App\Http\Controllers\Api\ApiProductFinestController;
+use App\Http\Controllers\Api\ApiOfficialPartnerHomeController;
+use App\Http\Controllers\Api\ApiArticleRecommendationController;
+use App\Http\Controllers\Api\ApiBannerClinicController;
+use App\Http\Controllers\Api\ApiContactOfficialController;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
 
@@ -77,6 +82,7 @@ Route::middleware('auth:api')->prefix('be')->group(function () {
         Route::delete($doctorScheduleDate, 'destroy')->name('api.doctor-schedule-date.delete');
     });
     Route::controller(ApiOutletController::class)->prefix('/outlet')->group(function () {
+        Route::get('partner-equal-filter', 'partnerEqualFilter')->name('api.outlet.partner-equal-filter');
         $outlet = '{outlet}';
         Route::get('', 'index')->name('api.outlet.list');
         Route::get('name-id', 'nameId')->name('api.outlet.name.id');
@@ -111,9 +117,26 @@ Route::middleware('auth:api')->prefix('be')->group(function () {
         Route::get('', 'index')->name('api.product_trending.index');
         Route::post('', 'update')->name('api.product_trending.update');
     });
+    Route::controller(ApiProductFinestController::class)->prefix('/product_finest')->group(function () {
+        Route::get('', 'index')->name('api.product_finest.index');
+        Route::post('', 'update')->name('api.product_finest.update');
+    });
     Route::controller(ApiOfficialPartnerController::class)->prefix('/official_partner')->group(function () {
         Route::get('', 'index')->name('api.official_partner.index');
         Route::post('', 'update')->name('api.official_partner.update');
+    });
+    Route::controller(ApiOfficialPartnerHomeController::class)->prefix('/official_partner_home')->group(function () {
+        Route::get('', 'index')->name('api.official_partner_home.index');
+        Route::post('', 'update')->name('api.official_partner_home.update');
+    });
+    Route::controller(ApiArticleRecommendationController::class)->prefix('/article_recommendation')->group(function () {
+        Route::get('', 'index')->name('api.article_recommendation.index');
+        Route::post('', 'update')->name('api.article_recommendation.update');
+    });
+
+    Route::controller(ApiContactOfficialController::class)->prefix('/contact_official')->group(function () {
+        Route::get('', 'index')->name('api.contact_official.index');
+        Route::post('', 'update')->name('api.contact_official.update');
     });
     
     Route::controller(ApiContactMessageController::class)->prefix('/contact_message')->group(function () {
@@ -183,6 +206,15 @@ Route::middleware('auth:api')->prefix('be')->group(function () {
         Route::get('', 'index')->name('api.banner.list');
         Route::get($banner, 'show')->name('api.banner.show');
         Route::patch($banner, 'update')->name('api.banner.update');
+    });
+    Route::controller(ApiBannerClinicController::class)->prefix('/banner_clinic')->group(function () {
+        $banner_clinic = '{banner_clinic}';
+        Route::get('', 'index')->name('api.banner_clinic.list');
+        Route::post('', 'store')->name('api.banner_clinic.create');
+        Route::get('list', 'list')->name('api.banner_clinic.list');
+        Route::get($banner_clinic, 'show')->name('api.banner_clinic.show');
+        Route::patch($banner_clinic, 'update')->name('api.banner_clinic.update');
+        Route::delete($banner_clinic, 'destroy')->name('api.banner_clinic.delete');
     });
 });
 
