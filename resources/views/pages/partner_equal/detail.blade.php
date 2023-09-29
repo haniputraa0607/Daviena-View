@@ -173,6 +173,34 @@
                             <div class="form-group" id="type">
                                 <div class="col-md-12">
                                     <div class="col-md-3">
+                                        <label class="control-label">Type<span class="required" aria-required="true">*</span>
+                                            <i class="fa fa-question-circle tooltips" data-original-title="Type" data-container="body"></i>
+                                        </label>
+                                    </div>
+                                    <div class="col-md-9">
+                                        <div class="col-md-10">
+                                            @php
+                                                $selected = '';
+                                                if(old('type')){
+                                                    $selected = old('type');
+                                                } else if($detail['partner']['type']){
+                                                    $selected = $detail['partner']['type'];
+                                                }
+                                            @endphp
+                                            <select class="form-control" name="type" id="type">
+                                                <option value="">Choose Type</option>
+                                                <option value="Agen" {{ $selected == 'Agen' ? 'selected' : '' }}>Agen</option>
+                                                <option value="Distributor"  {{ $selected == 'Distributor' ? 'selected' : '' }}>Distributor</option>
+                                                <option value="Store"  {{ $selected == 'Store' ? 'selected' : '' }}>Store</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group" id="type">
+                                <div class="col-md-12">
+                                    <div class="col-md-3">
                                         <label class="control-label">Province<span class="required" aria-required="true">*</span>
                                             <i class="fa fa-question-circle tooltips" data-original-title="City Code" data-container="body"></i>
                                         </label>

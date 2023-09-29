@@ -50,34 +50,34 @@ class Handler extends ExceptionHandler
     {
         //  $this->reportable(function (Throwable $e) {
 
-        // $this->renderable(function (Throwable $e, $request) {
-        //     // dd($e);
-        //     if ($request->wantsJson() || $request->is('*api*')) {
-        //         /**
-        //          * @var \Symfony\Component\HttpFoundation\Response|\Illuminate\Http\Response $e
-        //          */
-        //         $statusCode = method_exists($e, 'getStatusCode') ? $e->getStatusCode() : 500;
-        //         switch (true) {
-        //             case $e instanceof ValidationException:
-        //                 $error = $this->invalidValidation($e->getMessage(), collect($e->errors())->flatten());
-        //                 break;
-        //             case $e instanceof NotFoundHttpException:
-        //                 if ($e->getPrevious() instanceof ModelNotFoundException) {
-        //                     $modelException = $e->getPrevious();
-        //                     $modelName = $modelException->getModel();
-        //                     $error = $this->notFound(class_basename($modelName) . " is not found.");
-        //                     break;
-        //                 }
-        //             case $e instanceof RouteNotFoundException:
-        //                 $error = $e->getMessage() == "Route [login] not defined." ? $this->unauthorized("Please login") : $this->notFound($e->getMessage());
-        //                 break;
-        //             default:
-        //                 $debugmode = env('APP_DEBUG', true);
-        //                 $error = $this->error($debugmode ? $e->getMessage() : "Something went wrong", $statusCode);
-        //                 break;
-        //         }
-        //     }
-        //     return $error;
-        // });
+        $this->renderable(function (Throwable $e, $request) {
+            // dd($e);
+            if ($request->wantsJson() || $request->is('*api*')) {
+                /**
+                 * @var \Symfony\Component\HttpFoundation\Response|\Illuminate\Http\Response $e
+                 */
+                $statusCode = method_exists($e, 'getStatusCode') ? $e->getStatusCode() : 500;
+                switch (true) {
+                    case $e instanceof ValidationException:
+                        $error = $this->invalidValidation($e->getMessage(), collect($e->errors())->flatten());
+                        break;
+                    case $e instanceof NotFoundHttpException:
+                        if ($e->getPrevious() instanceof ModelNotFoundException) {
+                            $modelException = $e->getPrevious();
+                            $modelName = $modelException->getModel();
+                            $error = $this->notFound(class_basename($modelName) . " is not found.");
+                            break;
+                        }
+                    case $e instanceof RouteNotFoundException:
+                        $error = $e->getMessage() == "Route [login] not defined." ? $this->unauthorized("Please login") : $this->notFound($e->getMessage());
+                        break;
+                    default:
+                        $debugmode = env('APP_DEBUG', true);
+                        $error = $this->error($debugmode ? $e->getMessage() : "Something went wrong", $statusCode);
+                        break;
+                }
+            }
+            return $error;
+        });
     }
 }

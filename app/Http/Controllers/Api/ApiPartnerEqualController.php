@@ -44,6 +44,7 @@ class ApiPartnerEqualController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'phone' => $request->phone,
+            'type' => $request->type,
             'city_code' => $request->city_code
         ];
         if ($request->images) {
@@ -112,6 +113,7 @@ class ApiPartnerEqualController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'phone' => $request->phone,
+            'type' => $request->type,
             'city_code' => $request->city_code
         ];
         if ($request->images) {

@@ -22,6 +22,7 @@ class PartnerEqual extends Model
         'name',
         'email',
         'phone',
+        'type',
         'images',
         'city_code',
         'id_member',

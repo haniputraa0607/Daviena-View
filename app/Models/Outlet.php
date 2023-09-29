@@ -50,4 +50,9 @@ class Outlet extends Model
     {
         return $this->hasMany(OutletSchedule::class)->orderBy('id');
     }
+
+    public function partner_equal()
+    {
+        return $this->belongsTo(PartnerEqual::class, 'partner_equal_id');
+    }
 }

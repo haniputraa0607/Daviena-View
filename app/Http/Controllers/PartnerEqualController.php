@@ -38,6 +38,7 @@ class PartnerEqualController extends Controller
             "name" => $request->name,
             "email" => $request->email,
             "phone" => $request->phone,
+            "type" => $request->type,
             "city_code" => $request->city_code,
             "store_name" => $request->store_name,
             "store_address" => $request->store_address,
@@ -64,8 +65,9 @@ class PartnerEqualController extends Controller
                 return back()->withErrors($upload['messages'])->withInput();
             }
         }
+        // dd($payload);
         $save = MyHelper::post('be/partner_equal', $payload);
-        dd($save);
+        // dd($save);  
         if (isset($save['status']) && $save['status'] == "success") {
             return redirect('partner_equal')->withSuccess(['New Partner successfully added.']);
         } else {
@@ -132,6 +134,7 @@ class PartnerEqualController extends Controller
             "name" => $request->name,
             "email" => $request->email,
             "phone" => $request->phone,
+            "type" => $request->type,
             "city_code" => $request->city_code,
             "store_name" => $request->store_name,
             "store_address" => $request->store_address,

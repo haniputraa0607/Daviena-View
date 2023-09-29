@@ -41,6 +41,7 @@ class ApiOutletController extends Controller
     {
         $outlet->district->city->province;
         $outlet->outlet_schedule;
+        $outlet->partner_equal;
         return $this->ok("succes", $outlet);
     }
     public function store(Create $request): JsonResponse
