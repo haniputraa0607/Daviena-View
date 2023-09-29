@@ -55,6 +55,7 @@ class ProductPackageController extends Controller
             'sub_title'         => 'Detail',
         ];
         $detail = MyHelper::get($this->path . $id);
+        // dd($detail);
         $category = MyHelper::get('be/product-category');
         $product = MyHelper::get('be/product');
 

@@ -37,7 +37,7 @@ class ApiProductPackageController extends Controller
 
     public function show(Request $request, $id): JsonResponse
     {
-        $product = Product::with('global_price', 'product_package')->find($id);
+        $product = Product::with('global_price')->find($id);
         return $this->ok("success", $product);
     }
     public function store(ProductRequest $request): JsonResponse
@@ -49,14 +49,16 @@ class ApiProductPackageController extends Controller
             'type' => 'Package',
             'is_active' => 1,
         ];
-        $product = Product::create($payload);
-        $id_package = $product->id;
+        $product_group = [];
         foreach ($request->product as $key) {
-            ProductPackage::create([
-                'package_id' => $id_package,
-                'product_id' => $key
-            ]);
+            $product_group[] = [
+                'id' => $key,
+            ];
         }
+        if ($product_group) {
+            $payload['product_groups'] = json_encode($product_group);
+        }
+        $product = Product::create($payload);
         return $this->ok("succes", $product);
     }
     public function update(ProductRequest $request, $id): JsonResponse
@@ -66,14 +68,17 @@ class ApiProductPackageController extends Controller
             'description' => $request->description,
             'product_code' => $request->product_code,
         ];
-        $product = Product::find($id)->update($payload);
-        ProductPackage::where(['package_id' => $id])->delete();
+
+        $product_group = [];
         foreach ($request->product as $key) {
-            ProductPackage::create([
-                'package_id' => $id,
-                'product_id' => $key
-            ]);
+            $product_group[] = [
+                'id' => $key,
+            ];
         }
+        if ($product_group) {
+            $payload['product_groups'] = json_encode($product_group);
+        }
+        $product = Product::find($id)->update($payload);
         return $this->ok("succes", $product);
     }
 
@@ -82,12 +87,8 @@ class ApiProductPackageController extends Controller
         $product = Product::find($id);
 
         $productGlobalPriceCount = ProductGlobalPrice::where('product_id', $id)->count();
-        $productPackageCount = ProductPackage::where('package_id', $id)->count();
         if ($productGlobalPriceCount > 0) {
             return $this->error('The product is still connected to the global price');
-        }
-        if ($productPackageCount > 0) {
-            return $this->error('The product is still connected to the package');
         }
         $product->delete();
         return $this->ok("succes", true);
