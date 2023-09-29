@@ -185,8 +185,8 @@
                                             @foreach($products as $product)
                                                 @php
                                                 $selected = '';
-                                                foreach($detail['product_package'] as $key){
-                                                    if($key['id'] == $product['id']){
+                                                foreach(json_decode($detail['product_groups']) as $key){
+                                                    if($key->id == $product['id']){
                                                         $selected = 'selected';
                                                     }
                                                 }
