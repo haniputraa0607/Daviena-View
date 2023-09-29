@@ -110,5 +110,4 @@ class OutletController extends Controller
             return response()->json(['status' => 'fail', 'messages' => [$delete['message']]]);
         }
     }
-
 }

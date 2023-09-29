@@ -58,10 +58,10 @@ class ApiDoctorScheduleController extends Controller
     {
         $doctorSchedule = DoctorSchedule::create($request->all());
         $doctorScheduleId = $doctorSchedule->id;
-        foreach($request->schedule_date as $key){
+        foreach ($request->schedule_date as $key) {
             DoctorScheduleDate::create([
                 "doctor_schedule_id" => $doctorScheduleId,
-                "date" => $request->schedule_year.'-'.$request->schedule_month.'-'.$key
+                "date" => $request->schedule_year . '-' . $request->schedule_month . '-' . $key
             ]);
         }
         return $this->ok("succes", $doctorSchedule);
@@ -73,7 +73,7 @@ class ApiDoctorScheduleController extends Controller
         foreach ($request->schedule_date as $key) {
             DoctorScheduleDate::create([
                 "doctor_schedule_id" => $doctorSchedule->id, // Menggunakan $doctorSchedule->id untuk menghubungkannya dengan DoctorSchedule yang baru
-                "date" => $request->schedule_year.'-'.$request->schedule_month.'-'.$key
+                "date" => $request->schedule_year . '-' . $request->schedule_month . '-' . $key
             ]);
         }
         return $this->ok("success", $doctorSchedule);

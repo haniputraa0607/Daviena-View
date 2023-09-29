@@ -141,6 +141,4 @@ class HomeController extends Controller
             return back()->withErrors(!empty($save['error']) ? $save['error'] : $save['message'])->withInput();
         }
     }
-
-    
 }

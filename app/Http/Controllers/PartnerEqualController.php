@@ -67,7 +67,7 @@ class PartnerEqualController extends Controller
         }
         // dd($payload);
         $save = MyHelper::post('be/partner_equal', $payload);
-        // dd($save);  
+        // dd($save);
         if (isset($save['status']) && $save['status'] == "success") {
             return redirect('partner_equal')->withSuccess(['New Partner successfully added.']);
         } else {
@@ -83,7 +83,7 @@ class PartnerEqualController extends Controller
         ];
         $partner = MyHelper::get('be/partner_equal/' . $id);
         if (isset($partner['status']) && $partner['status'] == "success") {
-            if(isset($partner['result']['sosial_media'])){
+            if (isset($partner['result']['sosial_media'])) {
                 $search_ig = 'Instagram';
                 $search_tk = 'Tiktok';
                 $search_tp = 'Tokopedia';

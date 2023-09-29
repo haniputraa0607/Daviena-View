@@ -19,7 +19,7 @@ class ApiPartnerEqualController extends Controller
     public function show($id): JsonResponse
     {
         $partner_equal = PartnerEqual::with('city.province')->find($id);
-    
+
         if ($partner_equal) {
             $store = $partner_equal->partner_store()->first();
             if ($store) {
@@ -35,7 +35,7 @@ class ApiPartnerEqualController extends Controller
             return $this->error("Partner not found");
         }
     }
-    
+
 
     public function store(Request $request)//: JsonResponse
     {

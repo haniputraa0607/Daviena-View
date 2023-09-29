@@ -82,7 +82,7 @@ class ApiOutletController extends Controller
         $outlet->outlet_schedule()->saveMany($schedules);
         return $this->ok("succes", $outlet->outlet_schedule);
     }
-    
+
     public function partnerEqualFilter()
     {
         $assigneTickets = [];

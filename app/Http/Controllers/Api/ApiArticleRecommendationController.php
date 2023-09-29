@@ -18,7 +18,7 @@ class ApiArticleRecommendationController extends Controller
     public function update(Request $request): JsonResponse
     {
         $articleRecommendation = ArticleRecommendation::find(1);
-        if(!$articleRecommendation){
+        if (!$articleRecommendation) {
             $articleRecommendation->create([
                 'article_top' => $request->article_top,
                 'article_recommendation' => $request->article
@@ -28,7 +28,7 @@ class ApiArticleRecommendationController extends Controller
             'article_top' => $request->article_top,
             'article_recommendation' => $request->article
         ]);
-       
+
         return $this->ok("succes", true);
     }
 }

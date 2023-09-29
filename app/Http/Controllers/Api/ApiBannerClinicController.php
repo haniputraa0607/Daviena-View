@@ -10,17 +10,16 @@ use Yajra\DataTables\Facades\DataTables;
 
 class ApiBannerClinicController extends Controller
 {
-
     public function index(Request $request): JsonResponse
     {
         $query = BannerClinic::query();
         return DataTables::of($query)
             ->addIndexColumn()
-            ->editColumn('image', function($row){
-                return '<img src="'.env('API_URL').$row->image.'" width="200">';
+            ->editColumn('image', function ($row) {
+                return '<img src="' . env('API_URL') . $row->image . '" width="200">';
             })
             ->addColumn('action', function ($row) {
-                return '<a class="btn btn-sm btn-info" data-data=\''.json_encode($row).'\' onclick="main.edit(this)">
+                return '<a class="btn btn-sm btn-info" data-data=\'' . json_encode($row) . '\' onclick="main.edit(this)">
                             <li class="fa fa-search" aria-hidden="true"></li>
                         </a>
                         <a  href="javascript:void(0)" class="btn btn-sm btn-danger" id="btn-delete" data-id="' . $row->id . '" data-name="' . $row->name . '">

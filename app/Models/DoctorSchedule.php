@@ -35,5 +35,4 @@ class DoctorSchedule extends Model
     {
         return $this->hasMany(DoctorScheduleDate::class);
     }
-    
 }

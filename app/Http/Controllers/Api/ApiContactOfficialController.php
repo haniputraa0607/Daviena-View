@@ -29,13 +29,13 @@ class ApiContactOfficialController extends Controller
         ]);
         $contact_official_working = ContactOfficial::find($request->id_working_hour);
         $data_working = [];
-        foreach($request->working_hour as $key){
+        foreach ($request->working_hour as $key) {
             $data_working[] = $key;
         }
-        if($data_working){
+        if ($data_working) {
             $contact_official_working->update($data_working);
         }
-        for($i=0;$i<count($request->detail_id);$i++){
+        for ($i = 0; $i < count($request->detail_id); $i++) {
             ContactSosialMedia::find($request->detail_id[$i])->update([
                 'link' => $request->link[$i],
                 'username' => $request->username[$i]
