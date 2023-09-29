@@ -38,6 +38,7 @@ class PartnerEqualController extends Controller
             "name" => $request->name,
             "email" => $request->email,
             "phone" => $request->phone,
+            "type" => $request->type,
             "city_code" => $request->city_code,
             "store_name" => $request->store_name,
             "store_address" => $request->store_address,
@@ -64,8 +65,9 @@ class PartnerEqualController extends Controller
                 return back()->withErrors($upload['messages'])->withInput();
             }
         }
+        // dd($payload);
         $save = MyHelper::post('be/partner_equal', $payload);
-        dd($save);
+        // dd($save);
         if (isset($save['status']) && $save['status'] == "success") {
             return redirect('partner_equal')->withSuccess(['New Partner successfully added.']);
         } else {
@@ -81,34 +83,44 @@ class PartnerEqualController extends Controller
         ];
         $partner = MyHelper::get('be/partner_equal/' . $id);
         if (isset($partner['status']) && $partner['status'] == "success") {
-            $search_ig = 'Instagram';
-            $search_tk = 'Tiktok';
-            $search_tp = 'Tokopedia';
-            $search_sp = 'Shopee';
-            $search_bk = 'Bukalapak';
-            $tiktok_data = array_filter($partner['result']['sosial_media'], function ($item) use ($search_tk) {
-                return $item['type'] === $search_tk;
-            });
-            $ig_data = array_filter($partner['result']['sosial_media'], function ($item) use ($search_ig) {
-                return $item['type'] === $search_ig;
-            });
-            $tp_data = array_filter($partner['result']['sosial_media'], function ($item) use ($search_tp) {
-                return $item['type'] === $search_tp;
-            });
-            $sp_data = array_filter($partner['result']['sosial_media'], function ($item) use ($search_sp) {
-                return $item['type'] === $search_sp;
-            });
-            $bk_data = array_filter($partner['result']['sosial_media'], function ($item) use ($search_bk) {
-                return $item['type'] === $search_bk;
-            });
+            if (isset($partner['result']['sosial_media'])) {
+                $search_ig = 'Instagram';
+                $search_tk = 'Tiktok';
+                $search_tp = 'Tokopedia';
+                $search_sp = 'Shopee';
+                $search_bk = 'Bukalapak';
+                $tiktok_data = array_filter($partner['result']['sosial_media'], function ($item) use ($search_tk) {
+                    return $item['type'] === $search_tk;
+                });
+                $ig_data = array_filter($partner['result']['sosial_media'], function ($item) use ($search_ig) {
+                    return $item['type'] === $search_ig;
+                });
+                $tp_data = array_filter($partner['result']['sosial_media'], function ($item) use ($search_tp) {
+                    return $item['type'] === $search_tp;
+                });
+                $sp_data = array_filter($partner['result']['sosial_media'], function ($item) use ($search_sp) {
+                    return $item['type'] === $search_sp;
+                });
+                $bk_data = array_filter($partner['result']['sosial_media'], function ($item) use ($search_bk) {
+                    return $item['type'] === $search_bk;
+                });
+                $data['sosial_media'] = [
+                    'tiktok' => $tiktok_data ? reset($tiktok_data) : [] ,
+                    'instagram' => $ig_data ? reset($ig_data) : [],
+                    'tokopedia' => $tp_data ? reset($tp_data) : [],
+                    'shopee' => $sp_data ? reset($sp_data) : [],
+                    'bukalapak' => $bk_data ? reset($bk_data) : [],
+                ];
+            } else {
+                $data['sosial_media'] = [
+                    'tiktok' => [],
+                    'instagram' => [],
+                    'tokopedia' => [],
+                    'shopee' => [],
+                    'bukalapak' => [],
+                ];
+            }
             $data['detail'] = $partner['result'];
-            $data['sosial_media'] = [
-                'tiktok' => $tiktok_data ? reset($tiktok_data) : [] ,
-                'instagram' => $ig_data ? reset($ig_data) : [],
-                'tokopedia' => $tp_data ? reset($tp_data) : [],
-                'shopee' => $sp_data ? reset($sp_data) : [],
-                'bukalapak' => $bk_data ? reset($bk_data) : [],
-            ];
         } else {
             return back()->withErrors(['Something went wrong. Please try again.'])->withInput();
         }
@@ -122,6 +134,7 @@ class PartnerEqualController extends Controller
             "name" => $request->name,
             "email" => $request->email,
             "phone" => $request->phone,
+            "type" => $request->type,
             "city_code" => $request->city_code,
             "store_name" => $request->store_name,
             "store_address" => $request->store_address,

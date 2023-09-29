@@ -19,6 +19,7 @@ class Outlet extends Model
     protected $fillable = [
         'name',
         'id_partner',
+        'partner_equal_id',
         'outlet_code',
         // 'id_city',
         'outlet_phone',
@@ -31,7 +32,8 @@ class Outlet extends Model
         'district_code',
         'postal_code',
         'coordinates',
-        'activities'
+        'activities',
+        'images'
     ];
 
     protected $casts = [
@@ -47,5 +49,10 @@ class Outlet extends Model
     public function outlet_schedule(): HasMany
     {
         return $this->hasMany(OutletSchedule::class)->orderBy('id');
+    }
+
+    public function partner_equal()
+    {
+        return $this->belongsTo(PartnerEqual::class, 'partner_equal_id');
     }
 }

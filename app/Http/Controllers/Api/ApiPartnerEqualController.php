@@ -19,15 +19,23 @@ class ApiPartnerEqualController extends Controller
     public function show($id): JsonResponse
     {
         $partner_equal = PartnerEqual::with('city.province')->find($id);
-        $store = $partner_equal->partner_store()->first();
-        $sosial_media = $store->partner_sosial_media()->get();
-        $result = [
-            'partner' => $partner_equal,
-            'store' => $store,
-            'sosial_media' => $sosial_media
-        ];
-        return $this->ok("Success", $result);
+
+        if ($partner_equal) {
+            $store = $partner_equal->partner_store()->first();
+            if ($store) {
+                $sosial_media = $store->partner_sosial_media()->get();
+            }
+            $result = [
+                'partner' => $partner_equal,
+                'store' => $store,
+                'sosial_media' => $sosial_media ?? null
+            ];
+            return $this->ok("Success", $result);
+        } else {
+            return $this->error("Partner not found");
+        }
     }
+
 
     public function store(Request $request)//: JsonResponse
     {
@@ -36,6 +44,7 @@ class ApiPartnerEqualController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'phone' => $request->phone,
+            'type' => $request->type,
             'city_code' => $request->city_code
         ];
         if ($request->images) {
@@ -104,6 +113,7 @@ class ApiPartnerEqualController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'phone' => $request->phone,
+            'type' => $request->type,
             'city_code' => $request->city_code
         ];
         if ($request->images) {

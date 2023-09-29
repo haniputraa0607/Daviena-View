@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Outlet\Create;
 use App\Lib\MyHelper;
+use App\Models\PartnerEqual;
 use Illuminate\Http\Request;
 
 class OutletController extends Controller
@@ -36,8 +37,17 @@ class OutletController extends Controller
 
     public function store(Request $request)
     {
-
         $payload = $request->except('_token');
+        if ($request->file('image')) {
+            $image = $request->file('image');
+            $folder_image = 'outlets';
+            $upload = MyHelper::uploadImageApi($image, $folder_image);
+            if (isset($upload['status']) && $upload['status'] == "success") {
+                $payload['images'] = json_encode($upload['result']);
+            } elseif (isset($upload['status']) && $upload['status'] == 'fail') {
+                return back()->withErrors($upload['messages'])->withInput();
+            }
+        }
         $save = MyHelper::post($this->path, $payload);
         if (isset($save['status']) && $save['status'] == "success") {
             return redirect('outlet')->withSuccess(['New Outlet successfully added.']);
@@ -68,8 +78,18 @@ class OutletController extends Controller
 
     public function update(Request $request, $id)
     {
-
-        $save = MyHelper::patch($this->path . $id, $request->except('_token'));
+        $payload = $request->except('_token');
+        if ($request->file('image')) {
+            $image = $request->file('image');
+            $folder_image = 'outlets';
+            $upload = MyHelper::uploadImageApi($image, $folder_image);
+            if (isset($upload['status']) && $upload['status'] == "success") {
+                $payload['images'] = json_encode($upload['result']);
+            } elseif (isset($upload['status']) && $upload['status'] == 'fail') {
+                return back()->withErrors($upload['messages'])->withInput();
+            }
+        }
+        $save = MyHelper::patch($this->path . $id, $payload);
 
         if (isset($save['status']) && $save['status'] == "success") {
             return redirect('outlet')->withSuccess(['CMS Outlet detail has been updated.']);

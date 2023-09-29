@@ -23,23 +23,28 @@
     </script>
     
     <script type="text/javascript">
-    document.addEventListener('DOMContentLoaded', function() {
-        var calendarEl = document.getElementById('calendar');
-        var calendar = new FullCalendar.Calendar(calendarEl, {
-            initialView: 'dayGridMonth',
-            selectable: true,
-            eventContent: 'some text',
-            dateClick: function(info) {
-                console.log(info);
-                },
-            });
-        calendar.render();
-      });
-      
+        // document.addEventListener('DOMContentLoaded', function() {
+        //     var calendarEl = document.getElementById('calendar');
+        //     var calendar = new FullCalendar.Calendar(calendarEl, {
+        //         initialView: 'dayGridMonth',
+        //         selectable: true,
+        //         eventContent: 'some text',
+        //         dateClick: function(info) {
+        //             console.log(info);
+        //             },
+        //         });
+        //     calendar.render();
+        // });
+        
+        $('#schedule_date').select2({
+            placeholder: 'Select Dates',
+            theme: 'bootstrap',
+            width: '100%',
+            allowClear: true,
+        });
     </script>
-   <script type="text/javascript">
-   
 
+   <script type="text/javascript">
     var province_code = 0;
     var city_code = 0;
     
@@ -66,6 +71,7 @@
             cache: true
         }
     });
+
     $('#outlet-input').select2({
         placeholder: 'Select Outlet',
         theme: 'bootstrap',
@@ -89,6 +95,7 @@
             cache: true
         }
     });
+
     $('#province-input').select2({
         placeholder: 'Select Province',
         theme: 'bootstrap',
@@ -234,7 +241,7 @@
 
                         <x-schedule-input/>
 
-                        <div id='calendar'></div>
+                        {{-- <div id='calendar'></div> --}}
                     </div>
                     <div class="form-actions">
                         {{ csrf_field() }}

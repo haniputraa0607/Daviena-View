@@ -29,7 +29,7 @@
         if (input.files && input.files[0]) {
           var reader = new FileReader();
           var fileimport = $('#' + input.id).val();
-          var allowedExtensions = /(\.png)$/i;
+          var allowedExtensions = /(\.png|\.jpg|\.jpeg)$/i;
           if (!allowedExtensions.exec(fileimport)) {
             alert('Gambar harus bertipe gambar');
             $('#' + input.id).val('');
@@ -52,7 +52,6 @@
 @endsection
 
 @section('content')
-    
     <div class="page-bar">
         <ul class="page-breadcrumb">
             <li>
@@ -60,12 +59,16 @@
                 <i class="fa fa-circle"></i>
             </li>
             <li>
-                <span>Landing Page Home</span>
-                <i class="fa fa-circle"></i>
+                <span>{{ $title }}</span>
+                @if (!empty($sub_title))
+                    <i class="fa fa-circle"></i>
+                @endif
             </li>
+            @if (!empty($sub_title))
             <li>
-                <strong>Treatment and Consultation</strong>
+                <span>{{ $sub_title }}</span>
             </li>
+            @endif
         </ul>
     </div><br>
 
@@ -74,12 +77,12 @@
     <div class="portlet light bordered">
         <div class="portlet-title">
             <div class="caption">
-                <span class="caption-subject font-blue bold uppercase">Treatment and Consultation</span>
+                <span class="caption-subject font-blue bold uppercase">Detail banner</span>
             </div>
         </div>
 
         <div class="portlet-body m-form__group row">
-            <form class="form-horizontal" role="form" action="{{ route('landing_page.home.treatment_consultation.update') }}"  method="post" enctype="multipart/form-data" id="myForm">
+            <form class="form-horizontal" role="form" action="{{ route('banner.update', $detail['id']) }}"  method="post" enctype="multipart/form-data" id="myForm">
                 <div class="col-md-12">
                     <div class="form-body">
 
@@ -114,17 +117,34 @@
                         <div class="form-group">
                             <div class="col-md-12">
                                 <div class="col-md-3">
-                                    <label class="control-label">Image<span class="required" aria-required="true">*</span>
-                                        <i class="fa fa-question-circle tooltips" data-original-title="Image" data-container="body"></i>
+                                    <label class="control-label">Link<span class="required" aria-required="true">*</span>
+                                        <i class="fa fa-question-circle tooltips" data-original-title="Link" data-container="body"></i>
                                     </label>
                                 </div>
                                 <div class="col-md-9">
                                     <div class="col-md-10">
-                                        <div class="alert alert-success text-center col-sm-12">
-                                            <img id="blah_image" src="{{ @$detail['image'] ? $detail['image'] : asset('images/logo.svg') }}" style="width:200px;" onerror="imgError(this)" alt="..." loading="lazy">
-                                        </div>
-                                        <input class="form-control" name="image" style="display:none;" id="image" type="file" onchange="readURL(this, 'image');">
-                                        <button class="btn btn-outline-success btn-sm" type="button" onclick="$('#image').click();">Upload</button>
+                                        <input type="text" class="form-control" name="link" value="@if(isset($detail['link'])){{ $detail['link'] }}@endif" placeholder="Link" required>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <div class="col-md-3">
+                                    <label class="control-label">Product<span class="required" aria-required="true">*</span>
+                                        <i class="fa fa-question-circle tooltips" data-original-title="Nama" data-container="body"></i>
+                                    </label>
+                                </div>
+                                <div class="col-md-9">
+                                    <div class="col-md-10">
+                                        <select class="form-control" name="product_id" id="">
+                                            <option value="" disabled>Pilih Product</option>
+                                            @if(!empty($products))
+                                                @foreach ($products as $product)
+                                                    <option value="{{ $product['id'] }}" @if ($product['id'] == $detail['product_id']) selected @endif >{{ $product['product_name'] }}</option>
+                                                @endforeach
+                                            @endisset
+                                        </select>
                                     </div>
                                 </div>
                             </div>

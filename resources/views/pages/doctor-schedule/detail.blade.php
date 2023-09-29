@@ -57,9 +57,19 @@
                 var option = new Option(data.result.name, data.result.id, true, true);
                 $('#outlet-input').append(option).trigger('change');
             });
+        
     </script>
     <script src="{{ env('STORAGE_URL_VIEW') }}{{ 'assets/global/plugins/select2/js/select2.min.js' }}"
         type="text/javascript"></script>
+    <script>
+        
+        $('#schedule_date').select2({
+            placeholder: 'Select Dates',
+            theme: 'bootstrap',
+            width: '100%',
+            allowClear: true,
+        });
+    </script>
 @endsection
 
 @section('content')
@@ -147,6 +157,28 @@
                                                 </div>
                                                 <div class="col-md-8">
                                                     <label class="control-label">{{ $detail['schedule_year'] }}</label>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="input-icon right">
+                                                    <label class="col-md-4 control-label">
+                                                        Dates
+                                                    </label>
+                                                </div>
+                                                <div class="col-md-8">
+                                                    @php 
+                                                    $date_string = '';
+                                                    @endphp
+                                                    @foreach($detail['dates'] as $key)
+                                                        @php
+                                                            if($loop->index > 0){
+                                                                $date_string .= ', ';
+                                                            }
+                                                            $date_arr = explode('-', $key['date']);
+                                                            $date_string .= $date_arr[2];
+                                                        @endphp
+                                                    @endforeach
+                                                    <label class="control-label">{{ $date_string }}</label>
                                                 </div>
                                             </div>
 

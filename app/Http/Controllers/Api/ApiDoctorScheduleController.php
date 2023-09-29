@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\DoctorSchedule\Request as DoctorScheduleRequest;
 use App\Lib\MyHelper;
 use App\Models\DoctorSchedule;
+use App\Models\DoctorScheduleDate;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -50,18 +51,34 @@ class ApiDoctorScheduleController extends Controller
     {
         $doctorSchedule->user;
         $doctorSchedule->outlet;
+        $doctorSchedule->dates;
         return $this->ok("succes", $doctorSchedule);
     }
     public function store(DoctorScheduleRequest $request): JsonResponse
     {
         $doctorSchedule = DoctorSchedule::create($request->all());
+        $doctorScheduleId = $doctorSchedule->id;
+        foreach ($request->schedule_date as $key) {
+            DoctorScheduleDate::create([
+                "doctor_schedule_id" => $doctorScheduleId,
+                "date" => $request->schedule_year . '-' . $request->schedule_month . '-' . $key
+            ]);
+        }
         return $this->ok("succes", $doctorSchedule);
     }
     public function update(DoctorScheduleRequest $request, DoctorSchedule $doctorSchedule): JsonResponse
     {
         $doctorSchedule->update($request->all());
-        return $this->ok("succes", $doctorSchedule);
+        $doctorSchedule->dates()->delete();
+        foreach ($request->schedule_date as $key) {
+            DoctorScheduleDate::create([
+                "doctor_schedule_id" => $doctorSchedule->id, // Menggunakan $doctorSchedule->id untuk menghubungkannya dengan DoctorSchedule yang baru
+                "date" => $request->schedule_year . '-' . $request->schedule_month . '-' . $key
+            ]);
+        }
+        return $this->ok("success", $doctorSchedule);
     }
+
     public function destroy(DoctorSchedule $doctorSchedule): JsonResponse
     {
         $doctorSchedule->delete();

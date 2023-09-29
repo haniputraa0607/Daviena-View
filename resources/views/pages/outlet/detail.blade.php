@@ -338,6 +338,57 @@
             });
         });
     </script>
+
+    <script>
+            
+        $('#partner_equal_id').select2({
+            placeholder: 'Select Partner',
+            theme: 'bootstrap',
+            width: '100%',
+            ajax: {
+                url: `{{ url('api/be/outlet/partner-equal-filter') }}`,
+                headers: {
+                    "Authorization": "{{ session('access_token') }}"
+                },
+                dataType: 'json',
+                delay: 250,
+                processResults: function(data) {
+                    return {
+                        results: $.map(data, function(item) {
+                            return {
+                                text: item.name,
+                                id: item.id
+                            }
+                        })
+                    };
+                },
+                cache: true
+            }
+        });
+        
+        function readURL(input, level) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                var fileimport = $('#' + input.id).val();
+                var allowedExtensions = /(\.png)$/i;
+                if (!allowedExtensions.exec(fileimport)) {
+                alert('Gambar harus bertipe gambar');
+                $('#' + input.id).val('');
+                return false;
+                }
+                reader.onload = function(e) {
+                $('#blah_' + level).attr('src', e.target.result).width(200);
+                // .height();
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        function imgError(data) {
+            console.log('error_img');
+            data.setAttribute('src', '{{ asset("images/logo.svg") }}');
+        }
+    </script>
 @endsection
 
 @section('content')
@@ -495,6 +546,17 @@
                                     <div class="form-group">
                                         <div class="input-icon right">
                                             <label class="col-md-4 control-label">
+                                                Partner
+                                            </label>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <label class="control-label">{{ $detail['partner_equal']['name'] ?? '-' }}</label>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <div class="input-icon right">
+                                            <label class="col-md-4 control-label">
                                                 Activities
                                             </label>
                                         </div>
@@ -505,6 +567,18 @@
                                                 $capitalizedArray = array_map('ucfirst', $array);
                                             @endphp
                                             <label class="control-label">{{ implode(', ', $capitalizedArray) }}</label>
+                                        </div>
+                                    </div>
+                                    
+
+                                    <div class="form-group">
+                                        <div class="input-icon right">
+                                            <label class="col-md-4 control-label">
+                                                Image
+                                            </label>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <img id="blah_image" src="{{ @$detail['images'] ? env('API_URL').json_decode($detail['images']) : asset('images/logo.svg') }}" style="width:200px;" onerror="imgError(this)" alt="..." loading="lazy">
                                         </div>
                                     </div>
 
@@ -684,7 +758,7 @@
                                     </div>
 
 
-                                    <div class="form-group" id="admin-role-selection">
+                                    <div class="form-group" id="admin-role-selection" style="display:none;">
                                         <div class="col-md-12">
                                             <div class="col-md-3">
                                                 <label class="control-label">Partner<span class="required"
@@ -698,9 +772,30 @@
                                                     <select name="partner" id="partner-input" class="form-control"
                                                         required>
                                                         <option value="">--Select--</option>
-                                                        <option value="1">Partner 1</option>
+                                                        <option value="1" selected>Partner 1</option>
                                                         <option value="2">Partner 2</option>
                                                         <option value="3">Partner 3</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="form-group" id="partner-selection">
+                                        <div class="col-md-12">
+                                            <div class="col-md-3">
+                                                <label class="control-label">Partner<span class="required"
+                                                        aria-required="true">*</span>
+                                                    <i class="fa fa-question-circle tooltips" data-original-title="Partner"
+                                                        data-container="body"></i>
+                                                </label>
+                                            </div>
+                                            <div class="col-md-9">
+                                                <div class="col-md-10">
+                                                    <select name="partner_equal_id" id="partner_equal_id" class="form-control" required>
+                                                        @isset($detail['partner_equal'])
+                                                            <option value="{{ $detail['partner_equal']['id'] }}" selected>{{ $detail['partner_equal']['name'] }}</option>
+                                                        @endisset
                                                     </select>
                                                 </div>
                                             </div>
@@ -730,6 +825,26 @@
                                                             {{ in_array('consultation', json_decode($detail['activities'])) ? 'selected' : '' }}>
                                                             Consultation</option>
                                                     </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    
+                                    <div class="form-group">
+                                        <div class="col-md-12">
+                                            <div class="col-md-3">
+                                                <label class="control-label">Image<span class="required" aria-required="true">*</span>
+                                                    <i class="fa fa-question-circle tooltips" data-original-title="Image" data-container="body"></i>
+                                                </label>
+                                            </div>
+                                            <div class="col-md-9">
+                                                <div class="col-md-10">
+                                                    <div class="alert alert-success text-center col-sm-12">
+                                                        <img id="blah_image" src="{{ @$detail['images'] ? env('API_URL').json_decode($detail['images']) : asset('images/logo.svg') }}" style="width:200px;" onerror="imgError(this)" alt="..." loading="lazy">
+                                                    </div>
+                                                    <input class="form-control" name="image" style="display:none;" id="image" type="file" onchange="readURL(this, 'image');">
+                                                    <button class="btn btn-outline-success btn-sm" type="button" onclick="$('#image').click();">Upload</button>
                                                 </div>
                                             </div>
                                         </div>

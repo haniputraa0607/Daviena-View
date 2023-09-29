@@ -156,60 +156,19 @@
         google.maps.event.addDomListener(window, 'load', initialize);
     </script>
 
-<script type="text/javascript">
-   
-
-    var province_code = 0;
-    var city_code = 0;
+    <script type="text/javascript">
     
-   
-    $('#province-input').select2({
-        placeholder: 'Select Province',
-        theme: 'bootstrap',
-        width: '100%',
-        ajax: {
-            url: `{{ url('api/indonesia/provinces') }}`,
-            headers: {
-                "Authorization": "{{ session('access_token') }}"
-            },
-            dataType: 'json',
-            delay: 250,
-            processResults: function(result) {
-                return {
-                    results: $.map(result.data, function(item) {
-                        return {
-                            text: item.name,
-                            id: item.code
-                        }
-                    })
-                };
-            },
-            cache: true
-        }
-    });
 
-    $('.select2-input').on('change', function(){
-        if ($(this).attr('id') === 'province-input') {
-            $('#city-input').empty().trigger('change');
-            $('#district-input').empty().trigger('change');
-        }
-
-        if ($(this).attr('id') === 'city-input') {
-            $('#district-input').empty().trigger('change');
-        }
-
-        province_code = $('#province-input').val();
-        city_code = $('#city-input').val();
+        var province_code = 0;
+        var city_code = 0;
         
-        cityUrl = `{{ url('api/indonesia/cities?province_code=') }}${province_code}`;
-        districtUrl = `{{ url('api/indonesia/districts?city_code=') }}${city_code}`;
-
-        $('#city-input').select2({
-            placeholder: 'Select city',
+    
+        $('#province-input').select2({
+            placeholder: 'Select Province',
             theme: 'bootstrap',
             width: '100%',
             ajax: {
-                url: cityUrl,
+                url: `{{ url('api/indonesia/provinces') }}`,
                 headers: {
                     "Authorization": "{{ session('access_token') }}"
                 },
@@ -229,23 +188,93 @@
             }
         });
 
-        $('#district-input').select2({
-            placeholder: 'Select district',
+        $('.select2-input').on('change', function(){
+            if ($(this).attr('id') === 'province-input') {
+                $('#city-input').empty().trigger('change');
+                $('#district-input').empty().trigger('change');
+            }
+
+            if ($(this).attr('id') === 'city-input') {
+                $('#district-input').empty().trigger('change');
+            }
+
+            province_code = $('#province-input').val();
+            city_code = $('#city-input').val();
+            
+            cityUrl = `{{ url('api/indonesia/cities?province_code=') }}${province_code}`;
+            districtUrl = `{{ url('api/indonesia/districts?city_code=') }}${city_code}`;
+
+            $('#city-input').select2({
+                placeholder: 'Select city',
+                theme: 'bootstrap',
+                width: '100%',
+                ajax: {
+                    url: cityUrl,
+                    headers: {
+                        "Authorization": "{{ session('access_token') }}"
+                    },
+                    dataType: 'json',
+                    delay: 250,
+                    processResults: function(result) {
+                        return {
+                            results: $.map(result.data, function(item) {
+                                return {
+                                    text: item.name,
+                                    id: item.code
+                                }
+                            })
+                        };
+                    },
+                    cache: true
+                }
+            });
+
+            $('#district-input').select2({
+                placeholder: 'Select district',
+                theme: 'bootstrap',
+                width: '100%',
+                ajax: {
+                    url: districtUrl,
+                    headers: {
+                        "Authorization": "{{ session('access_token') }}"
+                    },
+                    dataType: 'json',
+                    delay: 250,
+                    processResults: function(result) {
+                        return {
+                            results: $.map(result.data, function(item) {
+                                return {
+                                    text: item.name,
+                                    id: item.code
+                                }
+                            })
+                        };
+                    },
+                    cache: true
+                }
+            });
+        });
+    </script>
+
+    <script>
+        
+        $('#partner_equal_id').select2({
+            placeholder: 'Select Partner',
             theme: 'bootstrap',
             width: '100%',
             ajax: {
-                url: districtUrl,
+                url: `{{ url('api/be/outlet/partner-equal-filter') }}`,
                 headers: {
                     "Authorization": "{{ session('access_token') }}"
                 },
                 dataType: 'json',
                 delay: 250,
-                processResults: function(result) {
+                processResults: function(data) {
                     return {
-                        results: $.map(result.data, function(item) {
+                        results: $.map(data, function(item) {
                             return {
                                 text: item.name,
-                                id: item.code
+                                id: item.id
                             }
                         })
                     };
@@ -253,8 +282,30 @@
                 cache: true
             }
         });
-    });
-</script>
+        
+        function readURL(input, level) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                var fileimport = $('#' + input.id).val();
+                var allowedExtensions = /(\.png)$/i;
+                if (!allowedExtensions.exec(fileimport)) {
+                alert('Gambar harus bertipe gambar');
+                $('#' + input.id).val('');
+                return false;
+                }
+                reader.onload = function(e) {
+                $('#blah_' + level).attr('src', e.target.result).width(200);
+                // .height();
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        function imgError(data) {
+            console.log('error_img');
+            data.setAttribute('src', '{{ asset("images/logo.svg") }}');
+        }
+    </script>
 @endsection
 
 
@@ -491,7 +542,7 @@
                             </div>
                         </div>
 
-                        <div class="form-group" id="partner-selection">
+                        <div class="form-group" id="partner-selection" style="display:none">
                             <div class="col-md-12">
                                 <div class="col-md-3">
                                     <label class="control-label">Partner<span class="required"
@@ -504,10 +555,27 @@
                                     <div class="col-md-10">
                                         <select name="partner" id="partner-input" class="form-control" required>
                                             <option value="">Choose Partner</option>
-                                            <option value="1">Partner 1</option>
+                                            <option value="1" selected>Partner 1</option>
                                             <option value="2">Partner 2</option>
                                             <option value="3">Partner 3</option>
                                         </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group" id="partner-selection">
+                            <div class="col-md-12">
+                                <div class="col-md-3">
+                                    <label class="control-label">Partner<span class="required"
+                                            aria-required="true">*</span>
+                                        <i class="fa fa-question-circle tooltips" data-original-title="Partner"
+                                            data-container="body"></i>
+                                    </label>
+                                </div>
+                                <div class="col-md-9">
+                                    <div class="col-md-10">
+                                        <select name="partner_equal_id" id="partner_equal_id" class="form-control" required></select>
                                     </div>
                                 </div>
                             </div>
@@ -531,6 +599,25 @@
                                             <option value="consultation">Consultation</option>
                                             <option value="consultation">Prescription</option>
                                         </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <div class="col-md-3">
+                                    <label class="control-label">Image<span class="required" aria-required="true">*</span>
+                                        <i class="fa fa-question-circle tooltips" data-original-title="Image" data-container="body"></i>
+                                    </label>
+                                </div>
+                                <div class="col-md-9">
+                                    <div class="col-md-10">
+                                        <div class="alert alert-success text-center col-sm-12">
+                                            <img id="blah_image" src="{{ @$detail['image'] ? $detail['image'] : asset('images/logo.svg') }}" style="width:200px;" onerror="imgError(this)" alt="..." loading="lazy">
+                                        </div>
+                                        <input class="form-control" name="image" style="display:none;" id="image" type="file" onchange="readURL(this, 'image');">
+                                        <button class="btn btn-outline-success btn-sm" type="button" onclick="$('#image').click();">Upload</button>
                                     </div>
                                 </div>
                             </div>

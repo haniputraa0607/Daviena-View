@@ -7,6 +7,7 @@ use App\Http\Requests\Outlet\Create;
 use App\Http\Requests\Outlet\Update;
 use App\Models\Outlet;
 use App\Models\OutletSchedule;
+use App\Models\PartnerEqual;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
@@ -40,6 +41,7 @@ class ApiOutletController extends Controller
     {
         $outlet->district->city->province;
         $outlet->outlet_schedule;
+        $outlet->partner_equal;
         return $this->ok("succes", $outlet);
     }
     public function store(Create $request): JsonResponse
@@ -79,5 +81,17 @@ class ApiOutletController extends Controller
         });
         $outlet->outlet_schedule()->saveMany($schedules);
         return $this->ok("succes", $outlet->outlet_schedule);
+    }
+
+    public function partnerEqualFilter()
+    {
+        $assigneTickets = [];
+        $search = request()->q;
+        $assigneTickets = PartnerEqual::select("id", "name")
+                        ->when(request()->has('q'), function ($query) use ($search) {
+                            $query->where('name', 'LIKE', "%$search%");
+                        })
+                        ->get();
+        return response()->json($assigneTickets);
     }
 }

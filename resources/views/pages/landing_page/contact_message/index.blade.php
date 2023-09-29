@@ -88,13 +88,10 @@
     <div class="portlet light bordered">
         <div class="portlet-title">
             <div class="caption">
-                <span class="caption-subject font-blue sbold uppercase">CMS Product List</span>
+                <span class="caption-subject font-blue sbold uppercase">CMS Contact Message List</span>
             </div>
         </div>
         <div class="portlet-body">
-            <a href="{{ url('product/create') }}" class="btn btn-success btn_add_user" style="margin-bottom: 15px;">
-                <i class="fa fa-plus"></i> Add New Product
-            </a>
             <table class="table trace trace-as-text table-striped table-bordered table-hover dt-responsive" id="table_data">
                 <thead class="trace-head">
                     <tr>

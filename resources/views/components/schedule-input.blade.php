@@ -87,6 +87,44 @@
             </div>
         </div>
     </div>
+
+    <div class="form-group">
+        <div class="col-md-12">
+            <div class="col-md-3">
+                <label class="control-label">Schedule Date<span class="required" aria-required="true">*</span>
+                    <i class="fa fa-question-circle tooltips" data-original-title="Schedule Date" data-container="body"></i>
+                </label>
+            </div>
+            <div class="col-md-9">
+                <div class="col-md-10">
+                    @isset($detail)
+                        <select class="form-control" name="schedule_date[]" id="schedule_date" multiple>
+                            @for ($i = 1; $i<32; $i++)
+                                @php
+                                    $selected = '';
+                                    $i_selected = ($i < 10) ? '0'.$i : $i;
+                                    foreach($detail['dates'] as $key){
+                                        $date_arr = explode('-', $key['date']);
+                                        if($date_arr[2] == $i_selected){
+                                            $selected = 'selected';
+                                        }
+                                    }
+                                @endphp
+                                <option value="{{ $i }}" {{ $selected }}>{{ ($i < 10) ? '0'.$i : $i }}</option>
+                            @endfor
+                        </select>
+                    @else
+                        <select class="form-control" name="schedule_date[]" id="schedule_date" multiple>
+                            @for ($i = 1; $i<32; $i++)
+                                <option value="{{ $i }}">{{ ($i < 10) ? '0'.$i : $i }}</option>
+                            @endfor
+                        </select>
+                    @endisset
+                   
+                </div>
+            </div>
+        </div>
+    </div>
     
     
 
