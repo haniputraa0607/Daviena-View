@@ -52,7 +52,7 @@ class ContactOfficialController extends Controller
         return view('pages.landing_page.consultation_ordering', $data);
     }
 
-    
+
     public function consultationOrderingUpdate(Request $request)
     {
         $payload = $request->except('_token');

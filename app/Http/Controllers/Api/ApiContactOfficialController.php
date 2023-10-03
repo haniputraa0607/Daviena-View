@@ -52,18 +52,18 @@ class ApiContactOfficialController extends Controller
         $contact_official = ContactOfficial::where("official_name", "Konsultasi & Pemesanan")->first();
         return $this->ok('success', $contact_official);
     }
-    
+
     public function consultationOrderingUpdate(Request $request): JsonResponse
     {
         $payload = [
             [
                 "contact" => [
                     [
-                        "name" => $request->name[0], 
+                        "name" => $request->name[0],
                         "telp" => $request->telp[0]
                     ],
                     [
-                        "name" => $request->name[1], 
+                        "name" => $request->name[1],
                         "telp" => $request->telp[1]
                     ],
                 ],
@@ -72,7 +72,7 @@ class ApiContactOfficialController extends Controller
                 "service_hours" => $request->service_hours
             ],
         ];
-        $data_update =[
+        $data_update = [
             'official_value' => json_encode($payload)
         ];
         ContactOfficial::find($request->id)->update($data_update);
