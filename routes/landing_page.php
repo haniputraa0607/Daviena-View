@@ -43,6 +43,10 @@ Route::prefix('landing_page')->group(function () {
         Route::get('/', [ContactOfficialController::class, 'index'])->name('landing_page.contact_official');
         Route::post('/', [ContactOfficialController::class, 'update'])->name('landing_page.contact_official.update');
     });
+    Route::prefix('consultation_ordering')->group(function(){
+        Route::get('/', [ContactOfficialController::class, 'consultationOrdering'])->name('landing_page.consultation_ordering');
+        Route::post('/', [ContactOfficialController::class, 'consultationOrderingUpdate'])->name('landing_page.consultation_ordering.update');
+    });
     Route::prefix('banner_clinic')->group(function () {
         Route::get('/', [BannerClinicController::class, 'index'])->name('banner_clinic.index');
         Route::post('list', [BannerClinicController::class, 'list'])->name('banner_clinic.list');

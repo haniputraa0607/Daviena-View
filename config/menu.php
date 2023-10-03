@@ -186,6 +186,13 @@ return [
                 ],
                 [
                     'type' => 'single',
+                    'label' => 'Consultation & Ordering',
+                    'icon' => 'fa fa-address-book',
+                    'url' => 'landing_page/consultation_ordering',
+                    'active' => '\View::shared("menu_active") == "contasultation_ordering"',
+                ],
+                [
+                    'type' => 'single',
                     'label' => 'Official Partner',
                     'icon' => 'fa fa-columns',
                     'url' => 'landing_page/official_partner',

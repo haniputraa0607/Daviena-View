@@ -14,7 +14,10 @@ class ApiContactOfficialController extends Controller
 {
     public function index(): JsonResponse
     {
-        $contact_official = ContactOfficial::all();
+        $contact_official = ContactOfficial::whereIn("official_name", [
+            "WhatsApp",
+            "Working Hour"
+        ])->get();
         $contact_sosial_media = ContactSosialMedia::all();
         return $this->ok('success', [
             'contact_official' => $contact_official,
@@ -41,6 +44,38 @@ class ApiContactOfficialController extends Controller
                 'username' => $request->username[$i]
             ]);
         }
+        return $this->ok("succes", true);
+    }
+
+    public function consultationOrdering(): JsonResponse
+    {
+        $contact_official = ContactOfficial::where("official_name", "Konsultasi & Pemesanan")->first();
+        return $this->ok('success', $contact_official);
+    }
+
+    public function consultationOrderingUpdate(Request $request): JsonResponse
+    {
+        $payload = [
+            [
+                "contact" => [
+                    [
+                        "name" => $request->name[0],
+                        "telp" => $request->telp[0]
+                    ],
+                    [
+                        "name" => $request->name[1],
+                        "telp" => $request->telp[1]
+                    ],
+                ],
+            ],
+            [
+                "service_hours" => $request->service_hours
+            ],
+        ];
+        $data_update = [
+            'official_value' => json_encode($payload)
+        ];
+        ContactOfficial::find($request->id)->update($data_update);
         return $this->ok("succes", true);
     }
 }
