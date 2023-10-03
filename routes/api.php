@@ -138,6 +138,11 @@ Route::middleware('auth:api')->prefix('be')->group(function () {
         Route::get('', 'index')->name('api.contact_official.index');
         Route::post('', 'update')->name('api.contact_official.update');
     });
+
+    Route::controller(ApiContactOfficialController::class)->prefix('/consultation_ordering')->group(function () {
+        Route::get('', 'consultationOrdering')->name('api.consultation_ordering.index');
+        Route::post('', 'consultationOrderingUpdate')->name('api.consultation_ordering.update');
+    });
     
     Route::controller(ApiContactMessageController::class)->prefix('/contact_message')->group(function () {
         $contact_message = '{contact_message}';
