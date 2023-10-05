@@ -546,6 +546,19 @@
                                     <div class="form-group">
                                         <div class="input-icon right">
                                             <label class="col-md-4 control-label">
+                                                Google Maps Link
+                                            </label>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <label class="control-label">
+                                                <a  target="_blank" href="{{ $detail['google_maps_link'] ?? ''}}">{{ $detail['google_maps_link'] ?? '-' }}</a>
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <div class="input-icon right">
+                                            <label class="col-md-4 control-label">
                                                 Partner
                                             </label>
                                         </div>
@@ -659,6 +672,7 @@
                                             </div>
                                         </div>
                                     </div>
+                                    
 
                                     <div class="form-group">
                                         <div class="col-md-12">
@@ -680,6 +694,24 @@
                                         </div>
                                     </div>
 
+                                    <div class="form-group">
+                                        <div class="col-md-12">
+                                            <div class="col-md-3">
+                                                <label class="control-label">Google Maps Link<span class="required"
+                                                        aria-required="true">*</span>
+                                                    <i class="fa fa-question-circle tooltips" data-original-title="Google Maps Link"
+                                                        data-container="body"></i>
+                                                </label>
+                                            </div>
+                                            <div class="col-md-9">
+                                                <div class="col-md-10">
+                                                    <input type="text" class="form-control" name="google_maps_link" value="@if (isset($detail['google_maps_link'])) {{ $detail['google_maps_link'] }} @endif" placeholder="Google Maps Link"
+                                                        required>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
                                     <div class="form-group">
                                         <div class="col-md-12">
                                             <div class="col-md-3">

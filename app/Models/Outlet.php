@@ -32,6 +32,7 @@ class Outlet extends Model
         'district_code',
         'postal_code',
         'coordinates',
+        'google_maps_link',
         'activities',
         'images'
     ];
