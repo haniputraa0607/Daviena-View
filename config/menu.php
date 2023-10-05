@@ -187,7 +187,7 @@ return [
                 [
                     'type' => 'single',
                     'label' => 'Consultation & Ordering',
-                    'icon' => 'fa fa-address-book',
+                    'icon' => 'fa fa-book',
                     'url' => 'landing_page/consultation_ordering',
                     'active' => '\View::shared("menu_active") == "contasultation_ordering"',
                 ],
