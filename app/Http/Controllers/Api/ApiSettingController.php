@@ -18,9 +18,9 @@ class ApiSettingController extends Controller
 
     public function commmision_doctor_action(Request $request): JsonResponse
     {
-        $value_persen = $request->value/100;
+        $value_persen = $request->value / 100;
         $setting = Setting::where('key', 'doctor_commission')->first();
-        if($setting){
+        if ($setting) {
             $setting->update(['value' => $value_persen]);
         } else {
             Setting::create([

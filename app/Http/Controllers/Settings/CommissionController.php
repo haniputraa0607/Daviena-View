@@ -42,5 +42,4 @@ class CommissionController extends Controller
             return back()->withErrors($save['error'])->withInput();
         }
     }
-
 }
