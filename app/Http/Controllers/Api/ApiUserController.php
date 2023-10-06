@@ -41,12 +41,20 @@ class ApiUserController extends Controller
     }
     public function store(Create $request): JsonResponse
     {
-        $user = User::create($request->all());
+        $data = $request->all();
+        if (isset($data['commission_fee'])) {
+            $data['commission_fee'] = $data['commission_fee'] / 100;
+        }
+        $user = User::create($data);
         return $this->ok("succes", $user);
     }
     public function update(Update $request, User $user): JsonResponse
     {
-        $user->update($request->all());
+        $data = $request->all();
+        if (isset($data['commission_fee'])) {
+            $data['commission_fee'] = $data['commission_fee'] / 100;
+        }
+        $user->update($data);
         return $this->ok("succes", $user);
     }
     public function destroy(User $user): JsonResponse

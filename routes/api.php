@@ -24,6 +24,7 @@ use App\Http\Controllers\Api\ApiOfficialPartnerHomeController;
 use App\Http\Controllers\Api\ApiArticleRecommendationController;
 use App\Http\Controllers\Api\ApiBannerClinicController;
 use App\Http\Controllers\Api\ApiContactOfficialController;
+use App\Http\Controllers\Api\ApiSettingController;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
 
@@ -220,6 +221,11 @@ Route::middleware('auth:api')->prefix('be')->group(function () {
         Route::get($banner_clinic, 'show')->name('api.banner_clinic.show');
         Route::patch($banner_clinic, 'update')->name('api.banner_clinic.update');
         Route::delete($banner_clinic, 'destroy')->name('api.banner_clinic.delete');
+    });
+
+    Route::controller(ApiSettingController::class)->prefix('/setting')->group(function(){
+        Route::get('commission-global', 'commmision_doctor')->name('api.commission-global');
+        Route::post('commission-global', 'commmision_doctor_action')->name('api.commission-global.action');
     });
 });
 

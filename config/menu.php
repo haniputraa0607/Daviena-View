@@ -361,6 +361,13 @@ return [
             'label' => 'Settings',
             'children' => [
                 [
+                    'label' => 'Commision Doctor Global',
+                    'required_features' => [13,14],
+                    'active' => '\View::shared("menu_active") == "commission-doctor-global"',
+                    'url' => 'setting/commission-doctor-global',
+                    'icon' => 'fa fa-chain'
+                ],
+                [
                     'label' => 'Mobile Apps Home',
                     'required_features' => [],
                     'type' => 'tree',

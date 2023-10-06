@@ -43,7 +43,8 @@ class User extends Authenticatable
         'address',
         'gender',
         'level',
-        'consultation_price'
+        'consultation_price',
+        'commission_fee'
     ];
 
     /**

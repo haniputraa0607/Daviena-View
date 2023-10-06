@@ -85,9 +85,12 @@
 
             if ($(this).val() === 'salesman'){
                 $('#field-consultation-price').removeClass('hidden')
+                $('#field-commission-fee').removeClass('hidden')
             } else{
                 $('#field-consultation-price').addClass('hidden')
+                $('#field-commission-fee').addClass('hidden')
                 $('#consultation_price').val('')
+                $('#commission_fee').val('')
             }
         })
         $('#name').on('keyup',function () {
@@ -286,6 +289,17 @@
                                                     <label class="control-label">{{ MyHelper::rupiah($detail['consultation_price'] ?? 0) }}</label>
                                                 </div>
                                             </div>
+                                            <div class="form-group">
+                                                <div class="input-icon right">
+                                                    <label class="col-md-4 control-label">
+                                                        Commission Fee
+                                                    </label>
+                                                </div>
+                                                <div class="col-md-8">
+                                                    <label class="control-label">{{ ($detail['commission_fee'] ? ($detail['commission_fee']*100).'%' : '') ?? '0%' }}</label>
+                                                </div>
+                                            </div>
+                                            
 
                                             <div class="form-group">
                                                 <div class="input-icon right">
@@ -436,6 +450,20 @@
                                                         value=" {{ $detail['consultation_price'] ?? '' }} " placeholder="Consultation Price">
                                                 </div>
                                             </div>
+
+                                            <div class="form-group hidden" id="field-commission-fee">
+                                                <div class="input-icon right">
+                                                    <label class="col-md-4 control-label">
+                                                        Consultation Price
+                                                        <span class="required" aria-required="true"> * </span>
+                                                    </label>
+                                                </div>
+                                                <div class="col-md-8">
+                                                    <input type="number" max="100" min="0" class="form-control" id="commission_fee" name="commission_fee"
+                                                        placeholder="Commission Fee (Required)" value="{{ $detail['commission_fee'] ?? '' }}" required>
+                                                </div>
+                                            </div>
+                    
 
                                             <div class="form-group">
                                                 <div class="input-icon right">
