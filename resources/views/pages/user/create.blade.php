@@ -71,9 +71,11 @@
 
         if ($(this).val() === 'salesman'){
             $('#field-consultation-price').removeClass('hidden')
+            $('#field-commission-fee').removeClass('hidden')
         } else{
-            $('#field-consultation-price').addClass('hidden')
+            $('#field-commission-fee').addClass('hidden')
             $('#consultation_price').val('')
+            $('#commission_fee').val('')
         }
     })
     $('#name').on('keyup',function () {
@@ -517,6 +519,23 @@
                                     <div class="col-md-10">
                                         <input type="text" class="form-control" id="consultation_price" name="consultation_price"
                                             placeholder="Consultation Price (Required)" value="{{ old('consultation_price') }}" required>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group hidden" id="field-commission-fee">
+                            <div class="col-md-12">
+                                <div class="col-md-3">
+                                    <label class="control-label">Commission Fee <i>(%)</i><span class="required" aria-required="true">*</span>
+                                        <i class="fa fa-question-circle tooltips" data-original-title="Commission Fee"
+                                            data-container="body"></i>
+                                    </label>
+                                </div>
+                                <div class="col-md-9">
+                                    <div class="col-md-10">
+                                        <input type="number" max="100" min="0" class="form-control" id="commission_fee" name="commission_fee"
+                                            placeholder="Commission Fee (Required)" value="{{ old('commission_fee') }}" required>
                                     </div>
                                 </div>
                             </div>

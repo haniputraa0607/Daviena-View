@@ -9,8 +9,16 @@ use App\Http\Controllers\Settings\TermsOfServiceController;
 use App\Http\Controllers\Settings\OnboardingController;
 use App\Http\Controllers\Settings\FAQController;
 use App\Http\Controllers\Settings\AutoResponseController;
+use App\Http\Controllers\Settings\CommissionController;
 
-Route::prefix('setting')->middleware('validate_session')->group(function () {
+Route::prefix('setting')->group(function () {
+// Route::prefix('setting')->middleware('validate_session')->group(function () {
+
+    Route::prefix('commission-doctor-global')->group(function () {
+        Route::get('/', [CommissionController::class, 'index'])->name('setting.commission-doctor-global');
+        Route::post('/', [CommissionController::class, 'action'])->name('setting.commission-doctor-global.action');
+    });
+
     Route::prefix('version')->group(function () {
         Route::get('/', [VersionControlController::class, 'getVersionControllSetting'])->middleware('feature_control:13');
         Route::post('/', [VersionControlController::class, 'updateVersionControllSetting'])->name('version.control.update')->middleware('log:activity','feature_control:14');
