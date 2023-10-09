@@ -54,9 +54,9 @@ class ApiUserController extends Controller
     {
         if ($request->new_password) {
             $user = User::first();
-            
+
             if ($user && Hash::check($request->new_password, $user->password)) {
-                return $this->error('Error, The old password is not suitable');   
+                return $this->error('Error, The old password is not suitable');
             }
         }
         $data = $request->all();

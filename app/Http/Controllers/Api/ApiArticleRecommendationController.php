@@ -19,7 +19,7 @@ class ApiArticleRecommendationController extends Controller
     public function update(Request $request): JsonResponse
     {
         $articleRecommendation = ArticleRecommendation::find(1);
-    
+
         if (!$articleRecommendation) {
             $data_create = [
                 'article_top' => $request->input('article_top', ''),
@@ -32,7 +32,7 @@ class ApiArticleRecommendationController extends Controller
                 'article_recommendation' => json_encode($request->input('article', []))
             ]);
         }
-    
+
         return $this->ok("success", true);
     }
 }

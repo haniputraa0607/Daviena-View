@@ -38,7 +38,7 @@ class Update extends FormRequest
                 'level' => 'required',
                 'outlet_id' => 'required',
                 'address' => 'required|min:6',
-            ] : 
+            ] :
             [
                 'new_password' => 'min:6|string|required',
                 'super_admin_password' => 'min:6|string|required',
