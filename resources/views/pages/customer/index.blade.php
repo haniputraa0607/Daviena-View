@@ -46,10 +46,6 @@
                         name: 'gender'
                     },
                     {
-                        data: 'birth_date',
-                        name: 'birth_date'
-                    },
-                    {
                         data: 'email',
                         name: 'email'
                     },
@@ -176,19 +172,20 @@
             <a href="{{ route('customer.create') }}" class="btn btn-success btn_add_user" style="margin-bottom: 15px;">
                 <i class="fa fa-plus"></i> Add New Customer
             </a>
-            <table class="table trace trace-as-text table-striped table-bordered table-hover dt-responsive" id="table_data">
-                <thead class="trace-head">
-                    <tr>
-                        <th style="text-align: center"> No </th>
-                        <th style="text-align: center"> Name </th>
-                        <th style="text-align: center"> Gender </th>
-                        <th style="text-align: center"> Birth Date </th>
-                        <th style="text-align: center"> Email </th>
-                        <th style="text-align: center"> Phone </th>
-                        <th style="text-align: center"> Action </th>
-                    </tr>
-                </thead>
-            </table>
+            <div class="table-responsive">
+                <table class="table trace trace-as-text table-striped table-bordered table-hover dt-responsive" id="table_data">
+                    <thead class="trace-head">
+                        <tr>
+                            <th style="text-align: center"> No </th>
+                            <th style="text-align: center"> Name </th>
+                            <th style="text-align: center"> Gender </th>
+                            <th style="text-align: center"> Email </th>
+                            <th style="text-align: center"> Phone </th>
+                            <th style="text-align: center"> Action </th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
         </div>
     </div>
 @endsection

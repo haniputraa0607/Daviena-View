@@ -26,7 +26,7 @@ class ApiContactMessageController extends Controller
             })
             ->addColumn('action', function ($row) {
                 return ' <a class="btn btn-sm btn-info" href="' . route('landing_page.contact_message.detail', ['id' => $row->id]) . '">
-                            <li class="fa fa-search" aria-hidden="true"></li>
+                            <i class="fa fa-search" aria-hidden="true"></i>
                         </a>';
             })
             ->rawColumns(['action'])->make(true);

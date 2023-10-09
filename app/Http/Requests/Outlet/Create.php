@@ -26,7 +26,7 @@ class Create extends FormRequest
             'id_partner' => 'required',
             'outlet_code' => 'required',
             'outlet_phone' => 'required|numeric',
-            'outlet_email' => 'required',
+            'outlet_email' => 'required|email',
             'status' => 'required',
             // 'is_tax' => 'required',
             'address' => 'required',

@@ -9,6 +9,7 @@ use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Yajra\DataTables\Facades\DataTables;
 
 class ApiUserController extends Controller
@@ -26,10 +27,10 @@ class ApiUserController extends Controller
             })
             ->addColumn('action', function ($row) {
                 return ' <a class="btn btn-sm btn-info" href="' . route('user.detail', ['id' => $row->id]) . '">
-                            <li class="fa fa-search" aria-hidden="true"></li>
+                            <i class="fa fa-search" aria-hidden="true"></i>
                         </a>
                         <a  href="javascript:void(0)" class="btn btn-sm btn-danger" id="btn-delete" data-id="' . $row->id . '" data-name="' . $row->name . '">
-                            <li class="fa fa-trash" aria-hidden="true"></li>
+                            <i class="fa fa-trash" aria-hidden="true"></i>
                         </a>';
             })
             ->rawColumns(['action'])->make(true);
@@ -48,8 +49,16 @@ class ApiUserController extends Controller
         $user = User::create($data);
         return $this->ok("succes", $user);
     }
+
     public function update(Update $request, User $user): JsonResponse
     {
+        if ($request->new_password) {
+            $user = User::first();
+            
+            if ($user && Hash::check($request->new_password, $user->password)) {
+                return $this->error('Error, The old password is not suitable');   
+            }
+        }
         $data = $request->all();
         if (isset($data['commission_fee'])) {
             $data['commission_fee'] = $data['commission_fee'] / 100;
@@ -57,6 +66,7 @@ class ApiUserController extends Controller
         $user->update($data);
         return $this->ok("succes", $user);
     }
+
     public function destroy(User $user): JsonResponse
     {
         $user->delete();

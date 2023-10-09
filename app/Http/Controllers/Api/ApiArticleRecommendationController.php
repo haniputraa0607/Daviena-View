@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\Controller;
 use App\Models\ArticleRecommendation;
 use App\Models\OfficialPartnerHome;
@@ -18,17 +19,20 @@ class ApiArticleRecommendationController extends Controller
     public function update(Request $request): JsonResponse
     {
         $articleRecommendation = ArticleRecommendation::find(1);
+    
         if (!$articleRecommendation) {
-            $articleRecommendation->create([
-                'article_top' => $request->article_top,
-                'article_recommendation' => $request->article
+            $data_create = [
+                'article_top' => $request->input('article_top', ''),
+                'article_recommendation' => json_encode($request->input('article', []))
+            ];
+            ArticleRecommendation::create($data_create);
+        } else {
+            $articleRecommendation->update([
+                'article_top' => $request->input('article_top', ''),
+                'article_recommendation' => json_encode($request->input('article', []))
             ]);
         }
-        $articleRecommendation->update([
-            'article_top' => $request->article_top,
-            'article_recommendation' => $request->article
-        ]);
-
-        return $this->ok("succes", true);
+    
+        return $this->ok("success", true);
     }
 }

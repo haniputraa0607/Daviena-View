@@ -15,6 +15,7 @@ class HomeController extends Controller
             'title'   => 'Treatment and Consultation',
         ];
         $detail = MyHelper::curlApi('landing-page/treatment_consultation', 'GET');
+        // dd($detail);
         if (isset($detail['status']) && $detail['status'] == "success") {
             $data['detail'] = $detail['result'];
         } else {
@@ -135,6 +136,7 @@ class HomeController extends Controller
     {
         $payload = $request->except('_token');
         $save = MyHelper::post('be/article_recommendation', $payload);
+        // dd($save);
         if (isset($save['status']) && $save['status'] == "success") {
             return redirect('landing_page/home/article_recommendation')->withSuccess(['Article Recommendation successfully updated.']);
         } else {

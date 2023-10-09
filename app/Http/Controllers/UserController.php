@@ -32,7 +32,9 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $payload = $request->except('_token');
-        $payload['consultation_price'] = MyHelper::unrupiah($request->consultation_price);
+        if($request->consultation_price){
+            $payload['consultation_price'] = MyHelper::unrupiah($request->consultation_price);
+        }
 
         $save = MyHelper::post($this->path, $payload);
 
@@ -69,11 +71,11 @@ class UserController extends Controller
 
     public function update(Request $request, $id)
     {
-
         $payload = $request->except('_token');
-        $payload['consultation_price'] = MyHelper::unrupiah($request->consultation_price);
-
-        $save = MyHelper::patch($this->path . $id, $payload);
+        if($request->consultation_price){
+            $payload['consultation_price'] = MyHelper::unrupiah($request->consultation_price);
+        }
+        $save = MyHelper::patch($this->path . $id, $payload);   
 
         if (isset($save['status']) && $save['status'] == "success") {
             return redirect('user')->withSuccess(['CMS User detail has been updated.']);

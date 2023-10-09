@@ -80,7 +80,7 @@
                                 </div>
                                 <div class="col-md-9">
                                     <div class="col-md-10">
-                                        <input type="text" class="form-control" name="name"
+                                        <input type="text" class="form-control" name="grievance_name"
                                             value="{{ $detail['grievance_name'] }}" placeholder="Name (Required)" required>
                                     </div>
                                 </div>

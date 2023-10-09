@@ -25,7 +25,6 @@ class Update extends FormRequest
         return !$this->new_password ?
             [
                 'equal_id' => 'required|numeric|unique:users,equal_id,' . $this->id . ',id',
-
                 'name' => 'required',
                 'username' => 'required',
                 'email' => 'required',
@@ -39,9 +38,10 @@ class Update extends FormRequest
                 'level' => 'required',
                 'outlet_id' => 'required',
                 'address' => 'required|min:6',
-            ] :
+            ] : 
             [
-                'password' => 'min:6',
+                'new_password' => 'min:6|string|required',
+                'super_admin_password' => 'min:6|string|required',
                 'password_confirmation' => 'required_with:password|same:password|min:6',
             ];
     }

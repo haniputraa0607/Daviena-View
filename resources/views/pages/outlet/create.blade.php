@@ -497,7 +497,7 @@
                                 </div>
                                 <div class="col-md-9">
                                     <div class="col-md-10">
-                                        <input type="text" class="form-control" name="email" placeholder="Email"
+                                        <input type="email" class="form-control" name="email" placeholder="Email"
                                             required>
                                     </div>
                                 </div>

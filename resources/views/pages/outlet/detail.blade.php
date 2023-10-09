@@ -723,7 +723,7 @@
                                             </div>
                                             <div class="col-md-9">
                                                 <div class="col-md-10">
-                                                    <input type="text" class="form-control" name="email"
+                                                    <input type="email" class="form-control" name="email"
                                                         value="@if (isset($detail['outlet_email'])) {{ $detail['outlet_email'] }} @endif"
                                                         placeholder="Email" required>
                                                 </div>

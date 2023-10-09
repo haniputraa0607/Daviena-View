@@ -388,41 +388,42 @@ return [
                     'url' => 'setting/version',
                     'icon' => 'fa fa-info-circle'
                 ],
-                [
-                    'label' => 'Intro Apps',
-                    'required_features' => [19,20,21],
-                    'active' => '\View::shared("submenu_active") == "on-boarding"',
-                    'url' => 'setting/on-boarding',
-                    'icon' => 'icon-screen-tablet'
-                ],
-                [
-                    'label' => 'FAQ',
-                    'required_features' => [15,16,17,18],
-                    'active' => '\View::shared("submenu_active") == "faq"',
-                    'url' => 'setting/faq',
-                    'icon' => 'icon-question'
-                ],
-                [
-                    'label' => 'Privacy Policy',
-                    'required_features' => [22,23],
-                    'active' => '\View::shared("submenu_active") == "privacy-policy"',
-                    'url' => 'setting/privacy-policy',
-                    'icon' => 'fa fa-lock'
-                ],
-                [
-                    'label' => 'Terms of Service',
-                    'required_features' => [24,25],
-                    'active' => '\View::shared("submenu_active") == "terms-of-service"',
-                    'url' => 'setting/terms-of-service',
-                    'icon' => 'fa fa-check-square-o'
-                ],
-                [
-                    'label' => 'Auto-Response',
-                    'required_features' => [40,41],
-                    'active' => '\View::shared("menu_active") == "setting-autoresponse"',
-                    'url' => 'setting/autoresponse',
-                    'icon' => 'fa fa-bullhorn'
-                ],
+                // [
+                //     'label' => 'Intro Apps',
+                //     'required_features' => [19,20,21],
+                //     'active' => '\View::shared("submenu_active") == "on-boarding"',
+                //     'url' => 'setting/on-boarding',
+                //     'icon' => 'icon-screen-tablet'
+                // ],
+                // [
+                //     'label' => 'FAQ',
+                //     'required_features' => [15,16,17,18],
+                //     'active' => '\View::shared("submenu_active") == "faq"',
+                //     'url' => 'setting/faq',
+                //     'icon' => 'icon-question'
+                // ],
+                // [
+                //     'label' => 'Privacy Policy',
+                //     'required_features' => [22,23],
+                //     'active' => '\View::shared("submenu_active") == "privacy-policy"',
+                //     'url' => 'setting/privacy-policy',
+                //     'icon' => 'fa fa-lock'
+                // ],
+                // [
+                //     'label' => 'Terms of Service',
+                //     'required_features' => [24,25],
+                //     'active' => '\View::shared("submenu_active") == "terms-of-service"',
+                //     'url' => 'setting/terms-of-service',
+                //     'icon' => 'fa fa-check-square-o'
+                // ],
+                // [
+                //     'label' => 'Auto-Response',
+                //     'required_features' => [40,41],
+                //     'active' => '\View::shared("menu_active") == "setting-autoresponse"',
+                //     'url' => 'setting/autoresponse',
+                //     'icon' => 'fa fa-bullhorn'
+                // ],
+
                 // [
                 //     'label' => 'Maintenance Mode',
                 //     'required_features' => [],
