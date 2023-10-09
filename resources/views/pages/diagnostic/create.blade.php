@@ -70,8 +70,8 @@
                                 </div>
                                 <div class="col-md-9">
                                     <div class="col-md-10">
-                                        <input type="text" class="form-control" name="name"
-                                            value="{{ old('name') }}" placeholder="Name (Required)" required>
+                                        <input type="text" class="form-control" name="diagnostic_name"
+                                            value="{{ old('diagnostic_name') }}" placeholder="Name (Required)" required>
                                     </div>
                                 </div>
                             </div>

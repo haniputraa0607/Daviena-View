@@ -47,9 +47,9 @@ class ApiContactOfficialController extends Controller
         return $this->ok("succes", true);
     }
 
-    public function consultationOrdering(): JsonResponse
+    public function consultationOrdering()
     {
-        $contact_official = ContactOfficial::where("official_name", "Konsultasi & Pemesanan")->first();
+        $contact_official = ContactOfficial::where("official_name", "Consultation & Ordering")->first();
         return $this->ok('success', $contact_official);
     }
 

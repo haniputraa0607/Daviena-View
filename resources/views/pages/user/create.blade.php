@@ -468,7 +468,7 @@
                                 <div class="col-md-4">
                                     <div class="col-md-10">
                                         <input type="date" class="form-control" name="birthdate"
-                                            placeholder="Birthdate" value="{{ old('birthdate') }}" required>
+                                            placeholder="Birthdate" value="{{ old('birthdate') }}" max="{{ date('Y-m-d')}}" required>
                                     </div>
                                 </div>
                             </div>
@@ -535,7 +535,7 @@
                                 <div class="col-md-9">
                                     <div class="col-md-10">
                                         <input type="number" max="100" min="0" class="form-control" id="commission_fee" name="commission_fee"
-                                            placeholder="Commission Fee (Required)" value="{{ old('commission_fee') }}" required>
+                                            placeholder="Commission Fee (Required)" value="{{ old('commission_fee') }}">
                                     </div>
                                 </div>
                             </div>

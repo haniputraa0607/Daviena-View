@@ -139,7 +139,7 @@
                     <tr>
                         <th>No</th>				
                         <th>Name</th>				
-                        <th style="width: 90px;"></th>				
+                        <th style="width: 90px;">Action</th>				
                     </tr>
                 </thead>
             </table>

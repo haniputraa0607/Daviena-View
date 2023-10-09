@@ -26,10 +26,10 @@ class ApiProductPackageController extends Controller
             ->addIndexColumn()
             ->addColumn('action', function ($row) {
                 return ' <a class="btn btn-sm btn-info" href="' . route('product_package.detail', ['id' => $row->id]) . '">
-                            <li class="fa fa-search" aria-hidden="true"></li>
+                            <i class="fa fa-search" aria-hidden="true"></i>
                         </a>
                         <a  href="javascript:void(0)" class="btn btn-sm btn-danger" id="btn-delete" data-id="' . $row->id . '" data-name="' . $row->name . '">
-                            <li class="fa fa-trash" aria-hidden="true"></li>
+                            <i class="fa fa-trash" aria-hidden="true"></i>
                         </a>';
             })
             ->rawColumns(['action'])->make(true);

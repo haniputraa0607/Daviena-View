@@ -82,9 +82,9 @@
             <form class="form-horizontal" role="form" action="{{ route('landing_page.consultation_ordering.update') }}"  method="post" enctype="multipart/form-data" id="myForm">
                 <div class="col-md-12">
                     <div class="form-body">
-                        <?php
+                        @php
                             $official_value = json_decode($detail['official_value']);
-                        ?>
+                        @endphp
 
                         <input type="hidden" name="id" value="{{ $detail['id'] ?? '' }}">
                         @foreach($official_value[0]->contact as $key)

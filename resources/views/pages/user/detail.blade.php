@@ -516,7 +516,7 @@
                                                 </div>
                                                 <div class="col-md-4">
                                                     <input type="date" class="form-control" name="birthdate"
-                                                        value="{{ $detail['birthdate'] ?? '' }}" placeholder="Birthdate"
+                                                        value="{{ $detail['birthdate'] ?? '' }}" placeholder="Birthdate" max="{{ date('Y-m-d')}}"
                                                         required>
                                                 </div>
                                             </div>
