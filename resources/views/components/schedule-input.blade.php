@@ -103,10 +103,15 @@
                                 @php
                                     $selected = '';
                                     $i_selected = ($i < 10) ? '0'.$i : $i;
-                                    foreach($detail['dates'] as $key){
-                                        $date_arr = explode('-', $key['date']);
-                                        if($date_arr[2] == $i_selected){
-                                            $selected = 'selected';
+
+                                    if (!empty($detail['dates'])) {
+                                        foreach ($detail['dates'] as $key) {
+                                            // Lakukan pengolahan di sini
+                                            $date_arr = explode('-', $key['date']);
+                                            if ($date_arr[2] == $i_selected) {
+                                                $selected = 'selected';
+                                                // Lakukan tindakan lain di sini jika perlu
+                                            }
                                         }
                                     }
                                 @endphp

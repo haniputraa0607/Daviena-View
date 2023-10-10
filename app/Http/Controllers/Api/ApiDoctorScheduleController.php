@@ -16,14 +16,18 @@ class ApiDoctorScheduleController extends Controller
 {
     public function index(Request $request): JsonResponse
     {
-        $query = DoctorSchedule::query();
+        $query = DoctorSchedule::query()
+            ->with('user')
+            ->select('doctor_schedules.*') // Mengambil semua kolom dari tabel doctor_schedules
+            ->leftJoin('users', 'doctor_schedules.user_id', '=', 'users.id'); // Bergabungkan dengan tabel users
+
         return DataTables::of($query)
             ->addIndexColumn()
             ->editColumn('schedule_month', function ($row) {
                 return MyHelper::getMonth($row->schedule_month);
             })
-            ->addColumn('user', function ($row) {
-                return $row->user->name;
+            ->addColumn('user_name', function ($row) {
+                return $row->user->name; // Kolom 'user_name' akan digunakan untuk pencarian
             })
             ->addColumn('outlet', function ($row) {
                 return $row->outlet->name;
@@ -36,8 +40,13 @@ class ApiDoctorScheduleController extends Controller
                             <i class="fa fa-trash" aria-hidden="true"></i>
                         </a>';
             })
-            ->rawColumns(['action'])->make(true);
+            ->rawColumns(['action'])
+            ->filterColumn('user_name', function ($query, $keyword) {
+                $query->whereRaw("users.name like ?", ["%$keyword%"]); // Konfigurasi pencarian kolom 'user_name'
+            })
+            ->make(true);
     }
+
 
     public function nameId(): JsonResponse
     {

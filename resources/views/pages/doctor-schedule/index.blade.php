@@ -38,8 +38,8 @@
                         searchable: false
                     },
                     {
-                        data: 'user',
-                        name: 'user'
+                        data: 'user.name',
+                        name: 'user.name'
                     },
                     {
                         data: 'outlet',
