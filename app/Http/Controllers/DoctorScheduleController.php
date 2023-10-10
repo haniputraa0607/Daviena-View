@@ -29,7 +29,6 @@ class DoctorScheduleController extends Controller
             'sub_title'         => 'List',
             'menu_active'       => 'doctor-schedule',
         ];
-
         return view('pages.doctor-schedule.create', $data);
     }
 

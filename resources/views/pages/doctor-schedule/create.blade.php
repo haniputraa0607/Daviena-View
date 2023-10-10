@@ -45,116 +45,63 @@
     </script>
 
    <script type="text/javascript">
-    var province_code = 0;
-    var city_code = 0;
-    
-    $('#user-input').select2({
-        placeholder: 'Select User',
-        theme: 'bootstrap',
-        width: '100%',
-        ajax: {
-            url: `{{ route('api.user.list-doctor')}}`,
-            headers: {
-                "Authorization": "{{ session('access_token') }}"
-            },
-            dataType: 'json',
-            processResults: function(result) {
-                return {
-                    results: $.map(result.result, function(item) {
-                        return {
-                            text: item.name,
-                            id: item.id
-                        }
-                    })
-                };
-            },
-            cache: true
-        }
-    });
-
-    $('#outlet-input').select2({
-        placeholder: 'Select Outlet',
-        theme: 'bootstrap',
-        width: '100%',
-        ajax: {
-            url: `{{ route('api.outlet.name.id')}}`,
-            headers: {
-                "Authorization": "{{ session('access_token') }}"
-            },
-            dataType: 'json',
-            processResults: function(result) {
-                return {
-                    results: $.map(result.result, function(item) {
-                        return {
-                            text: item.name,
-                            id: item.id
-                        }
-                    })
-                };
-            },
-            cache: true
-        }
-    });
-
-    $('#province-input').select2({
-        placeholder: 'Select Province',
-        theme: 'bootstrap',
-        width: '100%',
-        ajax: {
-            url: `{{ url('api/indonesia/provinces') }}`,
-            headers: {
-                "Authorization": "{{ session('access_token') }}"
-            },
-            dataType: 'json',
-            delay: 250,
-            processResults: function(result) {
-                return {
-                    results: $.map(result.data, function(item) {
-                        return {
-                            text: item.name,
-                            id: item.code
-                        }
-                    })
-                };
-            },
-            cache: true
-        }
-    });
-
-    // $('#city-input').select2({
-    //     placeholder: 'Select city',
-    //     theme: 'bootstrap',
-    //     width: '100%'
-    // });
-
-    // $('#district-input').select2({
-    //     placeholder: 'Select district',
-    //     theme: 'bootstrap',
-    //     width: '100%'
-    // });
-
-    $('.select2-input').on('change', function(){
-        if ($(this).attr('id') === 'province-input') {
-            $('#city-input').empty().trigger('change');
-            $('#district-input').empty().trigger('change');
-        }
-
-        if ($(this).attr('id') === 'city-input') {
-            $('#district-input').empty().trigger('change');
-        }
-
-        province_code = $('#province-input').val();
-        city_code = $('#city-input').val();
+        var province_code = 0;
+        var city_code = 0;
         
-        cityUrl = `{{ url('api/indonesia/cities?province_code=') }}${province_code}`;
-        districtUrl = `{{ url('api/indonesia/districts?city_code=') }}${city_code}`;
-
-        $('#city-input').select2({
-            placeholder: 'Select city',
+        $('#user-input').select2({
+            placeholder: 'Select User',
             theme: 'bootstrap',
             width: '100%',
             ajax: {
-                url: cityUrl,
+                url: `{{ route('api.user.list-doctor')}}`,
+                headers: {
+                    "Authorization": "{{ session('access_token') }}"
+                },
+                dataType: 'json',
+                processResults: function(result) {
+                    return {
+                        results: $.map(result.result, function(item) {
+                            return {
+                                text: item.name,
+                                id: item.id
+                            }
+                        })
+                    };
+                },
+                cache: true
+            }
+        });
+
+        $('#outlet-input').select2({
+            placeholder: 'Select Outlet',
+            theme: 'bootstrap',
+            width: '100%',
+            ajax: {
+                url: `{{ route('api.outlet.name.id')}}`,
+                headers: {
+                    "Authorization": "{{ session('access_token') }}"
+                },
+                dataType: 'json',
+                processResults: function(result) {
+                    return {
+                        results: $.map(result.result, function(item) {
+                            return {
+                                text: item.name,
+                                id: item.id
+                            }
+                        })
+                    };
+                },
+                cache: true
+            }
+        });
+
+        $('#province-input').select2({
+            placeholder: 'Select Province',
+            theme: 'bootstrap',
+            width: '100%',
+            ajax: {
+                url: `{{ url('api/indonesia/provinces') }}`,
                 headers: {
                     "Authorization": "{{ session('access_token') }}"
                 },
@@ -174,32 +121,85 @@
             }
         });
 
-        $('#district-input').select2({
-            placeholder: 'Select district',
-            theme: 'bootstrap',
-            width: '100%',
-            ajax: {
-                url: districtUrl,
-                headers: {
-                    "Authorization": "{{ session('access_token') }}"
-                },
-                dataType: 'json',
-                delay: 250,
-                processResults: function(result) {
-                    return {
-                        results: $.map(result.data, function(item) {
-                            return {
-                                text: item.name,
-                                id: item.code
-                            }
-                        })
-                    };
-                },
-                cache: true
+        // $('#city-input').select2({
+        //     placeholder: 'Select city',
+        //     theme: 'bootstrap',
+        //     width: '100%'
+        // });
+
+        // $('#district-input').select2({
+        //     placeholder: 'Select district',
+        //     theme: 'bootstrap',
+        //     width: '100%'
+        // });
+
+        $('.select2-input').on('change', function(){
+            if ($(this).attr('id') === 'province-input') {
+                $('#city-input').empty().trigger('change');
+                $('#district-input').empty().trigger('change');
             }
+
+            if ($(this).attr('id') === 'city-input') {
+                $('#district-input').empty().trigger('change');
+            }
+
+            province_code = $('#province-input').val();
+            city_code = $('#city-input').val();
+            
+            cityUrl = `{{ url('api/indonesia/cities?province_code=') }}${province_code}`;
+            districtUrl = `{{ url('api/indonesia/districts?city_code=') }}${city_code}`;
+
+            $('#city-input').select2({
+                placeholder: 'Select city',
+                theme: 'bootstrap',
+                width: '100%',
+                ajax: {
+                    url: cityUrl,
+                    headers: {
+                        "Authorization": "{{ session('access_token') }}"
+                    },
+                    dataType: 'json',
+                    delay: 250,
+                    processResults: function(result) {
+                        return {
+                            results: $.map(result.data, function(item) {
+                                return {
+                                    text: item.name,
+                                    id: item.code
+                                }
+                            })
+                        };
+                    },
+                    cache: true
+                }
+            });
+
+            $('#district-input').select2({
+                placeholder: 'Select district',
+                theme: 'bootstrap',
+                width: '100%',
+                ajax: {
+                    url: districtUrl,
+                    headers: {
+                        "Authorization": "{{ session('access_token') }}"
+                    },
+                    dataType: 'json',
+                    delay: 250,
+                    processResults: function(result) {
+                        return {
+                            results: $.map(result.data, function(item) {
+                                return {
+                                    text: item.name,
+                                    id: item.code
+                                }
+                            })
+                        };
+                    },
+                    cache: true
+                }
+            });
         });
-    });
-</script>
+    </script>
 
 @endsection
 
