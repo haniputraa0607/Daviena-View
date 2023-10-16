@@ -277,31 +277,38 @@ return [
                 ],
             ]
         ],
-        // [
-        //     'type' => 'group',
-        //     'label' => 'Transaction',
-        //     'children' => [
-        //         [
-        //             'type' => 'tree',
-        //             'label' => 'Settings',
-        //             'icon' => 'fa fa-cogs',
-        //             'children' => [
-        //                 [
-        //                     'label' => 'Price Setting',
-        //                     'required_features' => [32, 34, 37],
-        //                     'active' => '\View::shared("submenu_active") == "setting-price"',
-        //                     'url' => 'transaction/setting/price'
-        //                 ],
-        //                 [
-        //                     'label' => 'Available Payment Method',
-        //                     'required_features' => [30, 31],
-        //                     'active' => '\View::shared("submenu_active") == "setting-payment-method"',
-        //                     'url' => 'transaction/setting/available-payment'
-        //                 ],
-        //             ]
-        //         ]
-        //     ]
-        // ],
+        [
+            'type' => 'group',
+            'label' => 'Transaction',
+            'children' => [
+                [
+                    'type' => 'single',
+                    'label' => 'Order',
+                    'icon' => 'fa fa-list',
+                    'url' => 'order',
+                    'active' => '\View::shared("menu_active") == "order"',
+                ],
+                // [
+                    // 'type' => 'tree',
+                    // 'label' => 'Settings',
+                    // 'icon' => 'fa fa-cogs',
+                    // 'children' => [
+                        // [
+                        //     'label' => 'Price Setting',
+                        //     'required_features' => [32, 34, 37],
+                        //     'active' => '\View::shared("submenu_active") == "setting-price"',
+                        //     'url' => 'transaction/setting/price'
+                        // ],
+                        // [
+                        //     'label' => 'Available Payment Method',
+                        //     'required_features' => [30, 31],
+                        //     'active' => '\View::shared("submenu_active") == "setting-payment-method"',
+                        //     'url' => 'transaction/setting/available-payment'
+                        // ],
+                    // ]
+                // ]
+            ]
+        ],
         // [
         //     'type' => 'group',
         //     'label' => 'Browse',

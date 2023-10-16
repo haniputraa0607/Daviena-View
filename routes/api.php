@@ -25,6 +25,7 @@ use App\Http\Controllers\Api\ApiArticleRecommendationController;
 use App\Http\Controllers\Api\ApiBannerClinicController;
 use App\Http\Controllers\Api\ApiContactOfficialController;
 use App\Http\Controllers\Api\ApiSettingController;
+use App\Http\Controllers\Api\ApiOrderController;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
 
@@ -228,6 +229,12 @@ Route::middleware('auth:api')->prefix('be')->group(function () {
         Route::get('commission-global', 'commmision_doctor')->name('api.commission-global');
         Route::post('commission-global', 'commmision_doctor_action')->name('api.commission-global.action');
     });
+
+    Route::controller(ApiOrderController::class)->prefix('/order')->group(function(){
+        Route::get('list', 'list')->name('api.order.list');
+        Route::get('{order}', 'show')->name('api.order.detail');
+    });
+    
 });
 
 Route::get('test-api', function () {
