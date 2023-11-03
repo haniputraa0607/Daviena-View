@@ -49,6 +49,7 @@ class OutletController extends Controller
             }
         }
         $save = MyHelper::post($this->path, $payload);
+        dd($save);
         if (isset($save['status']) && $save['status'] == "success") {
             return redirect('outlet')->withSuccess(['New Clinic successfully added.']);
         } else {
