@@ -21,7 +21,7 @@ class ApiBannerClinicController extends Controller
                     $imageUrl = env('API_URL') . $imageUrl;
                 }
                 return '<img src="' . $imageUrl . '" width="200" onerror="imgError(this)">';
-            })                
+            })
             ->addColumn('action', function ($row) {
                 return '<a class="btn btn-sm btn-info" data-data=\'' . json_encode($row) . '\' onclick="main.edit(this)">
                             <i class="fa fa-search" aria-hidden="true"></i>
