@@ -13,6 +13,8 @@ class HomeController extends Controller
     {
         $data = [
             'title'   => 'Treatment and Consultation',
+            'menu_active' => 'landing_page_home',
+            'submenu_active' => 'treatment_and_consultation'
         ];
         $detail = MyHelper::curlApi('landing-page/treatment_consultation', 'GET');
         // dd($detail);
@@ -38,7 +40,9 @@ class HomeController extends Controller
     public function productTrending(Request $request)
     {
         $data = [
-            'title' => 'Product Trending'
+            'title' => 'Product Trending',
+            'menu_active' => 'landing_page_home',
+            'submenu_active' => 'product_trending'
         ];
         $product = MyHelper::get('be/product');
         $detail = MyHelper::get('be/product_trending');
@@ -65,7 +69,9 @@ class HomeController extends Controller
     public function productFinest(Request $request)
     {
         $data = [
-            'title' => 'Product Trending'
+            'title' => 'Product Trending',
+            'menu_active' => 'landing_page_home',
+            'submenu_active' => 'product_finest'
         ];
         $product = MyHelper::get('be/product');
         $detail = MyHelper::get('be/product_finest');
@@ -92,7 +98,9 @@ class HomeController extends Controller
     public function officialPartner(Request $request)
     {
         $data = [
-            'title' => 'Article Recommendation'
+            'title' => 'Article Recommendation',
+            'menu_active' => 'landing_page_home',
+            'submenu_active' => 'official_partner_home'
         ];
         $partner = MyHelper::get('be/partner_equal');
         $detail = MyHelper::get('be/official_partner_home');
@@ -119,7 +127,9 @@ class HomeController extends Controller
     public function articleRecommendation()
     {
         $data = [
-            'title' => 'Article Recommendation'
+            'title' => 'Article Recommendation',
+            'menu_active' => 'landing_page_home',
+            'submenu_active' => 'article_recommendation'
         ];
         $article = MyHelper::get('be/article');
         $detail = MyHelper::get('be/article_recommendation');

@@ -335,7 +335,7 @@
     <div class="portlet light bordered">
         <div class="portlet-title">
             <div class="caption">
-                <span class="caption-subject font-blue sbold uppercase ">New Outlet</span>
+                <span class="caption-subject font-blue sbold uppercase ">New Clinic</span>
             </div>
         </div>
         <div class="portlet-body m-form__group row">
@@ -348,7 +348,7 @@
                             <div class="col-md-12">
                                 <div class="col-md-3">
                                     <label class="control-label">Name<span class="required" aria-required="true">*</span>
-                                        <i class="fa fa-question-circle tooltips" data-original-title="Nama Outlet"
+                                        <i class="fa fa-question-circle tooltips" data-original-title="Nama Clinic"
                                             data-container="body"></i>
                                     </label>
                                 </div>
@@ -365,7 +365,7 @@
                             <div class="col-md-12">
                                 <div class="col-md-3">
                                     <label class="control-label">Address<span class="required" aria-required="true">*</span>
-                                        <i class="fa fa-question-circle tooltips" data-original-title="Alamat Outlet"
+                                        <i class="fa fa-question-circle tooltips" data-original-title="Alamat Clinic"
                                             data-container="body"></i>
                                     </label>
                                 </div>
@@ -489,7 +489,7 @@
                         <div class="form-group">
                             <div class="col-md-12">
                                 <div class="col-md-3">
-                                    <label class="control-label">Outlet Email<span class="required"
+                                    <label class="control-label">Clinic Email<span class="required"
                                             aria-required="true">*</span>
                                         <i class="fa fa-question-circle tooltips" data-original-title="Email"
                                             data-container="body"></i>
@@ -507,9 +507,9 @@
                         <div class="form-group">
                             <div class="col-md-12">
                                 <div class="col-md-3">
-                                    <label class="control-label">Outlet Phone<span class="required"
+                                    <label class="control-label">Clinic Phone<span class="required"
                                             aria-required="true">*</span>
-                                        <i class="fa fa-question-circle tooltips" data-original-title="Telpon Outlet"
+                                        <i class="fa fa-question-circle tooltips" data-original-title="Telpon Clinic"
                                             data-container="body"></i>
                                     </label>
                                 </div>
@@ -525,16 +525,16 @@
                         <div class="form-group">
                             <div class="col-md-12">
                                 <div class="col-md-3">
-                                    <label class="control-label">Outlet Code<span class="required"
+                                    <label class="control-label">Clinic Code<span class="required"
                                             aria-required="true">*</span>
-                                        <i class="fa fa-question-circle tooltips" data-original-title="Kode Outlet"
+                                        <i class="fa fa-question-circle tooltips" data-original-title="Kode Clinic"
                                             data-container="body"></i>
                                     </label>
                                 </div>
                                 <div class="col-md-9">
                                     <div class="col-md-10">
                                         <input type="text" class="form-control" name="outlet_code" value="{{ old('outlet_code') }}"
-                                            placeholder="Outlet Code" required>
+                                            placeholder="Clinic Code" required>
                                     </div>
                                 </div>
                             </div>

@@ -142,6 +142,12 @@
                 reader.readAsDataURL(input.files[0]);
             }
         }
+        
+        function imgError(data) {
+            console.log('error_img');
+            data.setAttribute('src', '{{ asset("images/logo.svg") }}');
+        }
+
     </script>
 @endsection
 

@@ -49,13 +49,13 @@ return [
                 //     'url' => 'doctor-shift',
                 //     'active' => '\View::shared("menu_active") == "doctor-shift"',
                 // ],
-                [
-                    'type' => 'single',
-                    'label' => 'Doctor Schedule',
-                    'icon' => 'icon-user',
-                    'url' => 'doctor-schedule',
-                    'active' => '\View::shared("menu_active") == "doctor-schedule"',
-                ],
+                // [
+                //     'type' => 'single',
+                //     'label' => 'Doctor Schedule',
+                //     'icon' => 'icon-user',
+                //     'url' => 'doctor-schedule',
+                //     'active' => '\View::shared("menu_active") == "doctor-schedule"',
+                // ],
                 // [
                 //     'type' => 'single',
                 //     'label' => 'Doctor Schedule Date',
@@ -81,12 +81,12 @@ return [
         ],
         [
             'type' => 'group',
-            'label' => 'Outlet',
+            'label' => 'Clinic',
             'required_features' => [],
             'children' => [
                 [
                     'type' => 'single',
-                    'label' => 'Outlet',
+                    'label' => 'Clinic',
                     'icon' => 'fa fa-bank',
                     'url' => 'outlet',
                     'active' => '\View::shared("menu_active") == "outlet"',
@@ -131,11 +131,12 @@ return [
                     'required_features' => [],
                     'type' => 'tree',
                     'icon' => 'fa fa-university',
+                    'active' => '\View::shared("menu_active") == "landing_page_home"',
                     'children' => [
                         [
                             'label' => 'Banner',
                             'required_features' => '',
-                            'active' => '\View::shared("submenu_active") == "banner"',
+                            'active' => '\View::shared("submenu_active") == "banner-landing-page"',
                             'url' => 'banner'
                         ],
                         [
@@ -189,7 +190,7 @@ return [
                     'label' => 'Consultation & Ordering',
                     'icon' => 'fa fa-book',
                     'url' => 'landing_page/consultation_ordering',
-                    'active' => '\View::shared("menu_active") == "contasultation_ordering"',
+                    'active' => '\View::shared("menu_active") == "consultation_ordering"',
                 ],
                 [
                     'type' => 'single',
