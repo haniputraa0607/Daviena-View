@@ -128,15 +128,15 @@
         </div>
         <div class="portlet-body">
             <div class="row">
-                <div class="col-sm-4">
+                <div class="col-sm-3">
                     <label>Start</label>
                     <input type="date" name="start" id="start_date" class="form-control" value="{{ date('Y-m-d', strtotime('-7 days', strtotime(date('Y-m-d')))); }}">
                 </div>
-                <div class="col-sm-4">
+                <div class="col-sm-3">
                     <label>End</label>
                     <input type="date" name="end" id="end_date" class="form-control" value="{{ date('Y-m-d') }}">
                 </div>
-                <div class="col-sm-4">
+                <div class="col-sm-3">
                     <div class="form-group">
                         <label>Outlet</label>
                         <select class="form-control" name="outlet_id" id="outlet_id">
@@ -144,7 +144,7 @@
                         </select>
                     </div>
                 </div>
-                <div class="col-sm-4">
+                <div class="col-sm-3">
                     <div class="form-group">
                         <button type="button" style="margin-top:25px;" class="btn btn-primary" type="button" onclick="mainOrder.search()"><li class="fa fa-search"></li> Search</button>
                     </div>

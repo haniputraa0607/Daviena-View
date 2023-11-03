@@ -158,7 +158,7 @@
                         @foreach ($articles as $article)
                             <tr style="text-align: center;">
                                 <td>{{ $article['title'] }}</td>
-                                <td>{{ $article['release_date'] }}</td>
+                                <td>{{ MyHelper::indonesianDateNotTime($article['release_date']) }}</td>
                                 <td>{{ $article['writer'] }}</td>
                                 <td style="width: 90px;">                    
                                     <a data-id="{{ $article['id'] }}" data-name="{{ $article['title'] }}" class="btn btn-sm blue" onclick="main.detail(this)"><i class="fa fa-search"></i></a>

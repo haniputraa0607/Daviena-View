@@ -16,8 +16,12 @@ class ApiBannerClinicController extends Controller
         return DataTables::of($query)
             ->addIndexColumn()
             ->editColumn('image', function ($row) {
-                return '<img src="' . env('API_URL') . $row->image . '" width="200">';
-            })
+                $imageUrl = $row->image;
+                if (strpos($imageUrl, 'http:') !== 0 && strpos($imageUrl, 'https:') !== 0) {
+                    $imageUrl = env('API_URL') . $imageUrl;
+                }
+                return '<img src="' . $imageUrl . '" width="200" onerror="imgError(this)">';
+            })                
             ->addColumn('action', function ($row) {
                 return '<a class="btn btn-sm btn-info" data-data=\'' . json_encode($row) . '\' onclick="main.edit(this)">
                             <i class="fa fa-search" aria-hidden="true"></i>

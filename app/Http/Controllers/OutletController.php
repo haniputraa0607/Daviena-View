@@ -14,7 +14,7 @@ class OutletController extends Controller
     public function index()
     {
         $data = [
-            'title'             => 'Manage Outlet',
+            'title'             => 'Manage Clinic',
             'sub_title'         => 'List',
             'menu_active'       => 'outlet',
         ];
@@ -26,7 +26,7 @@ class OutletController extends Controller
     {
         $districts = MyHelper::get('indonesia/districts');
         $data = [
-            'title'             => 'Create Outlet',
+            'title'             => 'Create Clinic',
             'sub_title'         => 'List',
             'menu_active'       => 'outlet',
             'districts'         => $districts['data'],
@@ -50,7 +50,7 @@ class OutletController extends Controller
         }
         $save = MyHelper::post($this->path, $payload);
         if (isset($save['status']) && $save['status'] == "success") {
-            return redirect('outlet')->withSuccess(['New Outlet successfully added.']);
+            return redirect('outlet')->withSuccess(['New Clinic successfully added.']);
         } else {
             return back()->withErrors(!empty($save['error']) ? $save['error'] : $save['message'])->withInput();
         }
@@ -60,7 +60,7 @@ class OutletController extends Controller
     {
         $districts = MyHelper::get('indonesia/districts');
         $data = [
-            'title'             => 'CMS Detail Outlet',
+            'title'             => 'CMS Detail Clinic',
             'sub_title'         => 'Detail',
             'districts'         => $districts['data'],
         ];
@@ -92,7 +92,7 @@ class OutletController extends Controller
         $save = MyHelper::patch($this->path . $id, $payload);
 
         if (isset($save['status']) && $save['status'] == "success") {
-            return redirect('outlet')->withSuccess(['CMS Outlet detail has been updated.']);
+            return redirect('outlet')->withSuccess(['CMS Clinic detail has been updated.']);
         } else {
             if (isset($save['status']) && $save['status'] == "error") {
                 return back()->withErrors(!empty($save['error']) ? $save['error'] : $save['message'])->withInput();
@@ -105,7 +105,7 @@ class OutletController extends Controller
     {
         $delete = MyHelper::deleteApi($this->path . $id);
         if (isset($delete['status']) && $delete['status'] == "success") {
-            return response()->json(['status' => 'success', 'messages' => ['Outlet deleted successfully']]);
+            return response()->json(['status' => 'success', 'messages' => ['Clinic deleted successfully']]);
         } else {
             return response()->json(['status' => 'fail', 'messages' => [$delete['message']]]);
         }

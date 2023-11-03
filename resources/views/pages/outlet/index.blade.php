@@ -129,12 +129,12 @@
     <div class="portlet light bordered">
         <div class="portlet-title">
             <div class="caption">
-                <span class="caption-subject font-blue sbold uppercase">CMS Outlet List</span>
+                <span class="caption-subject font-blue sbold uppercase">CMS Clinic List</span>
             </div>
         </div>
         <div class="portlet-body">
             <a href="{{ url('outlet/create') }}" class="btn btn-success btn_add_user" style="margin-bottom: 15px;">
-                <i class="fa fa-plus"></i> Add New Outlet
+                <i class="fa fa-plus"></i> Add New Clinic
             </a>
             <table class="table trace trace-as-text table-striped table-bordered table-hover dt-responsive" id="table_data">
                 <thead class="trace-head">
