@@ -81,7 +81,6 @@ class MyHelper
     public static function post($url, $post)
     {
         $api = env('APP_API_URL');
-
         $client = new Client();
         $bearer = session('access_token');
         $content = array(
