@@ -28,7 +28,8 @@ class BannerClinicController extends Controller
                 $payload = [
                     'image' => $upload['result']
                 ];
-                $save = MyHelper::post($this->path, $payload);
+                $save = MyHelper::post($this->path.'store', $payload);
+                dd($save);
                 if (isset($save['status']) && $save['status'] == "success") {
                     return redirect('landing_page/banner_clinic')->withSuccess(['Success banner uploaded.']);
                 } else {
