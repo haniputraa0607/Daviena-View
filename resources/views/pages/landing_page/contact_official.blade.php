@@ -29,7 +29,7 @@
         if (input.files && input.files[0]) {
           var reader = new FileReader();
           var fileimport = $('#' + input.id).val();
-          var allowedExtensions = /(\.png)$/i;
+          var allowedExtensions = /(\.png|\.jpg|\.jpeg)$/i; // Mengizinkan PNG, JPG, dan JPEG
           if (!allowedExtensions.exec(fileimport)) {
             alert('Gambar harus bertipe gambar');
             $('#' + input.id).val('');
