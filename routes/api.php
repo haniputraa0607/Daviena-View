@@ -218,7 +218,7 @@ Route::middleware('auth:api')->prefix('be')->group(function () {
     Route::controller(ApiBannerClinicController::class)->prefix('/banner_clinic')->group(function () {
         $banner_clinic = '{banner_clinic}';
         Route::get('', 'index')->name('api.banner_clinic.list');
-        Route::post('', 'store')->name('api.banner_clinic.create');
+        Route::post('store', 'store')->name('api.banner_clinic.create');
         Route::get('list', 'list')->name('api.banner_clinic.list');
         Route::get($banner_clinic, 'show')->name('api.banner_clinic.show');
         Route::patch($banner_clinic, 'update')->name('api.banner_clinic.update');
