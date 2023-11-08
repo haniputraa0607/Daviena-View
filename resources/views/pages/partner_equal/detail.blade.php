@@ -24,8 +24,8 @@
     <script>
         // $('.selectpicker').selectpicker();
         $(document).ready(function() {
-            var province_code = {{ $detail['partner']['city']['province_code'] }};
-            var city_code = {{ $detail['partner']['city_code'] }};
+            var province_code = {{ $detail['partner']['city']['province_code'] ?? '' }};
+            var city_code = {{ $detail['partner']['city_code'] ?? '' }};
             var provinceUrl = `{{ url('api/indonesia/provinces') }}`;
             var cityUrl = `{{ url('api/indonesia/cities?province_code=') }}`;
 
