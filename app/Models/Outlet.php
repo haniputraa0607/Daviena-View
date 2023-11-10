@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use KodePandai\Indonesia\Models\District;
 
 // use Modules\Outlet\Entities\OutletSchedule;
@@ -14,6 +15,7 @@ use KodePandai\Indonesia\Models\District;
 class Outlet extends Model
 {
     use HasFactory;
+    use SoftDeletes;
 
     protected $table = 'outlets';
     protected $fillable = [
